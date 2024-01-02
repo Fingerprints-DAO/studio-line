@@ -6,6 +6,16 @@ const nextConfig = {
     config.externals.push("pino-pretty")
     return config
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        port: '',
+        pathname: '/**/**',
+      },
+    ],
+  },
 }
 
 module.exports = nextConfig

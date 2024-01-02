@@ -1,13 +1,12 @@
-import { LockFactory } from '@dapp/contracts'
+import { ERC20Factory } from '@dapp/contracts'
 
 export interface ContractAddress {
   ERC20Mock: string
-  Lock: string
   chainId: number
 }
 
 export interface Contracts {
-  LockContract: ReturnType<typeof LockFactory.connect>
+  ERC20Factory: ReturnType<typeof ERC20Factory.connect>
 }
 
 export enum ChainId {
