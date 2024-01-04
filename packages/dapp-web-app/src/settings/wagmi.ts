@@ -21,7 +21,7 @@ const { chains } = configureChains(selectedChain, [
 
 export const config = createConfig(
   getDefaultConfig({
-    autoConnect: true,
+    autoConnect: false,
     appName: 'My wagmi + ConnectKit App',
     walletConnectProjectId,
     infuraId: process.env.NEXT_PUBLIC_PROVIDER_KEY,

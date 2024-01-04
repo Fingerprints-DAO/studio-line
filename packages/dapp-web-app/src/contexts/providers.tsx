@@ -1,8 +1,8 @@
 'use client'
 
 import * as React from 'react'
-import { ConnectKitProvider } from 'connectkit'
-import { WagmiConfig } from 'wagmi'
+// import { ConnectKitProvider } from 'connectkit'
+// import { WagmiConfig } from 'wagmi'
 import { ChakraProvider } from '@chakra-ui/react'
 import { CacheProvider } from '@chakra-ui/next-js'
 import duration from 'dayjs/plugin/duration'
@@ -11,6 +11,7 @@ import dayjs from 'dayjs'
 dayjs.extend(duration)
 
 import { config } from '../settings/wagmi'
+import { GridItemProvider } from './GridItemContext'
 
 function Providers({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = React.useState(false)
@@ -21,10 +22,14 @@ function Providers({ children }: { children: React.ReactNode }) {
   return (
     <CacheProvider>
       <ChakraProvider>
-        <WagmiConfig config={config}>
+        <GridItemProvider>
+          {/* <WagmiConfig config={config}> */}
           {!mounted && <p>Loading</p>}
-          <ConnectKitProvider>{mounted && children}</ConnectKitProvider>
-        </WagmiConfig>
+          {/* <ConnectKitProvider> */}
+          {mounted && children}
+          {/* </ConnectKitProvider> */}
+          {/* </WagmiConfig> */}
+        </GridItemProvider>
       </ChakraProvider>
     </CacheProvider>
   )

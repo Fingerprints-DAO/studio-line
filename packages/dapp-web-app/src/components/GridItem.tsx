@@ -47,6 +47,7 @@ const GridItemComponent: React.FC<GridItemProps> = ({
       w={`${width}px`}
       h={`${height}px`} // Usa a altura calculada
       onClick={handleClick}
+      cursor={isClicked ? 'grabbing' : 'pointer'}
       _after={
         !isLastRow
           ? {
@@ -78,6 +79,7 @@ const GridItemComponent: React.FC<GridItemProps> = ({
         backgroundSize="cover"
         pos={'relative'}
         zIndex={2}
+        _hover={{ zIndex: 3 }}
       >
         <Box
           pos={'absolute'}
