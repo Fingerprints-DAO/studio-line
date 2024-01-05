@@ -8,9 +8,11 @@ type GridItemState = {
 // Criando o contexto com um estado vazio e uma função dummy para atualizá-lo
 const GridItemContext = createContext<{
   gridItemsState: GridItemState
+  soldItems: GridItemState
   toggleGridItem: (index: string) => void
 }>({
   gridItemsState: {},
+  soldItems: {},
   toggleGridItem: () => {},
 })
 
@@ -22,6 +24,12 @@ export const GridItemProvider = ({
   children: React.ReactNode
 }) => {
   const [gridItemsState, setGridItemsState] = useState<GridItemState>({})
+  const [soldItems] = useState<GridItemState>({
+    '0-0': true,
+    '3-4': true,
+    '20-5': true,
+    '10-20': true,
+  })
 
   const toggleGridItem = (index: string) => {
     setGridItemsState((prevState) => ({
@@ -31,7 +39,9 @@ export const GridItemProvider = ({
   }
 
   return (
-    <GridItemContext.Provider value={{ gridItemsState, toggleGridItem }}>
+    <GridItemContext.Provider
+      value={{ gridItemsState, toggleGridItem, soldItems }}
+    >
       {children}
     </GridItemContext.Provider>
   )

@@ -8,6 +8,8 @@ interface GridItemProps {
   height: number
   row: number
   col: number
+  isSold: boolean
+  placeholderImage: string
 }
 
 const lineStyle = {
@@ -21,13 +23,15 @@ const GridItemComponent: React.FC<GridItemProps> = ({
   height,
   row,
   col,
+  isSold,
+  placeholderImage,
 }) => {
   const { gridItemsState, toggleGridItem } = useGridItemContext()
   // const placeholderImage = 'https://via.placeholder.com/150'
   // const placeholderImage = `https://picsum.photos/id/${row + 1}${col}/200/300`
-  const placeholderImage = `https://picsum.photos/200/300?random=${row + 1}${
-    col + 1
-  }`
+  // const placeholderImage = `https://picsum.photos/200/300?random=${row + 1}${
+  //   col + 1
+  // }`
   const [isFirstRow, isLastRow, isFirstCol, isLastCol] = [
     row === 0,
     row === 23,
@@ -45,9 +49,9 @@ const GridItemComponent: React.FC<GridItemProps> = ({
     <Box
       pos={'relative'}
       w={`${width}px`}
-      h={`${height}px`} // Usa a altura calculada
-      onClick={handleClick}
-      cursor={isClicked ? 'grabbing' : 'pointer'}
+      h={`${height}px`}
+      onClick={isSold ? undefined : handleClick}
+      cursor={isSold ? 'not-allowed' : isClicked ? 'grabbing' : 'pointer'}
       _after={
         !isLastRow
           ? {
@@ -79,7 +83,15 @@ const GridItemComponent: React.FC<GridItemProps> = ({
         backgroundSize="cover"
         pos={'relative'}
         zIndex={2}
-        _hover={{ zIndex: 3 }}
+        _hover={{
+          width: `${width * 2}px`,
+          height: `${height * 2}px`,
+          transition: 'width 0.2s, height 0.2s, transform 0.2s, filter 2s',
+          transform: 'translate(-25%, -25%)',
+          filter: 'none',
+          zIndex: 3,
+        }}
+        // border={isSold ? '2px solid red' : 'none'}
       >
         <Box
           pos={'absolute'}
@@ -87,13 +99,17 @@ const GridItemComponent: React.FC<GridItemProps> = ({
           left={0}
           right={0}
           bottom={0}
-          zIndex={isClicked ? 1 : 0}
+          zIndex={isClicked || isSold ? 1 : 0}
+          _hover={{
+            transition: 'filter 2s',
+          }}
+          filter={isSold ? 'grayscale(100%)' : 'none'}
         >
           <Image
             src={placeholderImage}
             alt="placeholder"
-            width={width}
-            height={height}
+            width={width * 2}
+            height={height * 2}
           />
         </Box>
         <Box
@@ -108,7 +124,7 @@ const GridItemComponent: React.FC<GridItemProps> = ({
           left={0}
           right={0}
           bottom={0}
-          zIndex={isClicked ? 0 : 1}
+          zIndex={isSold || isClicked ? 0 : 1}
         />
       </Box>
     </Box>
