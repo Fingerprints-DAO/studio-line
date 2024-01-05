@@ -67,8 +67,8 @@ export default function Home() {
               !sidebarIsFloating
                 ? ''
                 : isOpen
-                ? 'translateX(0)'
-                : 'translateX(105%)'
+                ? 'translateX(8%)'
+                : 'translateX(108%)'
             }
             style={
               sidebarIsFloating
@@ -85,7 +85,7 @@ export default function Home() {
           >
             {sidebarIsFloating && (
               <Box
-                pos={'absolute'}
+                pos={'fixed'}
                 top={2}
                 left={'-40px'}
                 zIndex={2}

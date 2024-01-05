@@ -12,6 +12,7 @@ dayjs.extend(duration)
 
 import { config } from '../settings/wagmi'
 import { GridItemProvider } from './GridItemContext'
+import theme from 'settings/theme'
 
 function Providers({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = React.useState(false)
@@ -21,7 +22,7 @@ function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <CacheProvider>
-      <ChakraProvider>
+      <ChakraProvider theme={theme}>
         <GridItemProvider>
           {/* <WagmiConfig config={config}> */}
           {!mounted && <p>Loading</p>}
