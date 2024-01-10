@@ -1,18 +1,60 @@
 import React, { createContext, useState, useContext } from 'react'
 
-// Tipo para o estado dos itens
-type GridItemState = {
-  [key: string]: boolean
+export enum Direction {
+  UP = 'up',
+  DOWN = 'down',
 }
 
-// Criando o contexto com um estado vazio e uma função dummy para atualizá-lo
+export interface GridItemProperties {
+  isOpened: boolean
+  isBlocked: boolean
+  isHighlighted: boolean
+  image: string
+  index: string
+  row: number
+  col: number
+  direction: Direction
+}
+
+// Tipo para o estado dos itens
+export type GridItemState = {
+  [key: string]: GridItemProperties
+}
+
+export const gridItemDefaultState = {
+  isOpened: false,
+  isBlocked: false,
+  isHighlighted: false,
+  image: '',
+  index: '',
+  row: 0,
+  col: 0,
+  direction: Direction.UP,
+}
+
+const generateFullGridDefaultState = () => {
+  const grid = {} as GridItemState
+  for (let row = 0; row < 24; row++) {
+    for (let col = 0; col < 24; col++) {
+      const index = `${row}-${col}`
+      grid[index] = {
+        ...gridItemDefaultState,
+        index,
+        row,
+        col,
+        direction: row >= 12 ? Direction.UP : Direction.DOWN,
+        image: `https://picsum.photos/200/300?random=${row + 1}${col + 1}`,
+      }
+    }
+  }
+  return grid
+}
+
 const GridItemContext = createContext<{
   gridItemsState: GridItemState
-  soldItems: GridItemState
   toggleGridItem: (index: string) => void
 }>({
   gridItemsState: {},
-  soldItems: {},
   toggleGridItem: () => {},
 })
 
@@ -23,25 +65,38 @@ export const GridItemProvider = ({
 }: {
   children: React.ReactNode
 }) => {
-  const [gridItemsState, setGridItemsState] = useState<GridItemState>({})
-  const [soldItems] = useState<GridItemState>({
-    '0-0': true,
-    '3-4': true,
-    '20-5': true,
-    '10-20': true,
-  })
+  const [gridItemsState, setGridItemsState] = useState<GridItemState>(
+    generateFullGridDefaultState()
+  )
 
   const toggleGridItem = (index: string) => {
+    // const [col, row] = index.split('-').map((n) => Number(n))
+    // const newState = {} as any
+    // if (row >= 12) {
+    //   newState[`${row + 1}-${col}`] = true
+    //   newState[`${row + 1}-${col - 1}`] = true
+    //   newState[`${row + 1}-${col + 1}`] = true
+    //   newState[`${row}-${col + 1}`] = true
+    //   newState[`${row}-${col - 1}`] = true
+    // } else {
+    //   newState[`${row - 1}-${col}`] = true
+    //   newState[`${row - 1}-${col - 1}`] = true
+    //   newState[`${row - 1}-${col + 1}`] = true
+    //   newState[`${row}-${col + 1}`] = true
+    //   newState[`${row}-${col - 1}`] = true
+    // }
+
     setGridItemsState((prevState) => ({
       ...prevState,
-      [index]: !prevState[index],
+      [index]: {
+        ...prevState[index],
+        isOpened: !prevState[index].isOpened,
+      },
     }))
   }
 
   return (
-    <GridItemContext.Provider
-      value={{ gridItemsState, toggleGridItem, soldItems }}
-    >
+    <GridItemContext.Provider value={{ gridItemsState, toggleGridItem }}>
       {children}
     </GridItemContext.Provider>
   )

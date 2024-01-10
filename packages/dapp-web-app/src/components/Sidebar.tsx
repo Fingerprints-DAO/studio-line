@@ -37,7 +37,7 @@ export function Sidebar({
           gap={2}
         >
           {Object.keys(gridItemsState)
-            .filter((item) => gridItemsState[item])
+            .filter((item) => gridItemsState[item].isOpened)
             .map((key) => {
               const [row, col] = key.split('-').map((number) => Number(number))
               return (
@@ -45,7 +45,7 @@ export function Sidebar({
                   <Text as={'span'}>
                     Line {row * 24 + col + 1} ({col + 1}, {row + 1}) -{' '}
                   </Text>
-                  <Text as={'span'}>{row <= 12 ? '⬆️' : '⬇️'}</Text>
+                  <Text as={'span'}>{row <= 12 ? '⬇️' : '⬆️'}</Text>
                   {/* Button to remove the item */}
                   <Text
                     as={'span'}

@@ -45,10 +45,8 @@ export default function Home() {
     setItemsCount(
       Object.keys(gridItemsState).filter((item) => gridItemsState[item]).length
     )
-    console.log(Object.keys(gridItemsState))
   }, [gridItemsState])
 
-  console.log(sidebarIsFloating)
   return (
     <Box as={'main'}>
       <Container maxW={'6xl'} overflow={'hidden'}>

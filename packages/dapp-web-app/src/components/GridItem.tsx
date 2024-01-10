@@ -1,15 +1,15 @@
 import React, { memo, useState } from 'react'
 import { Box } from '@chakra-ui/react'
-import { useGridItemContext } from 'contexts/GridItemContext'
+import {
+  useGridItemContext,
+  GridItemProperties,
+} from 'contexts/GridItemContext'
 import Image from 'next/image'
 
-interface GridItemProps {
+interface GridItemProps extends GridItemProperties {
   width: number
   height: number
-  row: number
-  col: number
-  isSold: boolean
-  placeholderImage: string
+  toggleGridItem: (index: string) => void
 }
 
 const lineStyle = {
@@ -21,12 +21,16 @@ const lineStyle = {
 const GridItemComponent: React.FC<GridItemProps> = ({
   width,
   height,
+  isOpened,
+  isBlocked,
+  image,
+  index,
   row,
   col,
-  isSold,
-  placeholderImage,
+  isHighlighted,
+  direction,
+  toggleGridItem,
 }) => {
-  const { gridItemsState, toggleGridItem } = useGridItemContext()
   // const placeholderImage = 'https://via.placeholder.com/150'
   // const placeholderImage = `https://picsum.photos/id/${row + 1}${col}/200/300`
   // const placeholderImage = `https://picsum.photos/200/300?random=${row + 1}${
@@ -38,8 +42,6 @@ const GridItemComponent: React.FC<GridItemProps> = ({
     col === 0,
     col === 23,
   ]
-  const index = `${row}-${col}`
-  const isClicked = gridItemsState[index]
 
   const handleClick = () => {
     toggleGridItem(index)
@@ -50,8 +52,8 @@ const GridItemComponent: React.FC<GridItemProps> = ({
       pos={'relative'}
       w={`${width}px`}
       h={`${height}px`}
-      onClick={isSold ? undefined : handleClick}
-      cursor={isSold ? 'not-allowed' : isClicked ? 'grabbing' : 'pointer'}
+      onClick={isBlocked ? undefined : handleClick}
+      cursor={isBlocked ? 'not-allowed' : isOpened ? 'grabbing' : 'pointer'}
       _after={
         !isLastRow
           ? {
@@ -99,14 +101,14 @@ const GridItemComponent: React.FC<GridItemProps> = ({
           left={0}
           right={0}
           bottom={0}
-          zIndex={isClicked || isSold ? 1 : 0}
+          zIndex={isOpened || isBlocked ? 1 : 0}
           _hover={{
             transition: 'filter 2s',
           }}
-          filter={isSold ? 'grayscale(100%)' : 'none'}
+          filter={isBlocked ? 'grayscale(100%)' : 'none'}
         >
           <Image
-            src={placeholderImage}
+            src={image}
             alt="placeholder"
             width={width * 2}
             height={height * 2}
@@ -124,7 +126,7 @@ const GridItemComponent: React.FC<GridItemProps> = ({
           left={0}
           right={0}
           bottom={0}
-          zIndex={isSold || isClicked ? 0 : 1}
+          zIndex={isBlocked || isOpened ? 0 : 1}
         />
       </Box>
     </Box>

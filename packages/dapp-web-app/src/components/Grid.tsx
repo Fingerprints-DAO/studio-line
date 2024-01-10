@@ -7,7 +7,7 @@ import { useGridItemContext } from 'contexts/GridItemContext'
 const Grid: React.FC = () => {
   const gridSize = 24
   const { ref, width } = useContainerWidth()
-  const { soldItems } = useGridItemContext()
+  const { gridItemsState, toggleGridItem } = useGridItemContext()
 
   const itemSize = useMemo(() => {
     const totalSpacing = gridSize * 10
@@ -28,17 +28,13 @@ const Grid: React.FC = () => {
           key={index}
           width={itemSize}
           height={itemHeight}
-          row={row}
-          col={col}
-          isSold={soldItems[`${row}-${col}`]}
-          placeholderImage={`https://picsum.photos/200/300?random=${row + 1}${
-            col + 1
-          }`}
+          toggleGridItem={toggleGridItem}
+          {...gridItemsState[`${row}-${col}`]}
         />
       )
     }
     return items
-  }, [itemSize, itemHeight, soldItems])
+  }, [itemSize, itemHeight, toggleGridItem, gridItemsState])
 
   return (
     <div ref={ref}>
