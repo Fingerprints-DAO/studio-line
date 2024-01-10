@@ -9,6 +9,8 @@ import Image from 'next/image'
 interface GridItemProps extends GridItemProperties {
   width: number
   height: number
+  isHighlighted: boolean
+  onlyHighlightedClick: boolean
   toggleGridItem: (index: string) => void
 }
 
@@ -30,6 +32,7 @@ const GridItemComponent: React.FC<GridItemProps> = ({
   isHighlighted,
   direction,
   toggleGridItem,
+  onlyHighlightedClick,
 }) => {
   // const placeholderImage = 'https://via.placeholder.com/150'
   // const placeholderImage = `https://picsum.photos/id/${row + 1}${col}/200/300`
@@ -52,8 +55,18 @@ const GridItemComponent: React.FC<GridItemProps> = ({
       pos={'relative'}
       w={`${width}px`}
       h={`${height}px`}
-      onClick={isBlocked ? undefined : handleClick}
-      cursor={isBlocked ? 'not-allowed' : isOpened ? 'grabbing' : 'pointer'}
+      onClick={
+        isBlocked || (onlyHighlightedClick && !isHighlighted)
+          ? undefined
+          : handleClick
+      }
+      cursor={
+        isBlocked || (onlyHighlightedClick && !isHighlighted)
+          ? 'not-allowed'
+          : isOpened
+          ? 'grabbing'
+          : 'pointer'
+      }
       _after={
         !isLastRow
           ? {
@@ -85,14 +98,19 @@ const GridItemComponent: React.FC<GridItemProps> = ({
         backgroundSize="cover"
         pos={'relative'}
         zIndex={2}
-        _hover={{
-          width: `${width * 2}px`,
-          height: `${height * 2}px`,
-          transition: 'width 0.2s, height 0.2s, transform 0.2s, filter 2s',
-          transform: 'translate(-25%, -25%)',
-          filter: 'none',
-          zIndex: 3,
-        }}
+        _hover={
+          onlyHighlightedClick && !isHighlighted
+            ? {}
+            : {
+                width: `${width * 2}px`,
+                height: `${height * 2}px`,
+                transition:
+                  'width 0.2s, height 0.2s, transform 0.2s, filter 2s',
+                transform: 'translate(-25%, -25%)',
+                filter: 'none',
+                zIndex: 3,
+              }
+        }
         // border={isSold ? '2px solid red' : 'none'}
       >
         <Box
@@ -115,9 +133,11 @@ const GridItemComponent: React.FC<GridItemProps> = ({
           />
         </Box>
         <Box
-          border={'1px solid white'}
+          border={isHighlighted ? '2px solid red' : '1px solid white'}
           bgColor={
-            isFirstRow || isFirstCol || isLastRow || isLastCol
+            isHighlighted
+              ? 'red.500'
+              : isFirstRow || isFirstCol || isLastRow || isLastCol
               ? 'gray.200'
               : 'gray.500'
           }
@@ -133,7 +153,7 @@ const GridItemComponent: React.FC<GridItemProps> = ({
   )
 }
 
-const GridItem = memo(GridItemComponent)
+const GridItem = GridItemComponent
 GridItem.displayName = 'GridItem'
 
 export default GridItem

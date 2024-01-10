@@ -8,7 +8,6 @@ export enum Direction {
 export interface GridItemProperties {
   isOpened: boolean
   isBlocked: boolean
-  isHighlighted: boolean
   image: string
   index: string
   row: number
@@ -24,7 +23,6 @@ export type GridItemState = {
 export const gridItemDefaultState = {
   isOpened: false,
   isBlocked: false,
-  isHighlighted: false,
   image: '',
   index: '',
   row: 0,
@@ -52,9 +50,11 @@ const generateFullGridDefaultState = () => {
 
 const GridItemContext = createContext<{
   gridItemsState: GridItemState
+  highlightGridItem: string[]
   toggleGridItem: (index: string) => void
 }>({
   gridItemsState: {},
+  highlightGridItem: [],
   toggleGridItem: () => {},
 })
 
@@ -68,35 +68,39 @@ export const GridItemProvider = ({
   const [gridItemsState, setGridItemsState] = useState<GridItemState>(
     generateFullGridDefaultState()
   )
-
+  const [highlightGridItem, setHighlightGridItem] = useState<string[]>([])
   const toggleGridItem = (index: string) => {
-    // const [col, row] = index.split('-').map((n) => Number(n))
-    // const newState = {} as any
-    // if (row >= 12) {
-    //   newState[`${row + 1}-${col}`] = true
-    //   newState[`${row + 1}-${col - 1}`] = true
-    //   newState[`${row + 1}-${col + 1}`] = true
-    //   newState[`${row}-${col + 1}`] = true
-    //   newState[`${row}-${col - 1}`] = true
-    // } else {
-    //   newState[`${row - 1}-${col}`] = true
-    //   newState[`${row - 1}-${col - 1}`] = true
-    //   newState[`${row - 1}-${col + 1}`] = true
-    //   newState[`${row}-${col + 1}`] = true
-    //   newState[`${row}-${col - 1}`] = true
-    // }
+    setGridItemsState((prevState) => {
+      const newIsOpened = !prevState[index].isOpened
+      if (newIsOpened) {
+        const [row, col] = index.split('-').map((n) => Number(n))
+        const highlightRow =
+          prevState[index].direction === Direction.DOWN ? row + 1 : row - 1
 
-    setGridItemsState((prevState) => ({
-      ...prevState,
-      [index]: {
-        ...prevState[index],
-        isOpened: !prevState[index].isOpened,
-      },
-    }))
+        setHighlightGridItem([
+          `${highlightRow}-${col}`,
+          `${highlightRow}-${col - 1}`,
+          `${highlightRow}-${col + 1}`,
+          `${row}-${col + 1}`,
+          `${row}-${col - 1}`,
+        ])
+      } else {
+        setHighlightGridItem([])
+      }
+      return {
+        ...prevState,
+        [index]: {
+          ...prevState[index],
+          isOpened: newIsOpened,
+        },
+      }
+    })
   }
 
   return (
-    <GridItemContext.Provider value={{ gridItemsState, toggleGridItem }}>
+    <GridItemContext.Provider
+      value={{ gridItemsState, toggleGridItem, highlightGridItem }}
+    >
       {children}
     </GridItemContext.Provider>
   )
