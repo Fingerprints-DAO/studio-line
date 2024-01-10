@@ -8,7 +8,7 @@ import breakpoints from './breakpoints'
 
 const config: ThemeConfig = {
   useSystemColorMode: false,
-  initialColorMode: 'dark',
+  initialColorMode: 'light',
 }
 
 const theme = extendTheme({

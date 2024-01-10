@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import Grid from 'components/Grid'
 import { GridItemProvider, useGridItemContext } from 'contexts/GridItemContext'
-import { Sidebar } from 'components/Sidebar'
+import { SidebarDetailed } from 'components/SidebarDetailed'
 import Header from 'components/header'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 
@@ -57,7 +57,7 @@ export default function Home() {
           </Box>
           <VStack
             flex="3"
-            bg="black"
+            bg="white"
             p={4}
             alignItems="stretch"
             transition="transform 0.3s ease-in-out"
@@ -87,11 +87,11 @@ export default function Home() {
                 top={2}
                 left={'-40px'}
                 zIndex={2}
-                bgColor={'black'}
+                textColor={'black'}
                 textAlign={'center'}
               >
                 <Button
-                  variant="ghost"
+                  variant={'outline'}
                   onClick={handleToggleSidebar}
                   w={'40px'}
                 >
@@ -101,10 +101,10 @@ export default function Home() {
                     boxSize={6}
                   />
                 </Button>
-                {itemsCount > 0 && <Text mb={2}>({itemsCount})</Text>}
+                {/* {itemsCount > 0 && <Text mb={2}>({itemsCount})</Text>} */}
               </Box>
             )}
-            <Sidebar
+            <SidebarDetailed
               sidebarIsFloating={sidebarIsFloating}
               toggleSidebar={toggleSidebar}
             />

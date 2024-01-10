@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useMemo, useState } from 'react'
 import { Box } from '@chakra-ui/react'
 import {
   useGridItemContext,
@@ -14,11 +14,11 @@ interface GridItemProps extends GridItemProperties {
   toggleGridItem: (index: string) => void
 }
 
-const lineStyle = {
+const lineStyle = (isHighlighted = false) => ({
   content: '""',
   position: 'absolute',
-  bgColor: 'blackAlpha.600',
-}
+  bgColor: isHighlighted ? 'red' : 'blackAlpha.600',
+})
 
 const GridItemComponent: React.FC<GridItemProps> = ({
   width,
@@ -50,27 +50,37 @@ const GridItemComponent: React.FC<GridItemProps> = ({
     toggleGridItem(index)
   }
 
+  const disableClick =
+    isBlocked ||
+    (onlyHighlightedClick && !isHighlighted) ||
+    (!isHighlighted && (isLastRow || isFirstRow))
+  const isBorder = isFirstRow || isFirstCol || isLastRow || isLastCol
+  const isOdd = col % 2 === 0
+
+  const bgColor = useMemo(() => {
+    if (isHighlighted) {
+      return 'red.300'
+    }
+    if (isBorder) {
+      return '#d2d2d2'
+    }
+    if (isOdd) {
+      return '#737373'
+    }
+    return '#191919'
+  }, [isBorder, isHighlighted, isOdd])
+
   return (
     <Box
       pos={'relative'}
       w={`${width}px`}
       h={`${height}px`}
-      onClick={
-        isBlocked || (onlyHighlightedClick && !isHighlighted)
-          ? undefined
-          : handleClick
-      }
-      cursor={
-        isBlocked || (onlyHighlightedClick && !isHighlighted)
-          ? 'not-allowed'
-          : isOpened
-          ? 'grabbing'
-          : 'pointer'
-      }
+      onClick={disableClick ? undefined : handleClick}
+      cursor={disableClick ? 'not-allowed' : isOpened ? 'grabbing' : 'pointer'}
       _after={
         !isLastRow
           ? {
-              ...lineStyle,
+              ...lineStyle(),
               left: '50%',
               bottom: '-50%', // Ajustado para estender para fora do quadrado
               transform: 'translateX(-50%)',
@@ -82,7 +92,7 @@ const GridItemComponent: React.FC<GridItemProps> = ({
       _before={
         !isLastCol
           ? {
-              ...lineStyle,
+              ...lineStyle(),
               top: '50%',
               right: '-50%', // Ajustado para estender para fora do quadrado
               transform: 'translateY(-50%)',
@@ -99,7 +109,7 @@ const GridItemComponent: React.FC<GridItemProps> = ({
         pos={'relative'}
         zIndex={2}
         _hover={
-          onlyHighlightedClick && !isHighlighted
+          (onlyHighlightedClick && !isHighlighted) || disableClick
             ? {}
             : {
                 width: `${width * 2}px`,
@@ -124,6 +134,8 @@ const GridItemComponent: React.FC<GridItemProps> = ({
             transition: 'filter 2s',
           }}
           filter={isBlocked ? 'grayscale(100%)' : 'none'}
+          border={isHighlighted ? '2px solid red' : `none`}
+          borderColor={isHighlighted ? bgColor : `none`}
         >
           <Image
             src={image}
@@ -133,14 +145,7 @@ const GridItemComponent: React.FC<GridItemProps> = ({
           />
         </Box>
         <Box
-          border={isHighlighted ? '2px solid red' : '1px solid white'}
-          bgColor={
-            isHighlighted
-              ? 'red.500'
-              : isFirstRow || isFirstCol || isLastRow || isLastCol
-              ? 'gray.200'
-              : 'gray.500'
-          }
+          bgColor={bgColor}
           pos={'absolute'}
           top={0}
           left={0}
@@ -153,7 +158,7 @@ const GridItemComponent: React.FC<GridItemProps> = ({
   )
 }
 
-const GridItem = GridItemComponent
+const GridItem = memo(GridItemComponent)
 GridItem.displayName = 'GridItem'
 
 export default GridItem

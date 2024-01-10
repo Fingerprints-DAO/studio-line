@@ -46,13 +46,11 @@ const components = {
         },
       })),
       outline: defineStyle(({ colorScheme }) => ({
-        borderColor: `${colorScheme}.500`,
+        borderColor: `black`,
         borderWidth: 2,
-        color: `${colorScheme}.500`,
-        // _hover: {
-        //   background: `${colorScheme}.100`,
-        //   color: 'black',
-        // },
+        color: `black`,
+        rounded: 'none',
+        backgroundColor: 'white',
       })),
     },
     baseStyle: {
