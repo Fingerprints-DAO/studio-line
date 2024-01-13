@@ -19,7 +19,7 @@ import Header from 'components/header'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import Playground from 'components/playground'
 
-export default function Home() {
+export default function Auction() {
   // const { chain } = useNetwork()
   // if (chain?.id) {
   //   getContractsDataForChainOrThrow(chain?.id).then((a) =>

@@ -11,7 +11,6 @@ import dayjs from 'dayjs'
 dayjs.extend(duration)
 
 import { config } from '../settings/wagmi'
-import { GridItemProvider } from './GridItemContext'
 import theme from 'settings/theme'
 
 function Providers({ children }: { children: React.ReactNode }) {
@@ -23,14 +22,12 @@ function Providers({ children }: { children: React.ReactNode }) {
   return (
     <CacheProvider>
       <ChakraProvider theme={theme}>
-        <GridItemProvider>
-          {/* <WagmiConfig config={config}> */}
-          {!mounted && <p>Loading</p>}
-          {/* <ConnectKitProvider> */}
-          {mounted && children}
-          {/* </ConnectKitProvider> */}
-          {/* </WagmiConfig> */}
-        </GridItemProvider>
+        {/* <WagmiConfig config={config}> */}
+        {!mounted && <p>Loading</p>}
+        {/* <ConnectKitProvider> */}
+        {mounted && children}
+        {/* </ConnectKitProvider> */}
+        {/* </WagmiConfig> */}
       </ChakraProvider>
     </CacheProvider>
   )
