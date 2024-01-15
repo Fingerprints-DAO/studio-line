@@ -20,7 +20,7 @@ const lineStyle = (isHighlighted = false) => ({
   bgColor: isHighlighted ? 'red' : 'blackAlpha.600',
 })
 
-const GridItemComponent: React.FC<GridItemProps> = ({
+const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   width,
   height,
   isOpened,
@@ -158,7 +158,7 @@ const GridItemComponent: React.FC<GridItemProps> = ({
   )
 }
 
-const GridItem = memo(GridItemComponent)
-GridItem.displayName = 'GridItem'
+const PlaygroundGridItem = memo(PlaygroundGridItemComponent)
+PlaygroundGridItem.displayName = 'PlaygroundGridItem'
 
-export default GridItem
+export default PlaygroundGridItem

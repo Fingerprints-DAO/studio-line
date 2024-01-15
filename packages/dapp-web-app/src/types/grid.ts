@@ -1,3 +1,6 @@
+export const GridSize = 25
+export const GridItemsTotal = GridSize * GridSize
+
 export enum Direction {
   UP = 'up',
   DOWN = 'down',

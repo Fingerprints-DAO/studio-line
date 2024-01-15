@@ -12,7 +12,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import Grid from 'components/Grid'
+import PlaygroundGrid from 'components/playground/grid/PlaygroundGrid'
 import {
   PlaygroundProvider,
   usePlaygroundContext,
@@ -22,7 +22,7 @@ import Header from 'components/header'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import Playground from 'components/playground'
 
-export default function Home() {
+export default function HomePage() {
   // const { chain } = useNetwork()
   // if (chain?.id) {
   //   getContractsDataForChainOrThrow(chain?.id).then((a) =>

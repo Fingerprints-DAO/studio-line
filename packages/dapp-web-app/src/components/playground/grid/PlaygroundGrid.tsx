@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react'
 import { SimpleGrid } from '@chakra-ui/react'
-import GridItem from './GridItem'
+import PlaygroundGridItem from './PlaygroundGridItem'
 import useContainerWidth from 'hooks/useContainerWidth'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 
-const Grid: React.FC = () => {
+const PlaygroundGrid: React.FC = () => {
   const gridSize = 24
   const { ref, width } = useContainerWidth()
   const { gridItemsState, toggleGridItem, highlightGridItem } =
@@ -24,7 +24,7 @@ const Grid: React.FC = () => {
       const row = Math.floor(index / gridSize)
       const col = index % gridSize
       items.push(
-        <GridItem
+        <PlaygroundGridItem
           key={index}
           width={itemSize}
           height={itemHeight}
@@ -47,4 +47,4 @@ const Grid: React.FC = () => {
   )
 }
 
-export default Grid
+export default PlaygroundGrid

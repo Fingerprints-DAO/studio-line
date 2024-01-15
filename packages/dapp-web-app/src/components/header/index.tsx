@@ -24,7 +24,7 @@ import { usePathname } from 'next/navigation'
 
 // let nav = isAfterStage(PageState.Released) ? [{ href: '/auction', label: 'auction' }] : []
 const nav = [
-  { href: '/about', label: 'Auction' },
+  { href: '/auction', label: 'Auction' },
   { href: '/faq', label: 'Move' },
   { href: '/faq', label: 'Images' },
 ]

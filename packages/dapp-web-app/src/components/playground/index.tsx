@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { Box, Button, Container, Flex, Icon, VStack } from '@chakra-ui/react'
-import Grid from 'components/Grid'
+import PlaygroundGrid from 'components/playground/grid/PlaygroundGrid'
 import {
   PlaygroundProvider,
   usePlaygroundContext,
@@ -40,7 +40,7 @@ export default function Playground() {
         <Header />
         <Flex pos={'relative'}>
           <Box flex="7" p={2} bgColor={'white'}>
-            <Grid />
+            <PlaygroundGrid />
           </Box>
           <VStack
             flex="3"
