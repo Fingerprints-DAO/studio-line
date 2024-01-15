@@ -2,13 +2,13 @@ import React, { useMemo } from 'react'
 import { SimpleGrid } from '@chakra-ui/react'
 import GridItem from './GridItem'
 import useContainerWidth from 'hooks/useContainerWidth'
-import { useGridItemContext } from 'contexts/GridItemContext'
+import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 
 const Grid: React.FC = () => {
   const gridSize = 24
   const { ref, width } = useContainerWidth()
   const { gridItemsState, toggleGridItem, highlightGridItem } =
-    useGridItemContext()
+    usePlaygroundContext()
 
   const itemSize = useMemo(() => {
     const totalSpacing = gridSize * 10

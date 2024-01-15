@@ -1,9 +1,9 @@
 import React, { memo, useMemo, useState } from 'react'
 import { Box } from '@chakra-ui/react'
 import {
-  useGridItemContext,
+  usePlaygroundContext,
   GridItemProperties,
-} from 'contexts/GridItemContext'
+} from 'contexts/PlaygroundContext'
 import Image from 'next/image'
 
 interface GridItemProps extends GridItemProperties {

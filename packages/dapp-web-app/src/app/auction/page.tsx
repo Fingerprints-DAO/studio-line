@@ -13,7 +13,10 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import Grid from 'components/Grid'
-import { GridItemProvider, useGridItemContext } from 'contexts/GridItemContext'
+import {
+  PlaygroundProvider,
+  usePlaygroundContext,
+} from 'contexts/PlaygroundContext'
 import { SidebarDetailed } from 'components/playground/sidebar/SidebarDetailed'
 import Header from 'components/header'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'

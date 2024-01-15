@@ -2,7 +2,7 @@
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import { Box, Button, Icon, Text } from '@chakra-ui/react'
-import { useGridItemContext } from 'contexts/GridItemContext'
+import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 import { useState } from 'react'
 
 export function Sidebar({
@@ -12,7 +12,7 @@ export function Sidebar({
   toggleSidebar: () => void
   sidebarIsFloating: boolean
 }) {
-  const { gridItemsState, toggleGridItem } = useGridItemContext()
+  const { gridItemsState, toggleGridItem } = usePlaygroundContext()
 
   return (
     <Box>

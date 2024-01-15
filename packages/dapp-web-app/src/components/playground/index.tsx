@@ -3,7 +3,10 @@
 import React, { useState } from 'react'
 import { Box, Button, Container, Flex, Icon, VStack } from '@chakra-ui/react'
 import Grid from 'components/Grid'
-import { GridItemProvider, useGridItemContext } from 'contexts/GridItemContext'
+import {
+  PlaygroundProvider,
+  usePlaygroundContext,
+} from 'contexts/PlaygroundContext'
 import { SidebarDetailed } from 'components/playground/sidebar/SidebarDetailed'
 import Header from 'components/header'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
@@ -11,7 +14,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 export default function Playground() {
   const [sidebarIsFloating, setSidebarIsFloating] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const { gridItemsState } = useGridItemContext()
+  const { gridItemsState } = usePlaygroundContext()
   // const [itemsCount, setItemsCount] = useState(0)
 
   const handleToggleSidebar = () => {
@@ -32,7 +35,7 @@ export default function Playground() {
   // }, [gridItemsState])
 
   return (
-    <GridItemProvider>
+    <PlaygroundProvider>
       <Container maxW={'6xl'} overflow={'hidden'}>
         <Header />
         <Flex pos={'relative'}>
@@ -95,6 +98,6 @@ export default function Playground() {
           </VStack>
         </Flex>
       </Container>
-    </GridItemProvider>
+    </PlaygroundProvider>
   )
 }

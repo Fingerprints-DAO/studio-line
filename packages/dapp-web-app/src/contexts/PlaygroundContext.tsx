@@ -52,7 +52,7 @@ const generateFullGridDefaultState = () => {
   return grid
 }
 
-const GridItemContext = createContext<{
+const PlaygroundContext = createContext<{
   gridItemsState: GridItemState
   highlightGridItem: string[]
   toggleGridItem: (index: string) => void
@@ -68,9 +68,9 @@ const GridItemContext = createContext<{
   lastSelectedGridItem: undefined,
 })
 
-export const useGridItemContext = () => useContext(GridItemContext)
+export const usePlaygroundContext = () => useContext(PlaygroundContext)
 
-export const GridItemProvider = ({
+export const PlaygroundProvider = ({
   children,
 }: {
   children: React.ReactNode
@@ -175,7 +175,7 @@ export const GridItemProvider = ({
   }
 
   return (
-    <GridItemContext.Provider
+    <PlaygroundContext.Provider
       value={{
         gridItemsState,
         toggleGridItem,
@@ -185,6 +185,6 @@ export const GridItemProvider = ({
       }}
     >
       {children}
-    </GridItemContext.Provider>
+    </PlaygroundContext.Provider>
   )
 }
