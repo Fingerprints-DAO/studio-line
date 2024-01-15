@@ -1,19 +1,9 @@
 import React, { createContext, useState, useContext } from 'react'
+import { Direction, GridItemBaseProperties, generateImage } from 'types/grid'
 
-export enum Direction {
-  UP = 'up',
-  DOWN = 'down',
-  ALL = 'all',
-}
-
-export interface GridItemProperties {
+export interface GridItemProperties extends GridItemBaseProperties {
   isOpened: boolean
   isBlocked: boolean
-  image: string
-  index: string
-  row: number
-  col: number
-  direction: Direction
 }
 
 // Tipo para o estado dos itens
@@ -30,9 +20,6 @@ export const gridItemDefaultState = {
   col: 0,
   direction: Direction.UP,
 }
-
-const generateImage = (index: number) =>
-  `https://picsum.photos/id/${index}/200/300`
 
 const generateFullGridDefaultState = () => {
   const grid = {} as GridItemState
