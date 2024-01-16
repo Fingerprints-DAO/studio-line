@@ -36,7 +36,7 @@ const Header = () => {
 
   return (
     <>
-      <Grid as="header" py={8} position="relative" zIndex={10}>
+      <Grid as="header" py={8} position="relative" zIndex={1}>
         {/* <GridItem colSpan={{ base: 2, md: 2 }} color="black">
           <Link href="/">Line by Figure31</Link>
         </GridItem> */}

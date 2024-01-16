@@ -1,19 +1,13 @@
 import React, { useMemo } from 'react'
-import { SimpleGrid, Text } from '@chakra-ui/react'
-import AuctionGridItem from './AuctionGridItem'
+import { SimpleGrid } from '@chakra-ui/react'
+import AuctionGridItem from './MoveGridItem'
 import useContainerWidth from 'hooks/useContainerWidth'
 import { useAuctionContext } from 'contexts/AuctionContext'
 import { GridItemsTotal, GridSize } from 'types/grid'
 
-const AuctionGrid: React.FC = () => {
+const MoveGrid: React.FC = () => {
   const { ref, width } = useContainerWidth()
-  const {
-    gridItemsState,
-    toggleSelectedItem,
-    selectedItems,
-    availableItems,
-    mintedItems,
-  } = useAuctionContext()
+  const { gridItemsState, toggleSelectedItem } = useAuctionContext()
 
   const itemSize = useMemo(() => {
     const totalSpacing = GridSize * 10
@@ -36,42 +30,28 @@ const AuctionGrid: React.FC = () => {
         col = GridSize - col
       }
 
-      const id = `${row}-${col}`
+      // if (index > 615) {
+      //   console.log(index, row, col)
+      // }
 
       items.push(
         <AuctionGridItem
           key={index === 0 ? 'id0' : index}
           width={itemSize}
           height={itemHeight}
+          // isHighlighted={highlightGridItem.includes(`${row}-${col}`)}
+          // onlyHighlightedClick={highlightGridItem.length > 0}
           toggleGridItem={toggleSelectedItem}
-          isSelected={selectedItems.includes(id)}
-          isAvailable={availableItems.includes(id)}
-          isMinted={mintedItems.includes(id)}
-          {...gridItemsState[id]}
+          {...gridItemsState[`${row}-${col}`]}
         />
       )
     }
     // console.log(items.length)
     return items
-  }, [
-    itemSize,
-    itemHeight,
-    toggleSelectedItem,
-    selectedItems,
-    availableItems,
-    mintedItems,
-    gridItemsState,
-  ])
+  }, [itemSize, itemHeight, toggleSelectedItem, gridItemsState])
 
   return (
     <div ref={ref}>
-      <Text fontSize={'2xl'}>Please, select a token from the grid.</Text>
-      <Text fontSize={'md'}>
-        Only revealed tokens are available to be selected.
-      </Text>
-      <Text fontSize={'sm'} mb={5} color={'red'}>
-        Minted tokens can not be selected and have a red border.
-      </Text>
       <SimpleGrid columns={GridSize} spacing="10px">
         {gridItems}
       </SimpleGrid>
@@ -79,4 +59,4 @@ const AuctionGrid: React.FC = () => {
   )
 }
 
-export default AuctionGrid
+export default MoveGrid

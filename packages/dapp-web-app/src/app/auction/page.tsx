@@ -3,6 +3,7 @@
 import React from 'react'
 import { Box } from '@chakra-ui/react'
 import Auction from 'components/auction'
+import { AuctionProvider } from 'contexts/AuctionContext'
 
 export default function AuctionPage() {
   // const { chain } = useNetwork()
@@ -14,7 +15,9 @@ export default function AuctionPage() {
 
   return (
     <Box as={'main'}>
-      <Auction />
+      <AuctionProvider>
+        <Auction />
+      </AuctionProvider>
     </Box>
   )
 }

@@ -6,7 +6,9 @@ import {
   generateImage,
 } from 'types/grid'
 
-export interface GridItemProperties extends GridItemBaseProperties {}
+export interface GridItemProperties extends GridItemBaseProperties {
+  id: number | null
+}
 
 // Tipo para o estado dos itens
 export type GridItemState = {
@@ -14,6 +16,7 @@ export type GridItemState = {
 }
 
 export const gridItemDefaultState = {
+  id: null,
   image: '',
   index: '',
   row: 0,
@@ -28,6 +31,7 @@ const generateFullGridDefaultState = () => {
       const index = `${row}-${col}`
       grid[index] = {
         ...gridItemDefaultState,
+        id: col + row * GridSize,
         index,
         row,
         col,
@@ -82,8 +86,19 @@ export const AuctionProvider = ({
   // TODO: load contract states
   useEffect(() => {
     setGridItemsState(generateFullGridDefaultState())
-    setAvailableItems(['1-10', '2-15', '3-20', '4-21', '5-23', '6-22'])
-    setMintedItems(['2-15', '4-21'])
+    setAvailableItems([
+      '1-10',
+      '2-15',
+      '3-20',
+      '4-21',
+      '5-23',
+      '6-22',
+      '23-2',
+      '17-20',
+      '21-4',
+      '19-13',
+    ])
+    setMintedItems(['2-15', '4-21', '21-4'])
   }, [])
 
   return (

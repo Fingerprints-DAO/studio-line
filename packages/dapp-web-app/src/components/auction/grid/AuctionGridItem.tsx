@@ -1,5 +1,5 @@
 import React, { memo, useMemo, useState } from 'react'
-import { Box } from '@chakra-ui/react'
+import { Box, Tooltip } from '@chakra-ui/react'
 import { GridItemProperties } from 'contexts/AuctionContext'
 import Image from 'next/image'
 // import blueArrows from 'public/blueArrows.png'
@@ -7,6 +7,9 @@ import Image from 'next/image'
 interface GridItemProps extends GridItemProperties {
   width: number
   height: number
+  isSelected: boolean
+  isAvailable: boolean
+  isMinted: boolean
   toggleGridItem: (index: string) => void
 }
 
@@ -23,9 +26,14 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
   index,
   row,
   col,
+  isSelected,
+  isAvailable,
+  isMinted,
   direction,
   toggleGridItem,
 }) => {
+  const [isHovered, setIsHovered] = useState(false)
+
   const [isFirstRow, isLastRow, isFirstCol, isLastCol] = [
     row === 24,
     row === 0,
@@ -33,11 +41,18 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
     col === 24,
   ]
 
+  const handleMouseEnter = () => {
+    setIsHovered(true)
+  }
+
+  const handleMouseLeave = () => {
+    setIsHovered(false)
+  }
   const handleClick = () => {
     toggleGridItem(index)
   }
 
-  const disableClick = isLastRow || isFirstRow
+  const disableClick = isMinted || !isAvailable
   const isBorder = isFirstRow || isFirstCol || isLastRow || isLastCol
   const isOdd = col % 2 === 0
 
@@ -62,44 +77,10 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
       h={`${height}px`}
       onClick={disableClick ? undefined : handleClick}
       cursor={disableClick ? 'not-allowed' : 'pointer'}
-      // _after={
-      //   !isLastRow
-      //     ? {
-      //         ...lineStyle(),
-      //         bgColor: 'red',
-      //         left: '50%',
-      //         bottom: '-10%', // Ajustado para estender para fora do quadrado
-      //         top: '-10%', // Ajustado para estender para fora do quadrado
-      //         transform: 'translateX(-50%)',
-      //         width: '1px',
-      //       }
-      //     : {}
-      // }
-      // _before={
-      //   !isLastCol
-      //     ? {
-      //         ...lineStyle(),
-      //         top: '50%',
-      //         right: '-50%', // Ajustado para estender para fora do quadrado
-      //         transform: 'translateY(-50%)',
-      //         height: '1px',
-      //         width: '100%', // Ajustado para cobrir a distância entre os quadrados
-      //       }
-      //     : {}
-      // }
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Box pos={'absolute'} top={0} left={0} right={0} bottom={0}>
-        {/* central point: small circle box in the middle of the grid item */}
-        <Box
-          pos={'absolute'}
-          top={'50%'}
-          left={'50%'}
-          w={'10px'}
-          h={'10px'}
-          borderRadius={'full'}
-          transform={'translate(-50%, -50%)'}
-          bgColor={bgColor}
-        />
         {/* left line */}
         {!isFirstCol && (
           <Box
@@ -109,7 +90,7 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
             w={'calc(100% + 11px)'}
             transform={'translate(0, -50%)'}
             h={'1px'}
-            bgColor={'red'}
+            bgColor={'black'}
           />
         )}
         {/* right line */}
@@ -121,7 +102,7 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
             w={'calc(100% + 11px)'}
             transform={'translate(0%, -50%)'}
             h={'1px'}
-            bgColor={'yellow'}
+            bgColor={'black'}
           />
         )}
 
@@ -134,7 +115,7 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
             w={'1px'}
             h={'calc(100% + 11px)'}
             transform={'translate(-50%, 0%)'}
-            bgColor={'pink'}
+            bgColor={'black'}
           />
         )}
         {/* top line */}
@@ -149,101 +130,23 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
             bgColor={'black'}
           />
         )}
-        {/* diagonal left line */}
-        {/* {!isFirstRow && !isFirstCol && (
-              <Box
-                pos={'absolute'}
-                top={'5%'}
-                left={'-74%'}
-                w={`150%`}
-                h={'1px'}
-                style={{ rotate: '-126deg' }}
-                bgColor={'purple'}
-              >
-                <Box
-                  pos={'absolute'}
-                  width="0"
-                  height="0"
-                  borderTopWidth="10px"
-                  borderRightWidth="10px"
-                  borderBottomWidth="0"
-                  borderLeftWidth="10px"
-                  borderTopColor="transparent"
-                  borderRightColor="transparent"
-                  borderBottomColor="transparent"
-                  borderLeftColor="red"
-                  top={'-8px'}
-                  right={'-5px'}
-                  style={{ rotate: '-135deg' }}
-                />
-              </Box>
-            )} */}
-        {/* diagonal right line */}
-        {/* {!isFirstRow && !isLastCol && (
-              <Box
-                pos={'absolute'}
-                top={'5%'}
-                left={'24%'}
-                w={`150%`}
-                h={'1px'}
-                style={{ rotate: '126deg' }}
-                bgColor={'pink'}
-                zIndex={12}
-              >
-                <Box
-                  pos={'absolute'}
-                  width="0"
-                  height="0"
-                  borderTopWidth="10px"
-                  borderRightWidth="10px"
-                  borderBottomWidth="0"
-                  borderLeftWidth="10px"
-                  borderTopColor="transparent"
-                  borderRightColor="transparent"
-                  borderBottomColor="transparent"
-                  borderLeftColor="red"
-                  top={'0px'}
-                  left={'-5px'}
-                  style={{ rotate: '50deg' }}
-                />
-              </Box>
-            )} */}
       </Box>
 
-      {index === '22-4' && (
-        <Box
-          pos={'absolute'}
-          top={'30%'}
-          left={'-50%'}
-          w={'200%'}
-          h={'100%'}
-          zIndex={4}
-          bgImage={'/blue-arrows.png'}
-          bgPos={'center'}
-          bgSize={'contain'}
-          bgRepeat={'no-repeat'}
-        />
-      )}
       <Box
         w={'100%'}
         h={'100%'}
         backgroundSize="cover"
         pos={'relative'}
         zIndex={2}
-        _hover={
-          disableClick
-            ? {}
-            : {
-                width: `${width * 2}px`,
-                height: `${height * 2}px`,
-                transition:
-                  'width 0.2s, height 0.2s, transform 0.2s, filter 2s',
-                transform: 'translate(-25%, -25%)',
-                filter: 'none',
-                zIndex: 3,
-              }
-        }
-        // border={isSold ? '2px solid red' : 'none'}
+        _hover={{
+          width: `${width * 2}px`,
+          height: `${height * 2}px`,
+          transition: 'width 0.2s, height 0.2s, transform 0.2s, filter 2s',
+          transform: 'translate(-25%, -25%)',
+          filter: 'none',
+          zIndex: 3,
+        }}
+        border={isMinted ? '2px solid red' : 'none'}
       >
         <Box
           pos={'absolute'}
@@ -251,24 +154,34 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
           left={0}
           right={0}
           bottom={0}
-          zIndex={0}
+          zIndex={isAvailable || isHovered || isSelected ? 3 : 0}
           _hover={{
             transition: 'filter 2s',
           }}
-          // filter={isBlocked ? 'grayscale(100%)' : 'none'}
-          // border={isHighlighted ? '2px solid red' : `none`}
-          // borderColor={isHighlighted ? bgColor : `none`}
+          filter={
+            !isAvailable || isSelected
+              ? 'none'
+              : isHovered
+              ? 'none'
+              : 'grayscale(100%)'
+          }
+          transition={'filter 1s'}
         >
-          {/* <Image
-            src={image}
-            alt="placeholder"
-            width={width * 2}
-            height={height * 2}
-          /> */}
+          <Tooltip
+            label={isMinted ? 'Alredy minted' : 'Not mintable'}
+            bg={isMinted ? 'blackAlpha.600' : 'red.600'}
+            isDisabled={(!isMinted && isAvailable) || isSelected}
+          >
+            <Image
+              src={image}
+              alt="placeholder"
+              width={width * 2}
+              height={height * 2}
+            />
+          </Tooltip>
         </Box>
         <Box
-          // bgColor={'blackAlpha.300'}
-          // bgColor={bgColor}
+          bgColor={bgColor}
           pos={'absolute'}
           top={0}
           left={0}
@@ -276,9 +189,7 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
           bottom={0}
           zIndex={1}
           color={'black'}
-        >
-          {index}
-        </Box>
+        />
       </Box>
     </Box>
   )
