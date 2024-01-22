@@ -6,29 +6,12 @@ import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 import Image from 'next/image'
 import { useState } from 'react'
 
-export function SidebarDetailed({
-  toggleSidebar,
-  sidebarIsFloating,
-}: {
-  toggleSidebar: () => void
-  sidebarIsFloating: boolean
-}) {
+export function SidebarDetailed({}: {}) {
   const { lastSelectedGridItem, resetGrid, highlightGridItem, gridItemsState } =
     usePlaygroundContext()
 
   return (
     <Box>
-      <Box as={'button'} onClick={toggleSidebar}>
-        <Text
-          as={'span'}
-          fontStyle={'italic'}
-          fontSize={'sm'}
-          color={'blue.700'}
-        >
-          Set {sidebarIsFloating ? 'fixed sidebar' : 'floating sidebar'}
-        </Text>
-      </Box>
-
       <Box>
         {!lastSelectedGridItem && (
           <Text fontWeight={'bold'} my={4}>
@@ -46,11 +29,16 @@ export function SidebarDetailed({
               Token Selected {lastSelectedGridItem.row + 1}-
               {lastSelectedGridItem.col + 1}
             </Text>
-            <Box mb={10}>
+            <Box
+              mb={10}
+              display={'flex'}
+              alignItems={'center'}
+              flexDir={'column'}
+            >
               <Image
                 src={lastSelectedGridItem.image}
                 alt={`Token ${lastSelectedGridItem.index}`}
-                width={500}
+                width={200}
                 height={100}
               />
             </Box>

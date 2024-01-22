@@ -1,22 +1,33 @@
 import React, { useMemo } from 'react'
-import { SimpleGrid } from '@chakra-ui/react'
+import { Box, SimpleGrid } from '@chakra-ui/react'
 import PlaygroundGridItem from './PlaygroundGridItem'
-import useContainerWidth from 'hooks/useContainerWidth'
+import useContainerSizes from 'hooks/useContainerSizes'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 
+const gridSize = 24
+const spacing = 6
 const PlaygroundGrid: React.FC = () => {
-  const gridSize = 24
-  const { ref, width } = useContainerWidth()
+  const { ref, height } = useContainerSizes()
   const { gridItemsState, toggleGridItem, highlightGridItem } =
     usePlaygroundContext()
 
-  const itemSize = useMemo(() => {
-    const totalSpacing = gridSize * 10
-    const availableWidth = width - totalSpacing
-    return availableWidth / gridSize
-  }, [width])
+  const itemHeight = useMemo(() => {
+    const totalSpacing = gridSize * spacing
+    const availableHeight = height - totalSpacing
+    return availableHeight / gridSize
+  }, [height])
 
-  const itemHeight = useMemo(() => itemSize * (3 / 2), [itemSize])
+  const itemWidth = useMemo(() => {
+    return itemHeight / (3 / 2)
+  }, [itemHeight])
+
+  // const itemSize = useMemo(() => {
+  //   const totalSpacing = gridSize * 10
+  //   const availableWidth = width - totalSpacing
+  //   return availableWidth / gridSize
+  // }, [width])
+
+  // const itemHeight = useMemo(() => itemSize * (3 / 2), [itemSize])
 
   const gridItems = useMemo(() => {
     const items = []
@@ -26,7 +37,7 @@ const PlaygroundGrid: React.FC = () => {
       items.push(
         <PlaygroundGridItem
           key={index}
-          width={itemSize}
+          width={itemWidth}
           height={itemHeight}
           isHighlighted={highlightGridItem.includes(`${row}-${col}`)}
           onlyHighlightedClick={highlightGridItem.length > 0}
@@ -36,14 +47,19 @@ const PlaygroundGrid: React.FC = () => {
       )
     }
     return items
-  }, [itemSize, itemHeight, highlightGridItem, toggleGridItem, gridItemsState])
+  }, [itemWidth, itemHeight, highlightGridItem, toggleGridItem, gridItemsState])
 
   return (
-    <div ref={ref}>
-      <SimpleGrid columns={gridSize} spacing="10px">
+    <Box
+      ref={ref}
+      height={'100%'}
+      w={height > 0 ? height : 'auto'}
+      // minH={'700px'}
+    >
+      <SimpleGrid columns={gridSize} spacing={`${spacing}px`}>
         {gridItems}
       </SimpleGrid>
-    </div>
+    </Box>
   )
 }
 

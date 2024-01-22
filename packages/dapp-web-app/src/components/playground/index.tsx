@@ -13,20 +13,20 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 
 export default function Playground() {
   const [sidebarIsFloating, setSidebarIsFloating] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
+  // const [isOpen, setIsOpen] = useState(false)
   const { gridItemsState } = usePlaygroundContext()
   // const [itemsCount, setItemsCount] = useState(0)
 
-  const handleToggleSidebar = () => {
-    setIsOpen(!isOpen)
-  }
+  // const handleToggleSidebar = () => {
+  //   setIsOpen(!isOpen)
+  // }
 
-  const toggleSidebar = () => {
-    if (sidebarIsFloating) {
-      handleToggleSidebar()
-    }
-    setSidebarIsFloating(!sidebarIsFloating)
-  }
+  // const toggleSidebar = () => {
+  //   if (sidebarIsFloating) {
+  //     handleToggleSidebar()
+  //   }
+  //   setSidebarIsFloating(!sidebarIsFloating)
+  // }
 
   // useEffect(() => {
   //   setItemsCount(
@@ -36,65 +36,22 @@ export default function Playground() {
 
   return (
     <PlaygroundProvider>
-      <Container maxW={'6xl'} overflow={'hidden'}>
-        <Header />
-        <Flex pos={'relative'}>
-          <Box flex="7" p={2} bgColor={'white'}>
+      <Container maxW={'6xl'}>
+        <Flex pos={'relative'} justifyContent={'center'}>
+          <Box p={2} bgColor={'white'} h={'95vh'} mt={'2vh'} flexShrink={'0'}>
             <PlaygroundGrid />
           </Box>
           <VStack
-            flex="3"
             bg="white"
             p={4}
             alignItems="stretch"
-            transition="transform 0.3s ease-in-out"
-            transform={
-              !sidebarIsFloating
-                ? ''
-                : isOpen
-                ? 'translateX(8%)'
-                : 'translateX(108%)'
-            }
-            style={
-              sidebarIsFloating
-                ? {
-                    position: 'absolute',
-                    right: 0,
-                    left: '70%',
-                    top: 0,
-                    bottom: 0,
-                    zIndex: 2,
-                  }
-                : {}
-            }
+            maxH={'100vh'}
+            minW={'30vw'}
           >
-            {sidebarIsFloating && (
-              <Box
-                pos={'fixed'}
-                top={2}
-                left={'-40px'}
-                zIndex={2}
-                textColor={'black'}
-                textAlign={'center'}
-              >
-                <Button
-                  variant={'outline'}
-                  onClick={handleToggleSidebar}
-                  w={'40px'}
-                >
-                  <Icon
-                    w={'40px'}
-                    as={isOpen ? ChevronRightIcon : ChevronLeftIcon}
-                    boxSize={6}
-                  />
-                </Button>
-                {/* {itemsCount > 0 && <Text mb={2}>({itemsCount})</Text>} */}
-              </Box>
-            )}
-            <SidebarDetailed
-              sidebarIsFloating={sidebarIsFloating}
-              toggleSidebar={toggleSidebar}
-            />
+            <Header />
+            <Box maxH={'90vh'} overflow={'auto'}>
+              <SidebarDetailed />
+            </Box>
           </VStack>
         </Flex>
       </Container>

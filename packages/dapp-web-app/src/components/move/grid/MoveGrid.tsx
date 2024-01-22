@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react'
 import { SimpleGrid } from '@chakra-ui/react'
 import AuctionGridItem from './MoveGridItem'
-import useContainerWidth from 'hooks/useContainerWidth'
+import useContainerSizes from 'hooks/useContainerSizes'
 import { useAuctionContext } from 'contexts/AuctionContext'
 import { GridItemsTotal, GridSize } from 'types/grid'
 
 const MoveGrid: React.FC = () => {
-  const { ref, width } = useContainerWidth()
+  const { ref, width } = useContainerSizes()
   const { gridItemsState, toggleSelectedItem } = useAuctionContext()
 
   const itemSize = useMemo(() => {

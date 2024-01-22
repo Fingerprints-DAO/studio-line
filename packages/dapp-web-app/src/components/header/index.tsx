@@ -22,11 +22,9 @@ import { usePathname } from 'next/navigation'
 
 // let nav = isAfterStage(PageState.Released) ? [{ href: '/auction', label: 'auction' }] : []
 const nav = [
-  { href: '/playground', label: 'playground' },
-  { href: '/tokens', label: 'tokens' },
-  { href: '/auction', label: 'Auction' },
+  { href: '/', label: 'playground' },
   { href: '/about', label: 'about' },
-  { href: '/faq', label: 'FAQ' },
+  { href: '/auction', label: 'auction' },
 ]
 
 const Header = () => {
@@ -36,7 +34,7 @@ const Header = () => {
 
   return (
     <>
-      <Grid as="header" py={8} position="relative" zIndex={1}>
+      <Grid as="header" py={2} position="relative" zIndex={1}>
         {/* <GridItem colSpan={{ base: 2, md: 2 }} color="black">
           <Link href="/">Line by Figure31</Link>
         </GridItem> */}
@@ -45,7 +43,7 @@ const Header = () => {
             as="nav"
             display="flex"
             alignItems="center"
-            justifyContent="flex-end"
+            justifyContent="flex-start"
             h="full"
           >
             {nav.map((item, index) => {
@@ -57,7 +55,7 @@ const Header = () => {
                   as={Link}
                   href={item.href}
                   title={item.label}
-                  mr={14}
+                  mr={6}
                   ml={0}
                   _hover={{ color: 'gray.700' }}
                   color={isActive ? 'gray.700' : 'gray.600'}

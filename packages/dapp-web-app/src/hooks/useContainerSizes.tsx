@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 
-function useContainerWidth() {
+function useContainerSizes() {
   const ref = useRef<HTMLDivElement>(null)
   const [width, setWidth] = useState(0)
+  const [height, setHeight] = useState(0)
 
   // Função de debounce com tipagem correta
   const debounce = useCallback((fn: () => void, delay: number) => {
@@ -21,6 +22,7 @@ function useContainerWidth() {
     const handleResize = debounce(() => {
       if (ref.current) {
         setWidth(ref.current.offsetWidth)
+        setHeight(ref.current.offsetHeight)
       }
     }, 100) // 100ms de debounce
 
@@ -35,7 +37,7 @@ function useContainerWidth() {
     }
   }, [debounce])
 
-  return { ref, width }
+  return { ref, width, height }
 }
 
-export default useContainerWidth
+export default useContainerSizes
