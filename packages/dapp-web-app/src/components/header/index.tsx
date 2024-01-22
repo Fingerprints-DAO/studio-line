@@ -13,8 +13,6 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
-import Image from 'next/image'
-import { HamburgerIcon } from '@chakra-ui/icons'
 import Link from 'next/link'
 // import useMediaQuery from 'hooks/use-media-query'
 import { usePathname } from 'next/navigation'
@@ -24,9 +22,11 @@ import { usePathname } from 'next/navigation'
 
 // let nav = isAfterStage(PageState.Released) ? [{ href: '/auction', label: 'auction' }] : []
 const nav = [
+  { href: '/playground', label: 'playground' },
+  { href: '/tokens', label: 'tokens' },
   { href: '/auction', label: 'Auction' },
-  { href: '/faq', label: 'Move' },
-  { href: '/faq', label: 'Images' },
+  { href: '/about', label: 'about' },
+  { href: '/faq', label: 'FAQ' },
 ]
 
 const Header = () => {
