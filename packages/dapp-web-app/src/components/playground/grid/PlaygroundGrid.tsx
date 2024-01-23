@@ -1,62 +1,80 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { Box, SimpleGrid } from '@chakra-ui/react'
 import PlaygroundGridItem from './PlaygroundGridItem'
 import useContainerSizes from 'hooks/useContainerSizes'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
+import { GridItemsTotal, GridSize, GridSpace } from 'types/grid'
 
-const gridSize = 24
-const spacing = 6
 const PlaygroundGrid: React.FC = () => {
-  const { ref, height } = useContainerSizes()
+  const { ref, height, width } = useContainerSizes()
   const { gridItemsState, toggleGridItem, highlightGridItem } =
     usePlaygroundContext()
 
-  const itemHeight = useMemo(() => {
-    const totalSpacing = gridSize * spacing
+  const { itemHeight, itemWidth, gridSpaceX } = useMemo(() => {
+    const totalSpacing = GridSize * GridSpace
     const availableHeight = height - totalSpacing
-    return availableHeight / gridSize
-  }, [height])
-
-  const itemWidth = useMemo(() => {
-    return itemHeight / (3 / 2)
-  }, [itemHeight])
-
-  // const itemSize = useMemo(() => {
-  //   const totalSpacing = gridSize * 10
-  //   const availableWidth = width - totalSpacing
-  //   return availableWidth / gridSize
-  // }, [width])
-
-  // const itemHeight = useMemo(() => itemSize * (3 / 2), [itemSize])
+    const calculatedItemHeight = availableHeight / GridSize
+    const calculatedItemWidth = calculatedItemHeight / (3 / 2)
+    const calculatedGridSpaceX =
+      (width - Math.round(calculatedItemWidth) * (GridSize - 1)) /
+      (GridSize - 1)
+    return {
+      itemHeight: calculatedItemHeight,
+      itemWidth: calculatedItemWidth,
+      gridSpaceX: calculatedGridSpaceX,
+    }
+  }, [height, width])
 
   const gridItems = useMemo(() => {
     const items = []
-    for (let index = 0; index < gridSize * gridSize; index++) {
-      const row = Math.floor(index / gridSize)
-      const col = index % gridSize
+    for (let index = GridItemsTotal; index > 0; index--) {
+      let row = Math.floor(index / GridSize)
+      let col = index % GridSize
+
+      if (col === 0) {
+        row = row - 1
+      }
+      if (col > 0) {
+        col = GridSize - col
+      }
+      const id = `${row}-${col}`
+
       items.push(
         <PlaygroundGridItem
           key={index}
           width={itemWidth}
           height={itemHeight}
-          isHighlighted={highlightGridItem.includes(`${row}-${col}`)}
+          isHighlighted={highlightGridItem.includes(id)}
           onlyHighlightedClick={highlightGridItem.length > 0}
           toggleGridItem={toggleGridItem}
-          {...gridItemsState[`${row}-${col}`]}
+          lineWidth={Math.round(itemWidth + gridSpaceX)}
+          lineHeight={Math.round(itemHeight + GridSpace)}
+          {...gridItemsState[id]}
         />
       )
     }
     return items
-  }, [itemWidth, itemHeight, highlightGridItem, toggleGridItem, gridItemsState])
+  }, [
+    itemWidth,
+    itemHeight,
+    highlightGridItem,
+    toggleGridItem,
+    gridSpaceX,
+    gridItemsState,
+  ])
 
   return (
     <Box
       ref={ref}
       height={'100%'}
       w={height > 0 ? height : 'auto'}
-      // minH={'700px'}
+      minW={ref.current ? 'none' : '50vw'}
     >
-      <SimpleGrid columns={gridSize} spacing={`${spacing}px`}>
+      <SimpleGrid
+        columns={GridSize}
+        spacingY={`${GridSpace}px`}
+        spacingX={`${gridSpaceX}px`}
+      >
         {gridItems}
       </SimpleGrid>
     </Box>

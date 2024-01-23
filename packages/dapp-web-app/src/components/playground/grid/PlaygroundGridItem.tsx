@@ -1,28 +1,54 @@
 import React, { memo, useMemo, useState } from 'react'
 import { Box } from '@chakra-ui/react'
-import {
-  usePlaygroundContext,
-  GridItemProperties,
-} from 'contexts/PlaygroundContext'
+import { GridItemProperties } from 'contexts/PlaygroundContext'
 import Image from 'next/image'
+import GridNumber from './GridNumber'
+import { GridSize, GridSpace } from 'types/grid'
 
 interface GridItemProps extends GridItemProperties {
   width: number
   height: number
+  lineWidth: number
+  lineHeight: number
   isHighlighted: boolean
   onlyHighlightedClick: boolean
   toggleGridItem: (index: string) => void
 }
 
-const lineStyle = (isHighlighted = false) => ({
+const lineStyle = ({
+  isHighlighted = false,
+  isRow = false,
+  width = '100%',
+  height = '100%',
+  startFrom = '50%',
+}) => ({
   content: '""',
   position: 'absolute',
   bgColor: isHighlighted ? 'red' : 'blackAlpha.600',
+  ...(isRow
+    ? {
+        // up and down line
+        left: '50%',
+        top: startFrom,
+        transform: `translateX(-50%)`,
+        width: '1px',
+        height,
+      }
+    : {
+        // left and right line
+        top: '50%',
+        left: startFrom,
+        transform: `translateY(-50%)`,
+        height: '1px',
+        width,
+      }),
 })
 
 const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   width,
   height,
+  lineWidth,
+  lineHeight,
   isOpened,
   isBlocked,
   image,
@@ -34,17 +60,14 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   toggleGridItem,
   onlyHighlightedClick,
 }) => {
-  // const placeholderImage = 'https://via.placeholder.com/150'
-  // const placeholderImage = `https://picsum.photos/id/${row + 1}${col}/200/300`
-  // const placeholderImage = `https://picsum.photos/200/300?random=${row + 1}${
-  //   col + 1
-  // }`
   const [isFirstRow, isLastRow, isFirstCol, isLastCol] = [
+    row === GridSize - 1,
     row === 0,
-    row === 23,
     col === 0,
-    col === 23,
+    col === GridSize - 1,
   ]
+  const widthPx = `${width}px`
+  const heightPx = `${height}px`
 
   const handleClick = () => {
     toggleGridItem(index)
@@ -73,35 +96,33 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   return (
     <Box
       pos={'relative'}
-      w={`${width}px`}
-      h={`${height}px`}
+      w={widthPx}
+      h={heightPx}
       onClick={disableClick ? undefined : handleClick}
       cursor={disableClick ? 'not-allowed' : isOpened ? 'grabbing' : 'pointer'}
       _after={
         !isLastRow
-          ? {
-              ...lineStyle(),
-              left: '50%',
-              bottom: '-50%', // Ajustado para estender para fora do quadrado
-              transform: 'translateX(-50%)',
-              width: '1px',
-              height: '100%', // Ajustado para cobrir a distância entre os quadrados
-            }
+          ? lineStyle({
+              isRow: true,
+              height: `${lineHeight}px`,
+              startFrom: `${Math.round(height / 2)}px`,
+            })
           : {}
       }
       _before={
         !isLastCol
-          ? {
-              ...lineStyle(),
-              top: '50%',
-              right: '-50%', // Ajustado para estender para fora do quadrado
-              transform: 'translateY(-50%)',
-              height: '1px',
-              width: '100%', // Ajustado para cobrir a distância entre os quadrados
-            }
+          ? lineStyle({
+              isRow: false,
+              width: `${lineWidth}px`,
+              startFrom: `${Math.round(width / 2)}px`,
+            })
           : {}
       }
     >
+      {isFirstCol && (
+        <GridNumber number={row} isColumn w={widthPx} h={heightPx} />
+      )}
+      {isLastRow && <GridNumber number={col} w={widthPx} h={heightPx} />}
       <Box
         w={'100%'}
         h={'100%'}

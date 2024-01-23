@@ -1,5 +1,11 @@
 import React, { createContext, useState, useContext } from 'react'
-import { Direction, GridItemBaseProperties, generateImage } from 'types/grid'
+import {
+  Direction,
+  GridItemBaseProperties,
+  GridSize,
+  generateImage,
+  getDirection,
+} from 'types/grid'
 
 export interface GridItemProperties extends GridItemBaseProperties {
   isOpened: boolean
@@ -23,15 +29,15 @@ export const gridItemDefaultState = {
 
 const generateFullGridDefaultState = () => {
   const grid = {} as GridItemState
-  for (let row = 0; row < 24; row++) {
-    for (let col = 0; col < 24; col++) {
+  for (let row = GridSize - 1; row >= 0; row--) {
+    for (let col = 0; col < GridSize; col++) {
       const index = `${row}-${col}`
       grid[index] = {
         ...gridItemDefaultState,
         index,
         row,
         col,
-        direction: row >= 12 ? Direction.UP : Direction.DOWN,
+        direction: getDirection(row),
         image: generateImage(row + 1 + col + 1),
       }
     }
@@ -72,7 +78,7 @@ export const PlaygroundProvider = ({
   const toggleGridItem = (index: string) => {
     setGridItemsState((prevState) => {
       const direction =
-        prevState[index].row === 0 || prevState[index].row === 23
+        prevState[index].row === 0 || prevState[index].row === GridSize - 1
           ? Direction.ALL
           : lastSelectedGridItem?.direction ?? prevState[index].direction
       setLastSelectedGridItem({
@@ -111,7 +117,7 @@ export const PlaygroundProvider = ({
     //   setGridItemsState((prevState) => {
     //     const newIsOpened = !prevState[index].isOpened
     //     const direction =
-    //       prevState[index].row === 0 || prevState[index].row === 23
+    //       prevState[index].row === 0 || prevState[index].row === GridSize -1
     //         ? Direction.ALL
     //         : lastSelectedGridItem?.direction ?? prevState[index].direction
     //     setLastSelectedGridItem(
