@@ -2,7 +2,7 @@ import { Theme } from '@chakra-ui/react'
 
 const fontSizes: Partial<Theme['fontSizes']> = {
   xs: '12px',
-  md: '16px',
+  md: '14px',
   lg: '18px',
   '2xl': '24px',
   '3xl': '32px',

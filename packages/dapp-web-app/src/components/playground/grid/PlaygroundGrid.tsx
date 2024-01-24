@@ -7,8 +7,12 @@ import { GridItemsTotal, GridSize, GridSpace } from 'types/grid'
 
 const PlaygroundGrid: React.FC = () => {
   const { ref, height, width } = useContainerSizes()
-  const { gridItemsState, toggleGridItem, highlightGridItem } =
-    usePlaygroundContext()
+  const {
+    gridItemsState,
+    toggleGridItem,
+    highlightGridItem,
+    lastSelectedGridItem,
+  } = usePlaygroundContext()
 
   const { itemHeight, itemWidth, gridSpaceX } = useMemo(() => {
     const totalSpacing = GridSize * GridSpace
@@ -44,6 +48,7 @@ const PlaygroundGrid: React.FC = () => {
           key={index}
           width={itemWidth}
           height={itemHeight}
+          moveDirection={lastSelectedGridItem?.direction}
           isHighlighted={highlightGridItem.includes(id)}
           onlyHighlightedClick={highlightGridItem.length > 0}
           toggleGridItem={toggleGridItem}
@@ -57,6 +62,7 @@ const PlaygroundGrid: React.FC = () => {
   }, [
     itemWidth,
     itemHeight,
+    lastSelectedGridItem?.direction,
     highlightGridItem,
     toggleGridItem,
     gridSpaceX,

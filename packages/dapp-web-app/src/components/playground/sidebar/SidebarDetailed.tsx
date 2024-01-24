@@ -1,10 +1,8 @@
 'use client'
 
-import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
-import { Box, Button, Icon, Text } from '@chakra-ui/react'
+import { Box, Button, Text } from '@chakra-ui/react'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 import Image from 'next/image'
-import { useState } from 'react'
 
 export function SidebarDetailed({}: {}) {
   const { lastSelectedGridItem, resetGrid, highlightGridItem, gridItemsState } =
@@ -14,9 +12,15 @@ export function SidebarDetailed({}: {}) {
     <Box>
       <Box>
         {!lastSelectedGridItem && (
-          <Text fontWeight={'bold'} my={4}>
-            &lt; Please, select a token from the side.
-          </Text>
+          <>
+            <Text fontWeight={'bold'} mt={4} fontSize={'2xl'} as={'h1'}>
+              Select a token to get started
+            </Text>
+            <Text mb={4} fontSize={'md'}>
+              Here is the LINE playground, preview token images and plan your
+              moves on the board.
+            </Text>
+          </>
         )}
         {lastSelectedGridItem && (
           <Button variant={'outline'} my={4} onClick={resetGrid}>

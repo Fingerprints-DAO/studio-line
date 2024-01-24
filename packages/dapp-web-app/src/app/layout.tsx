@@ -1,8 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import Providers from 'contexts/providers'
-
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'arod.studio react ts template',
@@ -12,7 +9,7 @@ export const metadata: Metadata = {
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className} style={{ backgroundColor: 'white' }}>
+      <body style={{ backgroundColor: 'white' }}>
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -1,13 +1,14 @@
 import React, { memo, useMemo, useState } from 'react'
-import { Box } from '@chakra-ui/react'
+import { Box, Flex, Tooltip, Image as ChackraImage } from '@chakra-ui/react'
 import { GridItemProperties } from 'contexts/PlaygroundContext'
 import Image from 'next/image'
 import GridNumber from './GridNumber'
-import { GridSize, GridSpace } from 'types/grid'
+import { Direction, GridSize } from 'types/grid'
 
 interface GridItemProps extends GridItemProperties {
   width: number
   height: number
+  moveDirection?: Direction
   lineWidth: number
   lineHeight: number
   isHighlighted: boolean
@@ -47,6 +48,7 @@ const lineStyle = ({
 const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   width,
   height,
+  moveDirection,
   lineWidth,
   lineHeight,
   isOpened,
@@ -56,7 +58,6 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   row,
   col,
   isHighlighted,
-  direction,
   toggleGridItem,
   onlyHighlightedClick,
 }) => {
@@ -82,16 +83,18 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
 
   const bgColor = useMemo(() => {
     if (isHighlighted) {
-      return 'red.300'
+      return moveDirection === Direction.UP || moveDirection === Direction.ALL
+        ? 'cyan.200'
+        : 'red.100'
     }
     if (isBorder) {
-      return '#d2d2d2'
+      return 'gray.300'
     }
     if (isOdd) {
-      return '#737373'
+      return 'gray.400'
     }
-    return '#191919'
-  }, [isBorder, isHighlighted, isOdd])
+    return 'gray.500'
+  }, [isBorder, isHighlighted, isOdd, moveDirection])
 
   return (
     <Box
@@ -133,16 +136,15 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
           (onlyHighlightedClick && !isHighlighted) || disableClick
             ? {}
             : {
-                width: `${width * 2}px`,
-                height: `${height * 2}px`,
+                width: `${width * 1.4}px`,
+                height: `${height * 1.4}px`,
                 transition:
                   'width 0.2s, height 0.2s, transform 0.2s, filter 2s',
-                transform: 'translate(-25%, -25%)',
+                transform: 'translate(-15%, -15%)',
                 filter: 'none',
                 zIndex: 3,
               }
         }
-        // border={isSold ? '2px solid red' : 'none'}
       >
         <Box
           pos={'absolute'}
@@ -165,15 +167,37 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
             height={height * 2}
           />
         </Box>
-        <Box
-          bgColor={bgColor}
-          pos={'absolute'}
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          zIndex={isBlocked || isOpened ? 0 : 1}
-        />
+
+        <Tooltip
+          hasArrow
+          arrowSize={6}
+          gutter={6}
+          borderRadius={0}
+          p={'8px'}
+          bgColor={'rgba(45, 55, 72, 1)'}
+          backdropFilter={'blur(4px)'}
+          isDisabled={disableClick}
+          openDelay={500}
+          label={
+            <Flex
+              flexDir={'column'}
+              alignItems={'center'}
+              minH={'160px'}
+              minW={'80px'}
+            >
+              <ChackraImage src={image} h={'160px'} m={0} />
+            </Flex>
+          }
+          placement="auto"
+        >
+          <Box
+            bgColor={bgColor}
+            pos={'absolute'}
+            w={'100%'}
+            h={'100%'}
+            zIndex={isBlocked || isOpened ? 0 : 1}
+          />
+        </Tooltip>
       </Box>
     </Box>
   )

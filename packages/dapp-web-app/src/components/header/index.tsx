@@ -23,8 +23,8 @@ import { usePathname } from 'next/navigation'
 // let nav = isAfterStage(PageState.Released) ? [{ href: '/auction', label: 'auction' }] : []
 const nav = [
   { href: '/', label: 'playground' },
-  { href: '/about', label: 'about' },
   { href: '/auction', label: 'auction' },
+  { href: '/about', label: 'about' },
 ]
 
 const Header = () => {
@@ -33,47 +33,47 @@ const Header = () => {
   // const [isMobile] = useMediaQuery('(max-width: 767px)')
 
   return (
-    <>
-      <Grid as="header" py={2} position="relative" zIndex={1}>
-        {/* <GridItem colSpan={{ base: 2, md: 2 }} color="black">
-          <Link href="/">Line by Figure31</Link>
-        </GridItem> */}
-        <GridItem colSpan={{ base: 2, sm: 4, md: 10 }}>
-          <Flex
-            as="nav"
-            display="flex"
-            alignItems="center"
-            justifyContent="flex-start"
-            h="full"
-          >
-            {nav.map((item, index) => {
-              const isActive = pathname === item.href
+    <Grid
+      as="header"
+      py={2}
+      position="relative"
+      zIndex={1}
+      justifyContent={'right'}
+    >
+      <GridItem colSpan={{ base: 2, sm: 4, md: 10 }}>
+        <Flex
+          as="nav"
+          display="flex"
+          alignItems="center"
+          justifyContent="flex-start"
+          h="full"
+        >
+          {nav.map((item, index) => {
+            const isActive = pathname === item.href
 
-              return (
-                <Box
-                  key={index}
-                  as={Link}
-                  href={item.href}
-                  title={item.label}
-                  mr={6}
-                  ml={0}
-                  _hover={{ color: 'gray.700' }}
-                  color={isActive ? 'gray.700' : 'gray.600'}
-                  // bgColor={'black'}
-                  transition="ease"
-                  transitionProperty="color"
-                  transitionDuration="0.2s"
-                >
-                  <Text as="strong" fontSize="20px" lineHeight={'20px'}>
-                    {item.label}
-                  </Text>
-                </Box>
-              )
-            })}
-          </Flex>
-        </GridItem>
-      </Grid>
-    </>
+            return (
+              <Box
+                key={index}
+                as={Link}
+                href={item.href}
+                title={item.label}
+                mr={0}
+                ml={6}
+                _hover={{ color: 'cyan.500' }}
+                color={isActive ? 'cyan.500' : 'gray.900'}
+                transition="ease"
+                transitionProperty="color"
+                transitionDuration="0.2s"
+              >
+                <Text as="strong" fontSize="16px" lineHeight={'16px'}>
+                  {item.label}
+                </Text>
+              </Box>
+            )
+          })}
+        </Flex>
+      </GridItem>
+    </Grid>
   )
 }
 

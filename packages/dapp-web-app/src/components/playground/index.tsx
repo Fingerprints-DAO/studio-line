@@ -38,15 +38,24 @@ export default function Playground() {
     <PlaygroundProvider>
       <Container maxW={'6xl'}>
         <Flex pos={'relative'} justifyContent={'center'}>
-          <Box p={2} bgColor={'white'} h={'95vh'} mt={'2vh'} flexShrink={'0'}>
+          <Flex
+            p={2}
+            bgColor={'white'}
+            h={'95vh'}
+            mt={'2vh'}
+            flexShrink={'0'}
+            maxW={'50vw'}
+            justifyContent={'right'}
+          >
             <PlaygroundGrid />
-          </Box>
+          </Flex>
           <VStack
             bg="white"
             p={4}
             alignItems="stretch"
             maxH={'100vh'}
             minW={'30vw'}
+            maxW={'50vw'}
           >
             <Header />
             <Box maxH={'90vh'} overflow={'auto'}>
