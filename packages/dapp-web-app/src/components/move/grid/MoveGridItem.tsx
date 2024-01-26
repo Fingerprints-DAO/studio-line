@@ -1,19 +1,48 @@
 import React, { memo, useMemo, useState } from 'react'
-import { Box } from '@chakra-ui/react'
-import { GridItemProperties } from 'contexts/AuctionContext'
+import { Box, Flex, Tooltip, Image as ChackraImage } from '@chakra-ui/react'
+import { GridItemProperties } from 'contexts/MoveContext'
 import Image from 'next/image'
-// import blueArrows from 'public/blueArrows.png'
+import GridNumber from './GridNumber'
+import { Direction, GridSize } from 'types/grid'
 
 interface GridItemProps extends GridItemProperties {
   width: number
   height: number
+  lineWidth: number
+  lineHeight: number
+  isMinted: boolean
+  isAvailable: boolean
+  isSelected: boolean
   toggleGridItem: (index: string) => void
 }
 
-const lineStyle = (isHighlighted = false) => ({
+const lineStyle = ({
+  isHighlighted = false,
+  isRow = false,
+  width = '100%',
+  height = '100%',
+  startFrom = '50%',
+}) => ({
   content: '""',
   position: 'absolute',
-  bgColor: isHighlighted ? 'red' : 'blackAlpha.600',
+  bgColor: 'gray.200',
+  ...(isRow
+    ? {
+        // up and down line
+        left: '50%',
+        top: startFrom,
+        transform: `translateX(-50%)`,
+        width: '1px',
+        height,
+      }
+    : {
+        // left and right line
+        top: '50%',
+        left: startFrom,
+        transform: `translateY(-50%)`,
+        height: '1px',
+        width,
+      }),
 })
 
 const MoveGridItemComponent: React.FC<GridItemProps> = ({
@@ -25,265 +54,195 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
   col,
   direction,
   toggleGridItem,
+  lineWidth,
+  lineHeight,
+  isMinted,
+  isAvailable,
+  isSelected,
 }) => {
   const [isFirstRow, isLastRow, isFirstCol, isLastCol] = [
-    row === 24,
+    row === GridSize - 1,
     row === 0,
     col === 0,
-    col === 24,
+    col === GridSize - 1,
   ]
+  const widthPx = `${width}px`
+  const heightPx = `${height}px`
+
+  const disableClick = isMinted || !isAvailable
+  const renderPoint = isMinted || isAvailable || isSelected
 
   const handleClick = () => {
     toggleGridItem(index)
   }
 
-  const disableClick = isLastRow || isFirstRow
-  const isBorder = isFirstRow || isFirstCol || isLastRow || isLastCol
-  const isOdd = col % 2 === 0
-
   const bgColor = useMemo(() => {
-    // if (isHighlighted) {
-    //   return 'red.300'
-    // }
-    if (isBorder) {
-      return '#d2d2d2'
+    if (isAvailable) {
+      if (direction === Direction.UP) return 'red.500'
+      if (direction === Direction.DOWN) return 'cyan.500'
     }
-    if (isOdd) {
-      return '#737373'
-    }
-    return '#191919'
-  }, [isBorder, isOdd])
+    if (direction === Direction.UP) return 'red.100'
+    if (direction === Direction.DOWN) return 'cyan.100'
+    return 'gray.200'
+  }, [direction, isAvailable])
+
+  const arrowImage = useMemo(() => {
+    if (direction === Direction.UP) return 'move-up-arrow'
+    if (direction === Direction.DOWN) return 'move-down-arrow'
+    return 'move-down-all'
+  }, [direction])
+
+  const hideLastColumnDown = isLastCol && direction === Direction.DOWN
+  const hideFirstColumnDown = isFirstCol && direction === Direction.DOWN
+  const hideLastColumUp = isLastCol && direction === Direction.UP
+  const hideFirstColumUp = isFirstCol && direction === Direction.UP
 
   return (
     <Box
-      id={index}
       pos={'relative'}
-      w={`${width}px`}
-      h={`${height}px`}
+      w={widthPx}
+      h={heightPx}
       onClick={disableClick ? undefined : handleClick}
-      cursor={disableClick ? 'not-allowed' : 'pointer'}
-      // _after={
-      //   !isLastRow
-      //     ? {
-      //         ...lineStyle(),
-      //         bgColor: 'red',
-      //         left: '50%',
-      //         bottom: '-10%', // Ajustado para estender para fora do quadrado
-      //         top: '-10%', // Ajustado para estender para fora do quadrado
-      //         transform: 'translateX(-50%)',
-      //         width: '1px',
-      //       }
-      //     : {}
-      // }
-      // _before={
-      //   !isLastCol
-      //     ? {
-      //         ...lineStyle(),
-      //         top: '50%',
-      //         right: '-50%', // Ajustado para estender para fora do quadrado
-      //         transform: 'translateY(-50%)',
-      //         height: '1px',
-      //         width: '100%', // Ajustado para cobrir a distância entre os quadrados
-      //       }
-      //     : {}
-      // }
+      cursor={disableClick ? 'default' : 'pointer'}
+      _after={
+        !isLastRow
+          ? lineStyle({
+              isRow: true,
+              height: `${lineHeight}px`,
+              startFrom: `${Math.round(height / 2)}px`,
+            })
+          : {}
+      }
+      _before={
+        !isLastCol
+          ? lineStyle({
+              isRow: false,
+              width: `${lineWidth}px`,
+              startFrom: `${Math.round(width / 2)}px`,
+            })
+          : {}
+      }
     >
-      <Box pos={'absolute'} top={0} left={0} right={0} bottom={0}>
-        {/* central point: small circle box in the middle of the grid item */}
-        <Box
-          pos={'absolute'}
-          top={'50%'}
-          left={'50%'}
-          w={'10px'}
-          h={'10px'}
-          borderRadius={'full'}
-          transform={'translate(-50%, -50%)'}
-          bgColor={bgColor}
-          zIndex={4}
-        />
-        {/* left line */}
-        {!isFirstCol && (
-          <Box
-            pos={'absolute'}
-            top={'50%'}
-            right={'50%'}
-            w={'calc(100% + 11px)'}
-            transform={'translate(0, -50%)'}
-            h={'1px'}
-            bgColor={'black'}
-          />
-        )}
-        {/* right line */}
-        {!isLastCol && (
-          <Box
-            pos={'absolute'}
-            top={'50%'}
-            left={'50%'}
-            w={'calc(100% + 11px)'}
-            transform={'translate(0%, -50%)'}
-            h={'1px'}
-            bgColor={'black'}
-          />
-        )}
-
-        {/* bottom line */}
-        {!isLastRow && (
-          <Box
-            pos={'absolute'}
-            top={'50%'}
-            left={'50%'}
-            w={'1px'}
-            h={'calc(100% + 11px)'}
-            transform={'translate(-50%, 0%)'}
-            bgColor={'black'}
-          />
-        )}
-        {/* top line */}
-        {!isFirstRow && (
-          <Box
-            pos={'absolute'}
-            bottom={'50%'}
-            left={'50%'}
-            w={'1px'}
-            h={'calc(100% + 11px)'}
-            transform={'translate(-50%, 0%)'}
-            bgColor={'black'}
-          />
-        )}
-        {/* diagonal left line */}
-        {/* {!isFirstRow && !isFirstCol && (
-              <Box
-                pos={'absolute'}
-                top={'5%'}
-                left={'-74%'}
-                w={`150%`}
-                h={'1px'}
-                style={{ rotate: '-126deg' }}
-                bgColor={'purple'}
-              >
-                <Box
-                  pos={'absolute'}
-                  width="0"
-                  height="0"
-                  borderTopWidth="10px"
-                  borderRightWidth="10px"
-                  borderBottomWidth="0"
-                  borderLeftWidth="10px"
-                  borderTopColor="transparent"
-                  borderRightColor="transparent"
-                  borderBottomColor="transparent"
-                  borderLeftColor="red"
-                  top={'-8px'}
-                  right={'-5px'}
-                  style={{ rotate: '-135deg' }}
-                />
-              </Box>
-            )} */}
-        {/* diagonal right line */}
-        {/* {!isFirstRow && !isLastCol && (
-              <Box
-                pos={'absolute'}
-                top={'5%'}
-                left={'24%'}
-                w={`150%`}
-                h={'1px'}
-                style={{ rotate: '126deg' }}
-                bgColor={'pink'}
-                zIndex={12}
-              >
-                <Box
-                  pos={'absolute'}
-                  width="0"
-                  height="0"
-                  borderTopWidth="10px"
-                  borderRightWidth="10px"
-                  borderBottomWidth="0"
-                  borderLeftWidth="10px"
-                  borderTopColor="transparent"
-                  borderRightColor="transparent"
-                  borderBottomColor="transparent"
-                  borderLeftColor="red"
-                  top={'0px'}
-                  left={'-5px'}
-                  style={{ rotate: '50deg' }}
-                />
-              </Box>
-            )} */}
-      </Box>
-
-      {index === '22-4' && (
-        <Box
-          pos={'absolute'}
-          top={'42%'}
-          left={'-50%'}
-          w={'200%'}
-          h={'100%'}
-          zIndex={6}
-          bgImage={'/blue-arrows.png'}
-          bgPos={'center'}
-          bgSize={'contain'}
-          bgRepeat={'no-repeat'}
-        />
+      {/* GRID NUMBERS */}
+      {isFirstCol && (
+        <GridNumber number={row} isColumn w={widthPx} h={heightPx} />
       )}
-      <Box
-        w={'100%'}
-        h={'100%'}
-        backgroundSize="cover"
-        pos={'relative'}
-        zIndex={2}
-        _hover={
-          disableClick
-            ? {}
-            : {
-                width: `${width * 2}px`,
-                height: `${height * 2}px`,
-                transition:
-                  'width 0.2s, height 0.2s, transform 0.2s, filter 2s',
-                transform: 'translate(-25%, -25%)',
-                filter: 'none',
-                zIndex: 3,
-              }
-        }
-        // border={isSold ? '2px solid red' : 'none'}
-      >
-        <Box
-          pos={'absolute'}
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          zIndex={0}
-          _hover={{
-            transition: 'filter 2s',
-          }}
-          // filter={isBlocked ? 'grayscale(100%)' : 'none'}
-          // border={isHighlighted ? '2px solid red' : `none`}
-          // borderColor={isHighlighted ? bgColor : `none`}
-        >
-          {/* <Image
-            src={image}
-            alt="placeholder"
-            width={width * 2}
-            height={height * 2}
-          /> */}
-        </Box>
-        <Box
-          // bgColor={'blackAlpha.300'}
-          // bgColor={bgColor}
-          pos={'absolute'}
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          zIndex={1}
-          color={'black'}
-        />
-      </Box>
+      {isLastRow && <GridNumber number={col} w={widthPx} h={heightPx} />}
+      {/* GRID NUMBERS END */}
+
+      {renderPoint && (
+        <>
+          <Tooltip
+            hasArrow
+            arrowSize={6}
+            gutter={6}
+            borderRadius={0}
+            p={'8px'}
+            bgColor={'rgba(45, 55, 72, 1)'}
+            backdropFilter={'blur(4px)'}
+            openDelay={500}
+            label={
+              <Flex
+                flexDir={'column'}
+                alignItems={'center'}
+                minH={'160px'}
+                minW={'80px'}
+              >
+                <ChackraImage src={image} h={'160px'} m={0} />
+              </Flex>
+            }
+            placement="auto"
+          >
+            <Box pos={'absolute'} top={0} left={0} right={0} bottom={0}>
+              {/* central point: small circle box in the middle of the grid item */}
+              <Box
+                pos={'absolute'}
+                top={'50%'}
+                left={'50%'}
+                w={'7px'}
+                h={'7px'}
+                borderRadius={'full'}
+                transform={'translate(-50%, -50%)'}
+                bgColor={bgColor}
+                zIndex={4}
+              />
+            </Box>
+          </Tooltip>
+          <Box
+            position={'absolute'}
+            w={`${lineWidth * 2 - 4}px`}
+            h={`${lineHeight * 2 - 4}px`}
+            left={'50%'}
+            top={'50%'}
+            transform={`translate(-50%, -50%)`}
+            zIndex={1}
+          >
+            {/* {!(direction === Direction.UP) && (
+              <ChackraImage
+                src={`/${arrowImage}.svg`}
+                w={`100%`}
+                h={`100%`}
+                opacity={!isAvailable ? 0.2 : 1}
+              />
+            )} */}
+            <>
+              {/* LEFT */}
+              <ChackraImage
+                src={`/${arrowImage}.svg`}
+                w={`100%`}
+                h={`100%`}
+                opacity={!isAvailable ? 0.2 : 1}
+                pos={'absolute'}
+                hidden={hideLastColumnDown || hideFirstColumUp}
+              />
+              {/* UP */}
+              <ChackraImage
+                src={`/${arrowImage}.svg`}
+                w={`100%`}
+                h={`100%`}
+                opacity={!isAvailable ? 0.2 : 1}
+                transform={'rotate(90deg)'}
+                pos={'absolute'}
+              />
+              {/* RIGHT */}
+              <ChackraImage
+                src={`/${arrowImage}.svg`}
+                w={`100%`}
+                h={`100%`}
+                opacity={!isAvailable ? 0.2 : 1}
+                transform={'rotate(180deg)'}
+                pos={'absolute'}
+                hidden={hideLastColumUp || hideFirstColumnDown}
+              />
+              {/* LEFT-UP */}
+              <ChackraImage
+                src={`/${arrowImage}-diagonal.svg`}
+                w={`100%`}
+                h={`100%`}
+                opacity={!isAvailable ? 0.2 : 1}
+                transform={'rotate(0deg)'}
+                pos={'absolute'}
+                hidden={hideLastColumnDown || hideFirstColumUp}
+              />
+              {/* RIGHT-UP */}
+              <ChackraImage
+                src={`/${arrowImage}-diagonal.svg`}
+                w={`100%`}
+                h={`100%`}
+                opacity={!isAvailable ? 0.2 : 1}
+                transform={'rotate(90deg)'}
+                pos={'absolute'}
+                hidden={hideLastColumUp || hideFirstColumnDown}
+              />
+            </>
+          </Box>
+        </>
+      )}
     </Box>
   )
 }
 
-const AuctionGridItem = memo(MoveGridItemComponent)
-AuctionGridItem.displayName = 'AuctionGridItem'
+const MoveGridItem = memo(MoveGridItemComponent)
+MoveGridItem.displayName = 'MoveGridItem'
 
-export default AuctionGridItem
+export default MoveGridItem

@@ -1,21 +1,34 @@
-import React, { useMemo } from 'react'
-import { SimpleGrid } from '@chakra-ui/react'
-import AuctionGridItem from './MoveGridItem'
+import React, { useMemo, useRef } from 'react'
+import { Box, SimpleGrid } from '@chakra-ui/react'
+import MoveGridItem from './MoveGridItem'
 import useContainerSizes from 'hooks/useContainerSizes'
-import { useAuctionContext } from 'contexts/AuctionContext_bkp'
-import { GridItemsTotal, GridSize } from 'types/grid'
+import { useMoveContext } from 'contexts/MoveContext'
+import { GridItemsTotal, GridSize, GridSpace } from 'types/grid'
 
 const MoveGrid: React.FC = () => {
-  const { ref, width } = useContainerSizes()
-  const { gridItemsState, toggleSelectedItem } = useAuctionContext()
+  const { ref, height, width } = useContainerSizes()
+  const {
+    gridItemsState,
+    toggleSelectedItem,
+    mintedItems,
+    myItems,
+    selectedItems,
+  } = useMoveContext()
 
-  const itemSize = useMemo(() => {
-    const totalSpacing = GridSize * 10
-    const availableWidth = width - totalSpacing
-    return availableWidth / GridSize
-  }, [width])
-
-  const itemHeight = useMemo(() => itemSize * (3 / 2), [itemSize])
+  const { itemHeight, itemWidth, gridSpaceX } = useMemo(() => {
+    const totalSpacing = GridSize * GridSpace
+    const availableHeight = height - totalSpacing
+    const calculatedItemHeight = availableHeight / GridSize
+    const calculatedItemWidth = calculatedItemHeight / (3 / 2)
+    const calculatedGridSpaceX =
+      (width - Math.round(calculatedItemWidth) * (GridSize - 1)) /
+      (GridSize - 1)
+    return {
+      itemHeight: calculatedItemHeight,
+      itemWidth: calculatedItemWidth,
+      gridSpaceX: calculatedGridSpaceX,
+    }
+  }, [height, width])
 
   const gridItems = useMemo(() => {
     const items = []
@@ -29,33 +42,50 @@ const MoveGrid: React.FC = () => {
       if (col > 0) {
         col = GridSize - col
       }
-
-      // if (index > 615) {
-      //   console.log(index, row, col)
-      // }
+      const id = `${row}-${col}`
 
       items.push(
-        <AuctionGridItem
-          key={index === 0 ? 'id0' : index}
-          width={itemSize}
+        <MoveGridItem
+          key={index}
+          width={itemWidth}
           height={itemHeight}
-          // isHighlighted={highlightGridItem.includes(`${row}-${col}`)}
-          // onlyHighlightedClick={highlightGridItem.length > 0}
           toggleGridItem={toggleSelectedItem}
-          {...gridItemsState[`${row}-${col}`]}
+          lineWidth={Math.round(itemWidth + gridSpaceX)}
+          lineHeight={Math.round(itemHeight + GridSpace)}
+          isMinted={mintedItems.includes(id)}
+          isAvailable={myItems.includes(id)}
+          isSelected={selectedItems.includes(id)}
+          {...gridItemsState[id]}
         />
       )
     }
-    // console.log(items.length)
     return items
-  }, [itemSize, itemHeight, toggleSelectedItem, gridItemsState])
+  }, [
+    itemWidth,
+    itemHeight,
+    toggleSelectedItem,
+    gridSpaceX,
+    mintedItems,
+    myItems,
+    selectedItems,
+    gridItemsState,
+  ])
 
   return (
-    <div ref={ref}>
-      <SimpleGrid columns={GridSize} spacing="10px">
+    <Box
+      ref={ref}
+      height={'100%'}
+      w={height > 0 ? height : 'auto'}
+      minW={ref.current ? 'none' : '50vw'}
+    >
+      <SimpleGrid
+        columns={GridSize}
+        spacingY={`${GridSpace}px`}
+        spacingX={`${gridSpaceX}px`}
+      >
         {gridItems}
       </SimpleGrid>
-    </div>
+    </Box>
   )
 }
 
