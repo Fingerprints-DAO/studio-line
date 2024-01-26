@@ -51,7 +51,8 @@ const TextLine = ({ children, title = '', direction, ...props }: any) => (
 )
 
 export function SidebarDetailed({ ...props }: any) {
-  const { selectedItems, gridItemsState, toggleSelectedItem } = useMoveContext()
+  const { selectedGridItem, gridItemsState, toggleSelectedItem } =
+    useMoveContext()
 
   return (
     <Box {...props}>
@@ -62,13 +63,13 @@ export function SidebarDetailed({ ...props }: any) {
         <Text fontSize={'xx-small'}>
           Your tokens and move possibilities are highlighted on the grid.
         </Text>
-        {selectedItems.length > 0 && (
+        {selectedGridItem && (
           <Flex mt={4} justifyContent={'space-between'} shrink={0} flex={1}>
             <Box>
               <Text fontSize={'xs'} fontWeight={'bold'}>
                 Selected tokens
               </Text>
-              <List spacing={2} mt={2}>
+              {/* <List spacing={2} mt={2}>
                 {selectedItems
                   .map((item) => gridItemsState[item])
                   .map((item) => (
@@ -81,7 +82,8 @@ export function SidebarDetailed({ ...props }: any) {
                       {item.index.replace('-', ',')}
                     </TextLine>
                   ))}
-              </List>
+              </List> */}
+              {selectedGridItem.index.replace('-', ',')}
             </Box>
             <Box ml={4} flex={2}>
               <Text fontSize={'xs'} fontWeight={'bold'}>

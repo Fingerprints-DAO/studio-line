@@ -12,7 +12,7 @@ const MoveGrid: React.FC = () => {
     toggleSelectedItem,
     mintedItems,
     myItems,
-    selectedItems,
+    selectedGridItem,
   } = useMoveContext()
 
   const { itemHeight, itemWidth, gridSpaceX } = useMemo(() => {
@@ -54,7 +54,7 @@ const MoveGrid: React.FC = () => {
           lineHeight={Math.round(itemHeight + GridSpace)}
           isMinted={mintedItems.includes(id)}
           isAvailable={myItems.includes(id)}
-          isSelected={selectedItems.includes(id)}
+          isSelected={!!selectedGridItem}
           {...gridItemsState[id]}
         />
       )
@@ -67,7 +67,7 @@ const MoveGrid: React.FC = () => {
     gridSpaceX,
     mintedItems,
     myItems,
-    selectedItems,
+    selectedGridItem,
     gridItemsState,
   ])
 

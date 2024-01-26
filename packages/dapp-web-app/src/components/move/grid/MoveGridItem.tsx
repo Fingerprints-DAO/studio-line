@@ -177,64 +177,54 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
             transform={`translate(-50%, -50%)`}
             zIndex={1}
           >
-            {/* {!(direction === Direction.UP) && (
-              <ChackraImage
-                src={`/${arrowImage}.svg`}
-                w={`100%`}
-                h={`100%`}
-                opacity={!isAvailable ? 0.2 : 1}
-              />
-            )} */}
-            <>
-              {/* LEFT */}
-              <ChackraImage
-                src={`/${arrowImage}.svg`}
-                w={`100%`}
-                h={`100%`}
-                opacity={!isAvailable ? 0.2 : 1}
-                pos={'absolute'}
-                hidden={hideLastColumnDown || hideFirstColumUp}
-              />
-              {/* UP */}
-              <ChackraImage
-                src={`/${arrowImage}.svg`}
-                w={`100%`}
-                h={`100%`}
-                opacity={!isAvailable ? 0.2 : 1}
-                transform={'rotate(90deg)'}
-                pos={'absolute'}
-              />
-              {/* RIGHT */}
-              <ChackraImage
-                src={`/${arrowImage}.svg`}
-                w={`100%`}
-                h={`100%`}
-                opacity={!isAvailable ? 0.2 : 1}
-                transform={'rotate(180deg)'}
-                pos={'absolute'}
-                hidden={hideLastColumUp || hideFirstColumnDown}
-              />
-              {/* LEFT-UP */}
-              <ChackraImage
-                src={`/${arrowImage}-diagonal.svg`}
-                w={`100%`}
-                h={`100%`}
-                opacity={!isAvailable ? 0.2 : 1}
-                transform={'rotate(0deg)'}
-                pos={'absolute'}
-                hidden={hideLastColumnDown || hideFirstColumUp}
-              />
-              {/* RIGHT-UP */}
-              <ChackraImage
-                src={`/${arrowImage}-diagonal.svg`}
-                w={`100%`}
-                h={`100%`}
-                opacity={!isAvailable ? 0.2 : 1}
-                transform={'rotate(90deg)'}
-                pos={'absolute'}
-                hidden={hideLastColumUp || hideFirstColumnDown}
-              />
-            </>
+            {/* LEFT */}
+            <ChackraImage
+              src={`/${arrowImage}.svg`}
+              w={`100%`}
+              h={`100%`}
+              opacity={!isAvailable ? 0.2 : 1}
+              pos={'absolute'}
+              hidden={hideLastColumnDown || hideFirstColumUp}
+            />
+            {/* UP */}
+            <ChackraImage
+              src={`/${arrowImage}.svg`}
+              w={`100%`}
+              h={`100%`}
+              opacity={!isAvailable ? 0.2 : 1}
+              transform={'rotate(90deg)'}
+              pos={'absolute'}
+            />
+            {/* RIGHT */}
+            <ChackraImage
+              src={`/${arrowImage}.svg`}
+              w={`100%`}
+              h={`100%`}
+              opacity={!isAvailable ? 0.2 : 1}
+              transform={'rotate(180deg)'}
+              pos={'absolute'}
+              hidden={hideLastColumUp || hideFirstColumnDown}
+            />
+            {/* LEFT-UP */}
+            <ChackraImage
+              src={`/${arrowImage}-diagonal.svg`}
+              w={`100%`}
+              h={`100%`}
+              opacity={!isAvailable ? 0.2 : 1}
+              transform={'rotate(0deg)'}
+              pos={'absolute'}
+              hidden={hideLastColumnDown || hideFirstColumUp}
+            />
+            {/* RIGHT-UP */}
+            <ChackraImage
+              src={`/${arrowImage}-diagonal.svg`}
+              w={`100%`}
+              h={`100%`}
+              opacity={!isAvailable ? 0.2 : 1}
+              transform={'rotate(90deg)'}
+              pos={'absolute'}
+              hidden={hideLastColumUp || hideFirstColumnDown}
+            />
           </Box>
         </>
       )}

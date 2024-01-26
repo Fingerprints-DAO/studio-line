@@ -61,38 +61,30 @@ const generateFullGridDefaultState = () => {
 
 const MoveContext = createContext<{
   gridItemsState: GridItemState
-  selectedItems: string[]
   myItems: string[]
   mintedItems: string[]
   toggleSelectedItem: (index: string) => void
-  resetSelection: () => void
+  selectedGridItem?: {
+    direction: Direction
+  } & GridItemProperties
 }>({
   gridItemsState: {},
-  selectedItems: [],
   myItems: [],
   mintedItems: [],
   toggleSelectedItem: () => {},
-  resetSelection: () => {},
+  selectedGridItem: undefined,
 })
 
 export const useMoveContext = () => useContext(MoveContext)
 
 export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
   const [gridItemsState, setGridItemsState] = useState<GridItemState>({})
-  const [selectedItems, setSelectedItems] = useState<string[]>([])
   const [myItems, setMyItems] = useState<string[]>([])
   const [mintedItems, setMintedItems] = useState<string[]>([])
+  const [selectedGridItem, setSelectedGridItem] = useState<GridItemProperties>()
 
   const toggleSelectedItem = (index: string) => {
-    setSelectedItems(
-      selectedItems.includes(index)
-        ? selectedItems.filter((i) => i !== index)
-        : [...selectedItems, index]
-    )
-  }
-
-  const resetSelection = () => {
-    setSelectedItems([])
+    setSelectedGridItem(gridItemsState[index])
   }
 
   // TODO: load contract states
@@ -108,11 +100,10 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
     <MoveContext.Provider
       value={{
         gridItemsState,
-        selectedItems,
+        selectedGridItem,
         myItems,
         mintedItems,
         toggleSelectedItem,
-        resetSelection,
       }}
     >
       {children}
