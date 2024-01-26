@@ -61,6 +61,7 @@ const generateFullGridDefaultState = () => {
 
 const MoveContext = createContext<{
   gridItemsState: GridItemState
+  highlightGridItem: string[]
   myItems: string[]
   mintedItems: string[]
   toggleSelectedItem: (index: string) => void
@@ -69,6 +70,7 @@ const MoveContext = createContext<{
   } & GridItemProperties
 }>({
   gridItemsState: {},
+  highlightGridItem: [],
   myItems: [],
   mintedItems: [],
   toggleSelectedItem: () => {},
@@ -80,11 +82,34 @@ export const useMoveContext = () => useContext(MoveContext)
 export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
   const [gridItemsState, setGridItemsState] = useState<GridItemState>({})
   const [myItems, setMyItems] = useState<string[]>([])
+  const [highlightGridItem, setHighlightGridItem] = useState<string[]>([])
   const [mintedItems, setMintedItems] = useState<string[]>([])
   const [selectedGridItem, setSelectedGridItem] = useState<GridItemProperties>()
 
   const toggleSelectedItem = (index: string) => {
     setSelectedGridItem(gridItemsState[index])
+
+    const [row, col] = index.split('-').map((n) => Number(n))
+    const nextRow =
+      gridItemsState[index].direction !== Direction.UP ? row - 1 : row + 1
+    // TODO: if all, order should be different
+    const newHighlightGridItem = [
+      `${row}-${col - 1}`,
+      `${nextRow}-${col - 1}`,
+      `${nextRow}-${col}`,
+      `${nextRow}-${col + 1}`,
+      `${row}-${col + 1}`,
+    ]
+
+    if (gridItemsState[index].direction === Direction.ALL) {
+      newHighlightGridItem.push(
+        `${row + 1}-${col}`,
+        `${row + 1}-${col - 1}`,
+        `${row + 1}-${col + 1}`
+      )
+    }
+
+    setHighlightGridItem(newHighlightGridItem)
   }
 
   // TODO: load contract states
@@ -101,6 +126,7 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         gridItemsState,
         selectedGridItem,
+        highlightGridItem,
         myItems,
         mintedItems,
         toggleSelectedItem,

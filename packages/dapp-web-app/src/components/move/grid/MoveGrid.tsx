@@ -54,7 +54,7 @@ const MoveGrid: React.FC = () => {
           lineHeight={Math.round(itemHeight + GridSpace)}
           isMinted={mintedItems.includes(id)}
           isAvailable={myItems.includes(id)}
-          isSelected={!!selectedGridItem}
+          isSelected={selectedGridItem?.index === id}
           {...gridItemsState[id]}
         />
       )

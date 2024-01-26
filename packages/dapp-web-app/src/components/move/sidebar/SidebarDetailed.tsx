@@ -19,105 +19,137 @@ import { BsX } from 'react-icons/bs'
 import { useMoveContext } from 'contexts/MoveContext'
 import { Direction } from 'types/grid'
 import { useState } from 'react'
+import Image from 'next/image'
 
-const TextLine = ({ children, title = '', direction, ...props }: any) => (
-  <ListItem
-    mb={1}
-    bgColor={'gray.100'}
-    px={1}
-    display={'flex'}
-    justifyContent={'space-between'}
-    w={'100%'}
-    {...props}
-  >
-    <Flex alignItems={'center'} gap={1}>
-      <Text
-        as={'span'}
-        fontWeight={'bold'}
-        textColor={direction === Direction.DOWN ? 'cyan.500' : 'red.500'}
-        textTransform={'uppercase'}
-        fontSize={'md'}
-      >
-        LINE #{title}
-      </Text>{' '}
-      <Text as={'span'} fontSize={'xs'} color={'gray.500'}>
-        ({children})
-      </Text>
-    </Flex>
-    <Button variant={'link'} onClick={() => {}} minW={'none'} ml={2}>
-      <BsX size={16} color="gray.700" />
-    </Button>
-  </ListItem>
+const TextLine = ({ children, title = '', ...props }: any) => (
+  <Text fontSize={'md'} color={'gray.500'} mb={1} {...props}>
+    <Text as={'span'} fontWeight={'bold'} textColor={'gray.700'}>
+      {title}:
+    </Text>{' '}
+    <Text as={'span'} textTransform={'capitalize'}>
+      {children}
+    </Text>
+  </Text>
 )
 
 export function SidebarDetailed({ ...props }: any) {
-  const { selectedGridItem, gridItemsState, toggleSelectedItem } =
+  const { gridItemsState, selectedGridItem, highlightGridItem } =
     useMoveContext()
+
+  const highlightItems = [
+    selectedGridItem,
+    ...highlightGridItem
+      .map((item) => gridItemsState[item])
+      .filter((item) => item),
+  ]
 
   return (
     <Box {...props}>
       <Box as={'section'}>
-        <Text fontWeight={'bold'} mt={4} fontSize={'2xl'} as={'h1'}>
-          Select a token to move
-        </Text>
-        <Text fontSize={'xx-small'}>
-          Your tokens and move possibilities are highlighted on the grid.
-        </Text>
+        {!selectedGridItem && (
+          <>
+            <Text fontWeight={'bold'} mt={4} fontSize={'2xl'} as={'h1'}>
+              Select a token to move
+            </Text>
+            <Text fontSize={'xx-small'}>
+              Your tokens and move possibilities are highlighted on the grid.
+            </Text>
+          </>
+        )}
         {selectedGridItem && (
-          <Flex mt={4} justifyContent={'space-between'} shrink={0} flex={1}>
-            <Box>
-              <Text fontSize={'xs'} fontWeight={'bold'}>
-                Selected tokens
-              </Text>
-              {/* <List spacing={2} mt={2}>
-                {selectedItems
-                  .map((item) => gridItemsState[item])
-                  .map((item) => (
-                    <TextLine
-                      key={item.id}
-                      title={item.id}
-                      direction={item.direction}
-                      onClick={() => toggleSelectedItem(item.index)}
-                    >
-                      {item.index.replace('-', ',')}
-                    </TextLine>
-                  ))}
-              </List> */}
-              {selectedGridItem.index.replace('-', ',')}
-            </Box>
-            <Box ml={4} flex={2}>
-              <Text fontSize={'xs'} fontWeight={'bold'}>
-                Total: 1.69 ETH
-              </Text>
-              <FormControl
-                alignItems={'flex-start'}
-                mt={2}
-                mb={1}
-                display={'flex'}
+          <Box as="section">
+            <Flex as="header" alignItems={'center'}>
+              <Text
+                fontWeight={'bold'}
+                my={4}
+                textColor={'gray.900'}
+                fontSize={'2xl'}
+                textTransform={'uppercase'}
               >
-                <Checkbox
-                  colorScheme="gray"
-                  mt={'2px'}
-                  mr={2}
-                  borderRadius={0}
-                  rounded={'none'}
-                  style={{ borderRadius: 0 }}
-                  variant={'solid'}
+                LINE #{selectedGridItem.id}
+              </Text>
+              <Text fontSize={'md'} textColor={'gray.500'} ml={2}>
+                ({selectedGridItem.index.replace('-', ',')})
+              </Text>
+            </Flex>
+            <Flex justifyContent={'space-between'}>
+              <Box maxW={'60%'}>
+                <Image
+                  src={selectedGridItem.image}
+                  alt={`Token ${selectedGridItem.index}`}
+                  width={400}
+                  height={200}
+                  style={{ maxWidth: '100%' }}
                 />
-                <FormLabel
-                  fontSize={'xs'}
-                  fontWeight={'normal'}
-                  cursor={'pointer'}
+                {highlightItems.length > 0 && (
+                  <Box
+                    display={'flex'}
+                    justifyContent={'space-between'}
+                    mt={2}
+                    flexWrap={highlightItems.length > 6 ? 'wrap' : 'nowrap'}
+                  >
+                    {highlightItems.map((item) => {
+                      return (
+                        <Box
+                          key={item!.index}
+                          textAlign={'center'}
+                          w={
+                            highlightItems.length > 6
+                              ? '23%'
+                              : `${
+                                  Math.floor(100 / highlightItems.length) - 1
+                                }%`
+                          }
+                        >
+                          <Image
+                            src={item!.image}
+                            alt={`Token ${item!.index}`}
+                            width={78}
+                            height={20}
+                            style={{ maxWidth: '100%' }}
+                          />
+                          <Text fontSize={'11px'} mt={1}>
+                            ({item!.index.replace('-', ',')})
+                          </Text>
+                        </Box>
+                      )
+                    })}
+                  </Box>
+                )}
+              </Box>
+              <Box ml={8} flexShrink={0}>
+                <Button variant={'solid'} w={'full'}>
+                  Move
+                </Button>
+                <TextLine title={'Origin point'}>
+                  {selectedGridItem.index.replace('-', ',')}
+                </TextLine>
+                <TextLine title={'Image point'}>
+                  {selectedGridItem.index.replace('-', ',')}
+                </TextLine>
+                <TextLine title={'Type'}>{selectedGridItem.direction}</TextLine>
+                <TextLine title={'Limit'}>No</TextLine>
+                <TextLine title={'Starting point'}>
+                  {selectedGridItem.index.replace('-', ',')}
+                </TextLine>
+                <TextLine title={'Movements'}>-</TextLine>
+                <Link
+                  href={selectedGridItem.image}
+                  isExternal
+                  display={'block'}
                 >
-                  I agree to mint available tokens and be refunded for
-                  unavailable ones.
-                </FormLabel>
-              </FormControl>
-              <Button variant={'solid'} w={'full'}>
-                Mint selected tokens
-              </Button>
-            </Box>
-          </Flex>
+                  View on Opensea
+                </Link>
+                <Link
+                  href={selectedGridItem.image}
+                  isExternal
+                  display={'block'}
+                >
+                  Preview in new tab
+                </Link>
+              </Box>
+            </Flex>
+          </Box>
         )}
       </Box>
     </Box>
