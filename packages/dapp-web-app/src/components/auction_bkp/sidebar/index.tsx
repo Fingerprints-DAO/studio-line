@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, Text } from '@chakra-ui/react'
-import { useAuctionContext } from 'contexts/AuctionContext'
+import { useAuctionContext } from 'contexts/AuctionContext_bkp'
 
 export function Sidebar() {
   const { gridItemsState, toggleSelectedItem, selectedItems } =

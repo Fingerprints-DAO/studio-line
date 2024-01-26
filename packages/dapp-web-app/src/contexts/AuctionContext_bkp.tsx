@@ -4,13 +4,13 @@ import {
   GridItemBaseProperties,
   GridSize,
   generateImage,
-  getDirection,
 } from 'types/grid'
 
 export interface GridItemProperties extends GridItemBaseProperties {
   id: number | null
 }
 
+// Tipo para o estado dos itens
 export type GridItemState = {
   [key: string]: GridItemProperties
 }
@@ -24,24 +24,6 @@ export const gridItemDefaultState = {
   direction: Direction.UP,
 }
 
-const generateAvailableItems = (size = 200) => {
-  const array: string[] = []
-  for (let i = 0; i < size; i++) {
-    let row: number
-    let col: number
-    do {
-      row = Math.floor(Math.random() * 25) + 1
-      col = Math.floor(Math.random() * 25) + 1
-    } while (row === 0 || row === 24)
-    array.push(`${row}-${col}`)
-  }
-  return array
-}
-const getRandomItems = (array: string[], count: number): string[] => {
-  const shuffled = array.sort(() => 0.5 - Math.random())
-  return shuffled.slice(0, count)
-}
-
 const generateFullGridDefaultState = () => {
   const grid = {} as GridItemState
   for (let row = GridSize - 1; row >= 0; row--) {
@@ -53,7 +35,7 @@ const generateFullGridDefaultState = () => {
         index,
         row,
         col,
-        direction: getDirection(row),
+        direction: row <= 12 ? Direction.UP : Direction.DOWN,
         image: generateImage(row + 1 + col + 1),
       }
     }
@@ -103,10 +85,20 @@ export const AuctionProvider = ({
 
   // TODO: load contract states
   useEffect(() => {
-    const availableItemsGenerated = generateAvailableItems()
     setGridItemsState(generateFullGridDefaultState())
-    setAvailableItems(availableItemsGenerated)
-    setMintedItems(getRandomItems(availableItemsGenerated, 100))
+    setAvailableItems([
+      '1-10',
+      '2-15',
+      '3-20',
+      '4-21',
+      '5-23',
+      '6-22',
+      '23-2',
+      '17-20',
+      '21-4',
+      '19-13',
+    ])
+    setMintedItems(['2-15', '4-21', '21-4'])
   }, [])
 
   return (

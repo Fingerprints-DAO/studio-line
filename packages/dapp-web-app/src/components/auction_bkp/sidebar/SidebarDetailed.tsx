@@ -2,12 +2,20 @@
 
 import { Box, Button, List, ListItem, Text } from '@chakra-ui/react'
 import { useAuctionContext } from 'contexts/AuctionContext_bkp'
+import { Direction } from 'types/grid'
 
-export function SidebarDetailed({}: {}) {
+export function SidebarDetailed({
+  closeSidebar = () => {},
+}: {
+  closeSidebar?: () => void
+}) {
   const { selectedItems, resetSelection, gridItemsState } = useAuctionContext()
 
   return (
     <Box>
+      <Button variant={'link'} my={4} onClick={closeSidebar} color={'red.500'}>
+        Close
+      </Button>
       <Box>
         {selectedItems.length < 1 && (
           <Text fontWeight={'bold'} my={4}>
@@ -27,11 +35,15 @@ export function SidebarDetailed({}: {}) {
             <List>
               {selectedItems.map((index) => (
                 <ListItem key={index}>
-                  <Text>
-                    Line
-                    {/* {gridItemsState[index].row * 24 +
-                      1 * (gridItemsState[index].col + 1)}{' '}
-                    ({gridItemsState[index].row},{gridItemsState[index].col}) */}
+                  <Text
+                    color={
+                      gridItemsState[index].direction === Direction.UP
+                        ? 'red'
+                        : 'blue'
+                    }
+                  >
+                    Line {gridItemsState[index].id} ({gridItemsState[index].col}
+                    , {gridItemsState[index].row})
                   </Text>
                 </ListItem>
               ))}

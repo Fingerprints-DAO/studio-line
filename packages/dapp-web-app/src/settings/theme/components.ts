@@ -1,4 +1,4 @@
-import { defineStyle, defineStyleConfig } from '@chakra-ui/react'
+import { Checkbox, defineStyle, defineStyleConfig } from '@chakra-ui/react'
 
 const customColor = (colorScheme: any) => {
   if (colorScheme === 'black') {
@@ -24,6 +24,12 @@ const components = {
   //     paddingRight: '32px',
   //   },
   // },
+  Input: defineStyleConfig({
+    baseStyle: {
+      borderRadius: 0,
+      borderColor: 'gray.900',
+    },
+  }),
   Button: defineStyleConfig({
     // sizes: {
     //   lg: {
@@ -34,17 +40,20 @@ const components = {
     //   },
     // },
     variants: {
-      //   solid: defineStyle(({ colorScheme }) => ({
-      //     bg: `${colorScheme}.900`,
-      //     background: `${colorScheme}.900`,
-      //     color: customColor(colorScheme),
-      //     _hover: {
-      //       background: `${colorScheme}.900`,
-      //     },
-      //     _active: {
-      //       background: ``,
-      //     },
-      //   })),
+      solid: defineStyle(({ colorScheme }) => ({
+        bgColor: `${colorScheme}.900`,
+        color: 'gray.50',
+        _hover: {
+          bgColor: `gray.50`,
+          color: `${colorScheme}.900`,
+          borderWidth: '2px',
+          borderColor: `${colorScheme}.900`,
+          borderStyle: 'solid',
+        },
+        _active: {
+          background: ``,
+        },
+      })),
       outline: defineStyle(({ colorScheme }) => ({
         borderWidth: 2,
         borderColor: `${colorScheme}.900`,
@@ -61,6 +70,14 @@ const components = {
       _hover: {
         color: 'cyan.400',
         textDecoration: 'underline',
+      },
+    },
+  }),
+  Checkbox: defineStyleConfig({
+    baseStyle: {
+      color: 'red.500',
+      _checked: {
+        color: 'red.400',
       },
     },
   }),

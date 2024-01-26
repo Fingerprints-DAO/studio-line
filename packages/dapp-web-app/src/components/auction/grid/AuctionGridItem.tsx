@@ -1,22 +1,48 @@
 import React, { memo, useMemo, useState } from 'react'
-import { Box, Tooltip } from '@chakra-ui/react'
+import { Box, Flex, Tooltip, Image as ChackraImage } from '@chakra-ui/react'
 import { GridItemProperties } from 'contexts/AuctionContext'
 import Image from 'next/image'
-// import blueArrows from 'public/blueArrows.png'
+import GridNumber from './GridNumber'
+import { Direction, GridSize } from 'types/grid'
 
 interface GridItemProps extends GridItemProperties {
   width: number
   height: number
-  isSelected: boolean
-  isAvailable: boolean
+  lineWidth: number
+  lineHeight: number
   isMinted: boolean
+  isAvailable: boolean
+  isSelected: boolean
   toggleGridItem: (index: string) => void
 }
 
-const lineStyle = (isHighlighted = false) => ({
+const lineStyle = ({
+  isHighlighted = false,
+  isRow = false,
+  width = '100%',
+  height = '100%',
+  startFrom = '50%',
+}) => ({
   content: '""',
   position: 'absolute',
-  bgColor: isHighlighted ? 'red' : 'blackAlpha.600',
+  bgColor: 'gray.200',
+  ...(isRow
+    ? {
+        // up and down line
+        left: '50%',
+        top: startFrom,
+        transform: `translateX(-50%)`,
+        width: '1px',
+        height,
+      }
+    : {
+        // left and right line
+        top: '50%',
+        left: startFrom,
+        transform: `translateY(-50%)`,
+        height: '1px',
+        width,
+      }),
 })
 
 const AuctionGridItemComponent: React.FC<GridItemProps> = ({
@@ -26,171 +52,111 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
   index,
   row,
   col,
-  isSelected,
-  isAvailable,
-  isMinted,
   direction,
   toggleGridItem,
+  lineWidth,
+  lineHeight,
+  isMinted,
+  isAvailable,
+  isSelected,
 }) => {
-  const [isHovered, setIsHovered] = useState(false)
-
   const [isFirstRow, isLastRow, isFirstCol, isLastCol] = [
-    row === 24,
+    row === GridSize - 1,
     row === 0,
     col === 0,
-    col === 24,
+    col === GridSize - 1,
   ]
+  const widthPx = `${width}px`
+  const heightPx = `${height}px`
 
-  const handleMouseEnter = () => {
-    setIsHovered(true)
-  }
+  const disableClick = isLastRow || isFirstRow || isMinted || !isAvailable
+  const renderPoint = isMinted || isAvailable || isSelected
 
-  const handleMouseLeave = () => {
-    setIsHovered(false)
-  }
   const handleClick = () => {
     toggleGridItem(index)
   }
 
-  const disableClick = isMinted || !isAvailable
-  const isBorder = isFirstRow || isFirstCol || isLastRow || isLastCol
-  const isOdd = col % 2 === 0
-
   const bgColor = useMemo(() => {
-    // if (isHighlighted) {
-    //   return 'red.300'
-    // }
-    if (isBorder) {
-      return '#d2d2d2'
-    }
-    if (isOdd) {
-      return '#737373'
-    }
-    return '#191919'
-  }, [isBorder, isOdd])
+    if (isMinted) return 'gray.200'
+    if (direction === Direction.UP) return 'red.500'
+    if (direction === Direction.DOWN) return 'cyan.500'
+
+    return 'gray.500'
+  }, [direction, isMinted])
 
   return (
     <Box
-      id={index}
       pos={'relative'}
-      w={`${width}px`}
-      h={`${height}px`}
+      w={widthPx}
+      h={heightPx}
       onClick={disableClick ? undefined : handleClick}
-      cursor={disableClick ? 'not-allowed' : 'pointer'}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      cursor={disableClick ? 'default' : 'pointer'}
+      _after={
+        !isLastRow
+          ? lineStyle({
+              isRow: true,
+              height: `${lineHeight}px`,
+              startFrom: `${Math.round(height / 2)}px`,
+            })
+          : {}
+      }
+      _before={
+        !isLastCol
+          ? lineStyle({
+              isRow: false,
+              width: `${lineWidth}px`,
+              startFrom: `${Math.round(width / 2)}px`,
+            })
+          : {}
+      }
     >
-      <Box pos={'absolute'} top={0} left={0} right={0} bottom={0}>
-        {/* left line */}
-        {!isFirstCol && (
-          <Box
-            pos={'absolute'}
-            top={'50%'}
-            right={'50%'}
-            w={'calc(100% + 11px)'}
-            transform={'translate(0, -50%)'}
-            h={'1px'}
-            bgColor={'black'}
-          />
-        )}
-        {/* right line */}
-        {!isLastCol && (
-          <Box
-            pos={'absolute'}
-            top={'50%'}
-            left={'50%'}
-            w={'calc(100% + 11px)'}
-            transform={'translate(0%, -50%)'}
-            h={'1px'}
-            bgColor={'black'}
-          />
-        )}
+      {/* GRID NUMBERS */}
+      {isFirstCol && (
+        <GridNumber number={row} isColumn w={widthPx} h={heightPx} />
+      )}
+      {isLastRow && <GridNumber number={col} w={widthPx} h={heightPx} />}
+      {/* GRID NUMBERS END */}
 
-        {/* bottom line */}
-        {!isLastRow && (
-          <Box
-            pos={'absolute'}
-            top={'50%'}
-            left={'50%'}
-            w={'1px'}
-            h={'calc(100% + 11px)'}
-            transform={'translate(-50%, 0%)'}
-            bgColor={'black'}
-          />
-        )}
-        {/* top line */}
-        {!isFirstRow && (
-          <Box
-            pos={'absolute'}
-            bottom={'50%'}
-            left={'50%'}
-            w={'1px'}
-            h={'calc(100% + 11px)'}
-            transform={'translate(-50%, 0%)'}
-            bgColor={'black'}
-          />
-        )}
-      </Box>
-
-      <Box
-        w={'100%'}
-        h={'100%'}
-        backgroundSize="cover"
-        pos={'relative'}
-        zIndex={2}
-        _hover={{
-          width: `${width * 2}px`,
-          height: `${height * 2}px`,
-          transition: 'width 0.2s, height 0.2s, transform 0.2s, filter 2s',
-          transform: 'translate(-25%, -25%)',
-          filter: 'none',
-          zIndex: 3,
-        }}
-        border={isMinted ? '2px solid red' : 'none'}
-      >
-        <Box
-          pos={'absolute'}
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          zIndex={isAvailable || isHovered || isSelected ? 3 : 0}
-          _hover={{
-            transition: 'filter 2s',
-          }}
-          filter={
-            !isAvailable || isSelected
-              ? 'none'
-              : isHovered
-              ? 'none'
-              : 'grayscale(100%)'
+      {renderPoint && (
+        <Tooltip
+          hasArrow
+          arrowSize={6}
+          gutter={6}
+          borderRadius={0}
+          p={'8px'}
+          bgColor={'rgba(45, 55, 72, 1)'}
+          backdropFilter={'blur(4px)'}
+          openDelay={500}
+          label={
+            <Flex
+              flexDir={'column'}
+              alignItems={'center'}
+              minH={'160px'}
+              minW={'80px'}
+            >
+              <ChackraImage src={image} h={'160px'} m={0} />
+            </Flex>
           }
-          transition={'filter 1s'}
+          placement="auto"
         >
-          <Tooltip
-            label={isMinted ? 'Alredy minted' : 'Not mintable'}
-            bg={isMinted ? 'blackAlpha.600' : 'red.600'}
-            isDisabled={(!isMinted && isAvailable) || isSelected}
-          >
-            <Image
-              src={image}
-              alt="placeholder"
-              width={width * 2}
-              height={height * 2}
+          <Box pos={'absolute'} top={0} left={0} right={0} bottom={0}>
+            {/* central point: small circle box in the middle of the grid item */}
+            <Box
+              pos={'absolute'}
+              top={'50%'}
+              left={'50%'}
+              w={'10px'}
+              h={'10px'}
+              borderRadius={'full'}
+              transform={'translate(-50%, -50%)'}
+              bgColor={isAvailable && !isSelected ? 'gray.200' : bgColor}
+              borderWidth={isAvailable ? '2px' : ''}
+              borderColor={isAvailable ? bgColor : ''}
+              zIndex={4}
             />
-          </Tooltip>
-        </Box>
-        <Box
-          bgColor={bgColor}
-          pos={'absolute'}
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          zIndex={1}
-          color={'black'}
-        />
-      </Box>
+          </Box>
+        </Tooltip>
+      )}
     </Box>
   )
 }

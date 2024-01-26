@@ -10,7 +10,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react'
-import { AuctionProvider, useAuctionContext } from 'contexts/AuctionContext'
+import { AuctionProvider, useAuctionContext } from 'contexts/AuctionContext_bkp'
 import Header from 'components/header'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import MoveGrid from './grid/MoveGrid'

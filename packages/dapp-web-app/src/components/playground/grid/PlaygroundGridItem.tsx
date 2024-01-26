@@ -17,7 +17,6 @@ interface GridItemProps extends GridItemProperties {
 }
 
 const lineStyle = ({
-  isHighlighted = false,
   isRow = false,
   width = '100%',
   height = '100%',
@@ -25,7 +24,7 @@ const lineStyle = ({
 }) => ({
   content: '""',
   position: 'absolute',
-  bgColor: isHighlighted ? 'red' : 'blackAlpha.600',
+  bgColor: 'gray.200',
   ...(isRow
     ? {
         // up and down line

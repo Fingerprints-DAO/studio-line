@@ -1,117 +1,54 @@
 'use client'
 
-import React, { useState } from 'react'
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  Icon,
-  Text,
-  VStack,
-} from '@chakra-ui/react'
-import { useAuctionContext } from 'contexts/AuctionContext'
+import React from 'react'
+import { Container, Flex, VStack } from '@chakra-ui/react'
+import { AuctionProvider } from 'contexts/AuctionContext'
 import Header from 'components/header'
-import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
+import Footer from 'components/footer'
 import AuctionGrid from './grid/AuctionGrid'
 import { SidebarDetailed } from './sidebar/SidebarDetailed'
 
 export default function Auction() {
-  const [isOpen, setIsOpen] = useState(false)
-  const { selectedItems } = useAuctionContext()
-  const itemsCount = selectedItems.length
-  console.log('selectedItems', selectedItems)
-
-  const handleToggleSidebar = () => {
-    setIsOpen(!isOpen)
-  }
-
   return (
-    <Container maxW={'6xl'} overflow={'hidden'}>
-      <Header />
-      <Flex pos={'relative'}>
-        <Box flex="7" p={2} bgColor={'white'}>
-          <AuctionGrid />
-        </Box>
-        <VStack
-          flex="3"
-          bg="white"
-          p={4}
-          alignItems="stretch"
-          transition="transform 0.3s ease-in-out"
-          transform={isOpen ? 'translateX(8%)' : 'translateX(108%)'}
-          boxShadow={'lg'}
-          style={{
-            position: 'fixed',
-            right: 0,
-            left: '70%',
-            top: 0,
-            bottom: 0,
-            zIndex: 2,
-          }}
-        >
-          {/* <Box
-            pos={'fixed'}
-            top={'20%'}
-            right={'0'}
-            zIndex={2}
-            textColor={'black'}
-            textAlign={'center'}
-            border={'2px solid black'}
-            hidden={isOpen}
-          >
-            <Button
-              variant={'link'}
-              onClick={handleToggleSidebar}
-              w={'40px'}
-              mt={2}
-              color={'black'}
-            >
-              <Icon
-                w={'40px'}
-                as={isOpen ? ChevronRightIcon : ChevronLeftIcon}
-                boxSize={6}
-              />
-            </Button>
-            {itemsCount > 0 && (
-              <Text mb={2} fontSize={'sm'}>
-                ({itemsCount})
-              </Text>
-            )}
-          </Box> */}
-          <Box
+    <AuctionProvider>
+      <Container maxW={'6xl'}>
+        <Flex pos={'relative'} justifyContent={'center'}>
+          <Flex
+            p={2}
             bgColor={'white'}
-            pos={'fixed'}
-            top={'20%'}
-            left={'-79px'}
-            zIndex={3}
-            textColor={'black'}
-            textAlign={'center'}
-            border={'2px solid black'}
-            hidden={itemsCount < 1 || isOpen}
+            h={'95vh'}
+            mt={'2vh'}
+            flexShrink={'0'}
+            maxW={'50vw'}
+            justifyContent={'right'}
           >
-            <Button
-              variant={'link'}
-              onClick={handleToggleSidebar}
-              w={'40px'}
-              mt={2}
-              color={'black'}
+            <AuctionGrid />
+          </Flex>
+          <VStack
+            bg="white"
+            px={4}
+            alignItems="stretch"
+            maxH={'100vh'}
+            minW={'30vw'}
+            maxW={'50vw'}
+            pos={'relative'}
+          >
+            <Header />
+            <Flex
+              height={'100%'}
+              overflow={'auto'}
+              flexDir={'column'}
+              justifyContent={'space-between'}
+              mt={'60px'}
+              mr={'-20px'}
+              pr={'20px'}
             >
-              <Icon
-                w={'40px'}
-                as={isOpen ? ChevronRightIcon : ChevronLeftIcon}
-                boxSize={6}
-              />
-            </Button>
-            {itemsCount > 0 && (
-              <Text mb={2} fontSize={'sm'}>
-                ({itemsCount})
-              </Text>
-            )}
-          </Box>
-          <SidebarDetailed closeSidebar={handleToggleSidebar} />
-        </VStack>
-      </Flex>
-    </Container>
+              <SidebarDetailed />
+              <Footer />
+            </Flex>
+          </VStack>
+        </Flex>
+      </Container>
+    </AuctionProvider>
   )
 }

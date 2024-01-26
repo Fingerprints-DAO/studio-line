@@ -1,27 +1,34 @@
-import React, { useMemo } from 'react'
-import { SimpleGrid, Text } from '@chakra-ui/react'
+import React, { useMemo, useRef } from 'react'
+import { Box, SimpleGrid } from '@chakra-ui/react'
 import AuctionGridItem from './AuctionGridItem'
 import useContainerSizes from 'hooks/useContainerSizes'
 import { useAuctionContext } from 'contexts/AuctionContext'
-import { GridItemsTotal, GridSize } from 'types/grid'
+import { GridItemsTotal, GridSize, GridSpace } from 'types/grid'
 
 const AuctionGrid: React.FC = () => {
-  const { ref, width } = useContainerSizes()
+  const { ref, height, width } = useContainerSizes()
   const {
     gridItemsState,
     toggleSelectedItem,
-    selectedItems,
-    availableItems,
     mintedItems,
+    availableItems,
+    selectedItems,
   } = useAuctionContext()
 
-  const itemSize = useMemo(() => {
-    const totalSpacing = GridSize * 10
-    const availableWidth = width - totalSpacing
-    return availableWidth / GridSize
-  }, [width])
-
-  const itemHeight = useMemo(() => itemSize * (3 / 2), [itemSize])
+  const { itemHeight, itemWidth, gridSpaceX } = useMemo(() => {
+    const totalSpacing = GridSize * GridSpace
+    const availableHeight = height - totalSpacing
+    const calculatedItemHeight = availableHeight / GridSize
+    const calculatedItemWidth = calculatedItemHeight / (3 / 2)
+    const calculatedGridSpaceX =
+      (width - Math.round(calculatedItemWidth) * (GridSize - 1)) /
+      (GridSize - 1)
+    return {
+      itemHeight: calculatedItemHeight,
+      itemWidth: calculatedItemWidth,
+      gridSpaceX: calculatedGridSpaceX,
+    }
+  }, [height, width])
 
   const gridItems = useMemo(() => {
     const items = []
@@ -35,47 +42,50 @@ const AuctionGrid: React.FC = () => {
       if (col > 0) {
         col = GridSize - col
       }
-
       const id = `${row}-${col}`
 
       items.push(
         <AuctionGridItem
-          key={index === 0 ? 'id0' : index}
-          width={itemSize}
+          key={index}
+          width={itemWidth}
           height={itemHeight}
           toggleGridItem={toggleSelectedItem}
-          isSelected={selectedItems.includes(id)}
-          isAvailable={availableItems.includes(id)}
+          lineWidth={Math.round(itemWidth + gridSpaceX)}
+          lineHeight={Math.round(itemHeight + GridSpace)}
           isMinted={mintedItems.includes(id)}
+          isAvailable={availableItems.includes(id)}
+          isSelected={selectedItems.includes(id)}
           {...gridItemsState[id]}
         />
       )
     }
-    // console.log(items.length)
     return items
   }, [
-    itemSize,
+    itemWidth,
     itemHeight,
     toggleSelectedItem,
-    selectedItems,
-    availableItems,
+    gridSpaceX,
     mintedItems,
+    availableItems,
+    selectedItems,
     gridItemsState,
   ])
 
   return (
-    <div ref={ref}>
-      <Text fontSize={'2xl'}>Please, select a token from the grid.</Text>
-      <Text fontSize={'md'}>
-        Only revealed tokens are available to be selected.
-      </Text>
-      <Text fontSize={'sm'} mb={5} color={'red'}>
-        Minted tokens can not be selected and have a red border.
-      </Text>
-      <SimpleGrid columns={GridSize} spacing="10px">
+    <Box
+      ref={ref}
+      height={'100%'}
+      w={height > 0 ? height : 'auto'}
+      minW={ref.current ? 'none' : '50vw'}
+    >
+      <SimpleGrid
+        columns={GridSize}
+        spacingY={`${GridSpace}px`}
+        spacingX={`${gridSpaceX}px`}
+      >
         {gridItems}
       </SimpleGrid>
-    </div>
+    </Box>
   )
 }
 
