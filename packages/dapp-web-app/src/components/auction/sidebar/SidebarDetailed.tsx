@@ -58,6 +58,60 @@ export function SidebarDetailed({ ...props }: any) {
   return (
     <Box {...props}>
       <Box as={'section'}>
+        <Flex justifyContent={'space-between'}>
+          <Flex
+            bgColor={'gray.100'}
+            flexDirection={'column'}
+            py={1}
+            px={3}
+            flex={1}
+          >
+            <Text fontSize={'xs'} fontWeight={'bold'} textColor={'gray.500'}>
+              Current price
+            </Text>
+            <Text fontSize={'lg'} fontWeight={'bold'} textColor={'gray.900'}>
+              1.69 ETH
+            </Text>
+          </Flex>
+          <Flex
+            bgColor={'gray.100'}
+            flexDirection={'column'}
+            py={1}
+            px={3}
+            flex={1}
+            mx={2}
+          >
+            <Text fontSize={'xs'} fontWeight={'bold'} textColor={'gray.500'}>
+              Remaining time
+            </Text>
+            <Text fontSize={'lg'} fontWeight={'bold'} textColor={'gray.900'}>
+              00:23:42
+            </Text>
+          </Flex>
+          <Flex
+            bgColor={'gray.100'}
+            flexDirection={'column'}
+            py={1}
+            px={3}
+            flex={1}
+          >
+            <Text fontSize={'xs'} fontWeight={'bold'} textColor={'gray.500'}>
+              Available/minted
+            </Text>
+            <Text fontSize={'lg'} fontWeight={'bold'} textColor={'gray.900'}>
+              44/200
+            </Text>
+          </Flex>
+        </Flex>
+        <Text fontSize={'xs'} color={'gray.500'} mt={2} mb={6}>
+          <b>Descending dutch auction over 1 hour</b>.{' '}
+          <b>Starting price of 1ETH</b>,{' '}
+          <b>resting price of 0.2 ETH, no rebate</b>. Bidders can select
+          specific tokens before minting or mint randomly. As soon as you place
+          your bid your tokens will be minted. <b>Supply of 200</b>.
+        </Text>
+      </Box>
+      <Box as={'section'}>
         <Text fontWeight={'bold'} mt={4} fontSize={'2xl'} as={'h1'}>
           Select tokens on the grid
         </Text>
