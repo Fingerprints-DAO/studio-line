@@ -70,7 +70,7 @@ export function SidebarDetailed({ ...props }: any) {
               Current price
             </Text>
             <Text fontSize={'lg'} fontWeight={'bold'} textColor={'gray.900'}>
-              1.69 ETH
+              1.6969 ETH
             </Text>
           </Flex>
           <Flex
@@ -104,9 +104,8 @@ export function SidebarDetailed({ ...props }: any) {
           </Flex>
         </Flex>
         <Text fontSize={'xs'} color={'gray.500'} mt={2} mb={6}>
-          <b>Descending dutch auction over 1 hour</b>.{' '}
-          <b>Starting price of 1ETH</b>,{' '}
-          <b>resting price of 0.2 ETH, no rebate</b>. Bidders can select
+          <b>Linear dutch auction over 1 hour</b>. <b>Starting price of 1ETH</b>
+          , <b>resting price of 0.2 ETH, no rebate</b>. Bidders can select
           specific tokens before minting or mint randomly. As soon as you place
           your bid your tokens will be minted. <b>Supply of 200</b>.
         </Text>
