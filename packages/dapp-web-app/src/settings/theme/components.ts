@@ -27,6 +27,7 @@ const components = {
   Input: defineStyleConfig({
     baseStyle: {
       borderRadius: 0,
+      rounded: 'none',
       borderColor: 'gray.900',
     },
   }),
@@ -75,11 +76,19 @@ const components = {
   }),
   Checkbox: defineStyleConfig({
     baseStyle: {
-      color: 'red.500',
-      _checked: {
-        color: 'red.400',
+      control: {
+        rounde: 'none',
+        borderRadius: 0,
       },
     },
+    // variants: {
+    //   solid: defineStyle(() => ({
+    //     control: {
+    //       rounde: 'none',
+    //       borderRadius: 0,
+    //     },
+    //   })),
+    // },
   }),
   // Input: {
   //   sizes: {

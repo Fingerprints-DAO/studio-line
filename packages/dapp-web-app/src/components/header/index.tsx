@@ -35,8 +35,8 @@ const Header = () => {
   return (
     <Grid
       as="header"
-      pt={2}
-      pb={5}
+      pt={6}
+      pb={4}
       position="relative"
       zIndex={1}
       justifyContent={'right'}

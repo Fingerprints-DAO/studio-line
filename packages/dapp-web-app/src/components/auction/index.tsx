@@ -17,7 +17,7 @@ export default function Auction() {
             p={2}
             bgColor={'white'}
             h={'95vh'}
-            mt={'2vh'}
+            mt={'1vh'}
             flexShrink={'0'}
             maxW={'50vw'}
             justifyContent={'right'}
@@ -39,7 +39,7 @@ export default function Auction() {
               overflow={'auto'}
               flexDir={'column'}
               justifyContent={'space-between'}
-              mt={'60px'}
+              mt={'92px'}
               mr={'-20px'}
               pr={'20px'}
             >

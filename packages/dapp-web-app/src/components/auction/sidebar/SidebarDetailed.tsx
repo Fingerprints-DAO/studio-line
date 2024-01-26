@@ -11,6 +11,8 @@ import {
   ListItem,
   Checkbox,
   Input,
+  FormControl,
+  FormLabel,
 } from '@chakra-ui/react'
 import { BsX } from 'react-icons/bs'
 
@@ -84,15 +86,32 @@ export function SidebarDetailed({ ...props }: any) {
               <Text fontSize={'xs'} fontWeight={'bold'}>
                 Total: 1.69 ETH
               </Text>
-              <Flex alignItems={'flex-start'} mt={2} mb={1}>
-                <Checkbox colorScheme="gray" mt={'2px'} mr={1} />
-                <Text fontSize={'xs'}>
+              <FormControl
+                alignItems={'flex-start'}
+                mt={2}
+                mb={1}
+                display={'flex'}
+              >
+                <Checkbox
+                  colorScheme="gray"
+                  mt={'2px'}
+                  mr={2}
+                  borderRadius={0}
+                  rounded={'none'}
+                  style={{ borderRadius: 0 }}
+                  variant={'solid'}
+                />
+                <FormLabel
+                  fontSize={'xs'}
+                  fontWeight={'normal'}
+                  cursor={'pointer'}
+                >
                   I agree to mint available tokens and be refunded for
                   unavailable ones.
-                </Text>
-              </Flex>
+                </FormLabel>
+              </FormControl>
               <Button variant={'solid'} w={'full'}>
-                Mint
+                Mint selected tokens
               </Button>
             </Box>
           </Flex>
