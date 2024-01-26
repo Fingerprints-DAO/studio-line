@@ -33,28 +33,35 @@ const components = {
     //     px: 4,
     //   },
     // },
-    // variants: {
-    //   solid: defineStyle(({ colorScheme }) => ({
-    //     bg: `${colorScheme}.900`,
-    //     background: `${colorScheme}.900`,
-    //     color: customColor(colorScheme),
-    //     _hover: {
-    //       background: `${colorScheme}.900`,
-    //     },
-    //     _active: {
-    //       background: ``,
-    //     },
-    //   })),
-    //   outline: defineStyle(({ colorScheme }) => ({
-    //     borderColor: `black`,
-    //     borderWidth: 2,
-    //     color: `black`,
-    //     rounded: 'none',
-    //     backgroundColor: 'white',
-    //   })),
-    // },
+    variants: {
+      //   solid: defineStyle(({ colorScheme }) => ({
+      //     bg: `${colorScheme}.900`,
+      //     background: `${colorScheme}.900`,
+      //     color: customColor(colorScheme),
+      //     _hover: {
+      //       background: `${colorScheme}.900`,
+      //     },
+      //     _active: {
+      //       background: ``,
+      //     },
+      //   })),
+      outline: defineStyle(({ colorScheme }) => ({
+        borderWidth: 2,
+        borderColor: `${colorScheme}.900`,
+        rounded: 'none',
+      })),
+    },
     baseStyle: {
       borderRadius: 0,
+    },
+  }),
+  Link: defineStyleConfig({
+    baseStyle: {
+      color: 'cyan.500',
+      _hover: {
+        color: 'cyan.400',
+        textDecoration: 'underline',
+      },
     },
   }),
   // Input: {

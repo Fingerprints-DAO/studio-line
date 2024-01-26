@@ -9,7 +9,7 @@ export enum Direction {
 }
 
 export function getDirection(row: number): Direction {
-  return row >= 13 ? Direction.UP : Direction.DOWN
+  return row >= 13 ? Direction.DOWN : Direction.UP
 }
 
 export interface GridItemBaseProperties {

@@ -84,8 +84,8 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   const bgColor = useMemo(() => {
     if (isHighlighted) {
       return moveDirection === Direction.UP || moveDirection === Direction.ALL
-        ? 'cyan.200'
-        : 'red.100'
+        ? 'red.100'
+        : 'cyan.200'
     }
     if (isBorder) {
       return 'gray.300'

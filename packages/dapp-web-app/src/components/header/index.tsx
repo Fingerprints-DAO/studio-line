@@ -35,10 +35,15 @@ const Header = () => {
   return (
     <Grid
       as="header"
-      py={2}
+      pt={2}
+      pb={5}
       position="relative"
       zIndex={1}
       justifyContent={'right'}
+      pos={'absolute'}
+      bgColor={'white'}
+      right={4}
+      left={0}
     >
       <GridItem colSpan={{ base: 2, sm: 4, md: 10 }}>
         <Flex

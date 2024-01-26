@@ -1,39 +1,14 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Box, Button, Container, Flex, Icon, VStack } from '@chakra-ui/react'
+import React from 'react'
+import { Container, Flex, VStack } from '@chakra-ui/react'
 import PlaygroundGrid from 'components/playground/grid/PlaygroundGrid'
-import {
-  PlaygroundProvider,
-  usePlaygroundContext,
-} from 'contexts/PlaygroundContext'
+import { PlaygroundProvider } from 'contexts/PlaygroundContext'
 import { SidebarDetailed } from 'components/playground/sidebar/SidebarDetailed'
 import Header from 'components/header'
-import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
+import Footer from 'components/footer'
 
 export default function Playground() {
-  const [sidebarIsFloating, setSidebarIsFloating] = useState(false)
-  // const [isOpen, setIsOpen] = useState(false)
-  const { gridItemsState } = usePlaygroundContext()
-  // const [itemsCount, setItemsCount] = useState(0)
-
-  // const handleToggleSidebar = () => {
-  //   setIsOpen(!isOpen)
-  // }
-
-  // const toggleSidebar = () => {
-  //   if (sidebarIsFloating) {
-  //     handleToggleSidebar()
-  //   }
-  //   setSidebarIsFloating(!sidebarIsFloating)
-  // }
-
-  // useEffect(() => {
-  //   setItemsCount(
-  //     Object.keys(gridItemsState).filter((item) => gridItemsState[item]).length
-  //   )
-  // }, [gridItemsState])
-
   return (
     <PlaygroundProvider>
       <Container maxW={'6xl'}>
@@ -51,16 +26,26 @@ export default function Playground() {
           </Flex>
           <VStack
             bg="white"
-            p={4}
+            px={4}
             alignItems="stretch"
             maxH={'100vh'}
             minW={'30vw'}
             maxW={'50vw'}
+            pos={'relative'}
           >
             <Header />
-            <Box maxH={'90vh'} overflow={'auto'}>
+            <Flex
+              height={'100%'}
+              overflow={'auto'}
+              flexDir={'column'}
+              justifyContent={'space-between'}
+              mt={'60px'}
+              mr={'-20px'}
+              pr={'20px'}
+            >
               <SidebarDetailed />
-            </Box>
+              <Footer />
+            </Flex>
           </VStack>
         </Flex>
       </Container>
