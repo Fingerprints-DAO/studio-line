@@ -1,9 +1,9 @@
 import React, { memo, useMemo, useState } from 'react'
 import { Box, Flex, Tooltip, Image as ChackraImage } from '@chakra-ui/react'
 import { GridItemProperties } from 'contexts/MoveContext'
-import Image from 'next/image'
 import GridNumber from './GridNumber'
 import { Direction, GridSize } from 'types/grid'
+import { Arrow, ArrowDirections } from 'components/arrow'
 
 interface GridItemProps extends GridItemProperties {
   width: number
@@ -79,28 +79,22 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
   const bgColor = useMemo(() => {
     if (!isAvailable) return 'gray.200'
     if (isSelected) {
-      if (direction === Direction.UP) return 'red.500'
-      if (direction === Direction.DOWN) return 'cyan.500'
+      if (direction === Direction.UP) return 'red.600'
+      if (direction === Direction.DOWN) return 'cyan.600'
     }
-    if (direction === Direction.UP) return 'red.200'
-    if (direction === Direction.DOWN) return 'cyan.200'
-    return 'gray.200'
+    if (direction === Direction.UP) return 'red.100'
+    if (direction === Direction.DOWN) return 'cyan.100'
+    return 'gray.100'
   }, [direction, isAvailable, isSelected])
 
-  const arrowImage = useMemo(() => {
-    if (disableClick) {
-      if (direction === Direction.UP) return 'move-up-gray-arrow'
-      if (direction === Direction.DOWN) return 'move-down-gray-arrow'
-    }
-    if (direction === Direction.UP) return 'move-up-arrow'
-    if (direction === Direction.DOWN) return 'move-down-arrow'
-    return 'move-down-all'
-  }, [direction, disableClick])
+  const hideArrows = useMemo(() => {
+    if (isLastCol)
+      return [ArrowDirections.RIGHT, ArrowDirections.DIAGONAL_RIGHT]
+    if (isFirstCol) return [ArrowDirections.LEFT, ArrowDirections.DIAGONAL_LEFT]
 
-  const hideLastColumnDown = isLastCol && direction === Direction.DOWN
-  const hideFirstColumnDown = isFirstCol && direction === Direction.DOWN
-  const hideLastColumUp = isLastCol && direction === Direction.UP
-  const hideFirstColumUp = isFirstCol && direction === Direction.UP
+    return []
+  }, [isFirstCol, isLastCol])
+
   const arrowsProps = {
     w: `100%`,
     h: `100%`,
@@ -196,47 +190,52 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
           </Tooltip>
           <Box
             position={'absolute'}
-            w={`${lineWidth * 2 - 4}px`}
-            h={`${lineHeight * 2 - 4}px`}
+            w={`${lineWidth * 2 - 8}px`}
+            h={`${lineHeight * 2 - 8}px`}
             left={'50%'}
             top={'50%'}
             transform={`translate(-50%, -50%)`}
             zIndex={1}
-            opacity={isSelected || !isAvailable ? 1 : 0.3}
           >
-            {/* LEFT */}
-            <ChackraImage
+            <Arrow
               {...arrowsProps}
-              src={`/${arrowImage}.svg`}
-              hidden={hideLastColumnDown || hideFirstColumUp}
+              direction={direction}
+              isSelected={isSelected}
+              isAvailable={isAvailable}
+              hide={hideArrows}
             />
-            {/* UP */}
-            <ChackraImage
-              {...arrowsProps}
-              src={`/${arrowImage}.svg`}
-              transform={'rotate(90deg)'}
-            />
-            {/* RIGHT */}
-            <ChackraImage
-              {...arrowsProps}
-              src={`/${arrowImage}.svg`}
-              transform={'rotate(180deg)'}
-              hidden={hideLastColumUp || hideFirstColumnDown}
-            />
-            {/* LEFT-UP */}
-            <ChackraImage
-              {...arrowsProps}
-              src={`/${arrowImage}-diagonal.svg`}
-              transform={'rotate(0deg)'}
-              hidden={hideLastColumnDown || hideFirstColumUp}
-            />
-            {/* RIGHT-UP */}
-            <ChackraImage
-              {...arrowsProps}
-              src={`/${arrowImage}-diagonal.svg`}
-              transform={'rotate(90deg)'}
-              hidden={hideLastColumUp || hideFirstColumnDown}
-            />
+            {/* {false && (
+              <>
+                <ChackraImage
+                  {...arrowsProps}
+                  src={`/${arrowImage}.svg`}
+                  hidden={hideLastColumnDown || hideFirstColumUp}
+                />
+                <ChackraImage
+                  {...arrowsProps}
+                  src={`/${arrowImage}.svg`}
+                  transform={'rotate(90deg)'}
+                />
+                <ChackraImage
+                  {...arrowsProps}
+                  src={`/${arrowImage}.svg`}
+                  transform={'rotate(180deg)'}
+                  hidden={hideLastColumUp || hideFirstColumnDown}
+                />
+                <ChackraImage
+                  {...arrowsProps}
+                  src={`/${arrowImage}-diagonal.svg`}
+                  transform={'rotate(0deg)'}
+                  hidden={hideLastColumnDown || hideFirstColumUp}
+                />
+                <ChackraImage
+                  {...arrowsProps}
+                  src={`/${arrowImage}-diagonal.svg`}
+                  transform={'rotate(90deg)'}
+                  hidden={hideLastColumUp || hideFirstColumnDown}
+                />
+              </>
+            )} */}
           </Box>
         </>
       )}
