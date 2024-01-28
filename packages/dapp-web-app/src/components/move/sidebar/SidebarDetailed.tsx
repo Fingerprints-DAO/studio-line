@@ -136,6 +136,30 @@ export function SidebarDetailed({ ...props }: any) {
                     hovered={arrowHover}
                   />
                 </Box>
+                {arrowSelected && (
+                  <Flex alignItems={'flex-end'}>
+                    <Box>
+                      <Text fontSize={'xs'} fontWeight={'bold'}>
+                        From
+                      </Text>
+                      <Text fontSize={'xs'}>(10,18)</Text>
+                    </Box>
+                    <Box mx={1}>
+                      <Image
+                        src={'/move-to.svg'}
+                        width={16}
+                        height={16}
+                        alt={'Illustrate movement'}
+                      />
+                    </Box>
+                    <Box>
+                      <Text fontSize={'xs'} fontWeight={'bold'}>
+                        To
+                      </Text>
+                      <Text fontSize={'xs'}>(10,18)</Text>
+                    </Box>
+                  </Flex>
+                )}
                 <Button
                   variant={'solid'}
                   w={'full'}
