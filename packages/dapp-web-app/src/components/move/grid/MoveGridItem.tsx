@@ -4,7 +4,7 @@ import { GridItemProperties } from 'contexts/MoveContext'
 import GridNumber from './GridNumber'
 import { Direction, GridSize } from 'types/grid'
 import { Arrow } from 'components/arrow/GridArrow'
-import { ArrowDirections } from 'components/arrow/utils'
+import { ArrowDirections, useHexColor } from 'components/arrow/utils'
 
 interface GridItemProps extends GridItemProperties {
   width: number
@@ -70,23 +70,18 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
   const widthPx = `${width}px`
   const heightPx = `${height}px`
 
-  const disableClick = !isAvailable
+  const disableClick = !isMinted
   const renderPoint = isMinted || isAvailable
+
+  const bgColor = useHexColor({
+    isAvailable,
+    isSelected,
+    direction,
+  })
 
   const handleClick = () => {
     toggleGridItem(index)
   }
-
-  const bgColor = useMemo(() => {
-    if (!isAvailable) return 'gray.200'
-    if (isSelected) {
-      if (direction === Direction.UP) return 'red.600'
-      if (direction === Direction.DOWN) return 'cyan.600'
-    }
-    if (direction === Direction.UP) return 'red.100'
-    if (direction === Direction.DOWN) return 'cyan.100'
-    return 'gray.100'
-  }, [direction, isAvailable, isSelected])
 
   const hideArrows = useMemo(() => {
     if (isLastCol)

@@ -1,14 +1,12 @@
 'use client'
 
 import { Box, Button, Flex, Link, Text } from '@chakra-ui/react'
-import { Arrow } from 'components/arrow/GridArrow'
 import { SidebarArrow } from 'components/arrow/SidebarArrow'
-import { useArrowColors, ArrowDirections } from 'components/arrow/utils'
+import { ArrowDirections } from 'components/arrow/utils'
 
 import { useMoveContext } from 'contexts/MoveContext'
 import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
-import { Direction } from 'types/grid'
 
 const TextLine = ({ children, title = '', ...props }: any) => (
   <Text fontSize={'md'} color={'gray.500'} mb={1} {...props}>
@@ -22,7 +20,7 @@ const TextLine = ({ children, title = '', ...props }: any) => (
 )
 
 export function SidebarDetailed({ ...props }: any) {
-  const { gridItemsState, selectedGridItem, highlightGridItem } =
+  const { gridItemsState, selectedGridItem, highlightGridItem, myItems } =
     useMoveContext()
   const [arrowHover, setArrowHover] = useState<ArrowDirections | undefined>()
   const [arrowSelected, setArrowSelected] = useState<
@@ -125,50 +123,57 @@ export function SidebarDetailed({ ...props }: any) {
                 )}
               </Box>
               <Box ml={8} mt={2} flexShrink={0}>
-                <Box pos={'relative'} w={'full'} h={'45px'}>
-                  <SidebarArrow
-                    displayCircle
-                    direction={selectedGridItem.direction}
-                    isAvailable
-                    handleOnClick={handleArrorOnClick}
-                    handleMouseOver={handleArrowMouseOver}
-                    selected={arrowSelected}
-                    hovered={arrowHover}
-                  />
-                </Box>
-                {arrowSelected && (
-                  <Flex alignItems={'flex-end'}>
-                    <Box>
-                      <Text fontSize={'xs'} fontWeight={'bold'}>
-                        From
-                      </Text>
-                      <Text fontSize={'xs'}>(10,18)</Text>
-                    </Box>
-                    <Box mx={1}>
-                      <Image
-                        src={'/move-to.svg'}
-                        width={16}
-                        height={16}
-                        alt={'Illustrate movement'}
+                {myItems.includes(selectedGridItem.index) ? (
+                  <>
+                    <Box pos={'relative'} w={'full'} h={'45px'}>
+                      <SidebarArrow
+                        displayCircle
+                        direction={selectedGridItem.direction}
+                        isAvailable
+                        handleOnClick={handleArrorOnClick}
+                        handleMouseOver={handleArrowMouseOver}
+                        selected={arrowSelected}
+                        hovered={arrowHover}
                       />
                     </Box>
-                    <Box>
-                      <Text fontSize={'xs'} fontWeight={'bold'}>
-                        To
-                      </Text>
-                      <Text fontSize={'xs'}>(10,18)</Text>
-                    </Box>
-                  </Flex>
+                    {arrowSelected && (
+                      <Flex alignItems={'flex-end'} mt={1}>
+                        <Box>
+                          <Text fontSize={'xs'} fontWeight={'bold'}>
+                            From
+                          </Text>
+                          <Text fontSize={'xs'}>(10,18)</Text>
+                        </Box>
+                        <Box mx={1}>
+                          <Image
+                            src={'/move-to.svg'}
+                            width={16}
+                            height={16}
+                            alt={'Illustrate movement'}
+                          />
+                        </Box>
+                        <Box>
+                          <Text fontSize={'xs'} fontWeight={'bold'}>
+                            To
+                          </Text>
+                          <Text fontSize={'xs'}>(10,18)</Text>
+                        </Box>
+                      </Flex>
+                    )}
+                    <Button
+                      variant={'solid'}
+                      w={'full'}
+                      mt={4}
+                      mb={6}
+                      isDisabled={!arrowSelected}
+                    >
+                      Move
+                    </Button>
+                  </>
+                ) : (
+                  <Box w={'full'} h={'45px'} />
                 )}
-                <Button
-                  variant={'solid'}
-                  w={'full'}
-                  mt={4}
-                  mb={6}
-                  isDisabled={!arrowSelected}
-                >
-                  Move
-                </Button>
+
                 <TextLine title={'Origin point'}>
                   {selectedGridItem.index.replace('-', ',')}
                 </TextLine>
