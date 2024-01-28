@@ -1,57 +1,45 @@
-import { Box, Theme, theme, useTheme } from '@chakra-ui/react'
-import { useMemo } from 'react'
+import { Box } from '@chakra-ui/react'
+import { ArrowDirections, ArrowProps, useHexColor } from './utils'
 import { Direction } from 'types/grid'
-
-export enum ArrowDirections {
-  CENTER = 'CENTER',
-  LEFT = 'left',
-  RIGHT = 'right',
-  DIAGONAL_LEFT = 'diagonal-left',
-  DIAGONAL_RIGHT = 'diagonal-right',
-}
-
-type ArrowProps = {
-  isAvailable: boolean
-  isSelected: boolean
-  hide?: ArrowDirections[]
-  direction: Direction
-}
 
 export function Arrow({
   isSelected,
   isAvailable,
   direction,
   hide = [],
+  displayCircle,
+  hasMouseOver,
   ...props
 }: ArrowProps) {
-  const theme = useTheme()
-  const hexColor = useMemo(() => {
-    if (!isAvailable) return theme.colors['gray'][200]
-    if (isSelected) {
-      if (direction === Direction.UP) return theme.colors['red'][600]
-      if (direction === Direction.DOWN) return theme.colors['cyan'][600]
-    }
-    if (direction === Direction.UP) return theme.colors['red'][100]
-    if (direction === Direction.DOWN) return theme.colors['cyan'][100]
-    return theme.colors['gray'][200]
-  }, [direction, isAvailable, isSelected, theme.colors])
+  const hexColor = useHexColor({
+    isAvailable,
+    isSelected,
+    direction,
+  })
 
   return (
     <Box
       {...props}
       transform={direction === Direction.DOWN ? `scaleY(-1)` : ''}
+      pos={'relative'}
     >
-      <svg
-        width="49"
-        height="48"
-        viewBox="0 0 49 48"
+      <Box
+        as="svg"
+        width={props.w || '48'}
+        height={props.h || '47'}
+        viewBox="0 0 48 47"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <g>
+          {/* CIRCLE */}
+          {displayCircle && (
+            <circle cx="24.5677" cy="24.3971" r="2.9796" fill={hexColor} />
+          )}
           {/* LEFT */}
           {hide.includes(ArrowDirections.LEFT) ? null : (
-            <path
+            <Box
+              as="path"
               fillRule="evenodd"
               clipRule="evenodd"
               d="M4.70376 26.3801L0.730957 23.8971L4.70376 21.4141L3.91056 23.3971H24.5678C24.8439 23.3971 25.0678 23.6209 25.0678 23.8971C25.0678 24.1732 24.8439 24.3971 24.5678 24.3971H3.91056L4.70376 26.3801Z"
@@ -95,7 +83,7 @@ export function Arrow({
             />
           )}
         </g>
-      </svg>
+      </Box>
     </Box>
   )
 }

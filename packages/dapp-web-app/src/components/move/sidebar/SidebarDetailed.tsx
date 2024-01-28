@@ -1,25 +1,14 @@
 'use client'
 
-import {
-  Box,
-  Button,
-  Flex,
-  Link,
-  Text,
-  Image as ChackraImage,
-  List,
-  ListItem,
-  Checkbox,
-  Input,
-  FormControl,
-  FormLabel,
-} from '@chakra-ui/react'
-import { BsX } from 'react-icons/bs'
+import { Box, Button, Flex, Link, Text } from '@chakra-ui/react'
+import { Arrow } from 'components/arrow/GridArrow'
+import { SidebarArrow } from 'components/arrow/SidebarArrow'
+import { useArrowColors, ArrowDirections } from 'components/arrow/utils'
 
 import { useMoveContext } from 'contexts/MoveContext'
-import { Direction } from 'types/grid'
-import { useState } from 'react'
 import Image from 'next/image'
+import { useEffect, useMemo, useState } from 'react'
+import { Direction } from 'types/grid'
 
 const TextLine = ({ children, title = '', ...props }: any) => (
   <Text fontSize={'md'} color={'gray.500'} mb={1} {...props}>
@@ -35,13 +24,32 @@ const TextLine = ({ children, title = '', ...props }: any) => (
 export function SidebarDetailed({ ...props }: any) {
   const { gridItemsState, selectedGridItem, highlightGridItem } =
     useMoveContext()
+  const [arrowHover, setArrowHover] = useState<ArrowDirections | undefined>()
+  const [arrowSelected, setArrowSelected] = useState<
+    ArrowDirections | undefined
+  >()
 
-  const highlightItems = [
-    selectedGridItem,
-    ...highlightGridItem
-      .map((item) => gridItemsState[item])
-      .filter((item) => item),
-  ]
+  const handleArrowMouseOver = (direction?: ArrowDirections) => {
+    setArrowHover(direction)
+  }
+  const handleArrorOnClick = (direction: ArrowDirections) => {
+    setArrowSelected(direction)
+  }
+
+  const highlightItems = useMemo(
+    () => [
+      selectedGridItem,
+      ...highlightGridItem
+        .map((item) => gridItemsState[item])
+        .filter((item) => item),
+    ],
+    [gridItemsState, highlightGridItem, selectedGridItem]
+  )
+
+  useEffect(() => {
+    setArrowHover(undefined)
+    setArrowSelected(undefined)
+  }, [selectedGridItem])
 
   return (
     <Box {...props}>
@@ -51,29 +59,28 @@ export function SidebarDetailed({ ...props }: any) {
             <Text fontWeight={'bold'} mt={4} fontSize={'2xl'} as={'h1'}>
               Select a token to move
             </Text>
-            <Text fontSize={'xx-small'}>
+            <Text fontSize={'xs'}>
               Your tokens and move possibilities are highlighted on the grid.
             </Text>
           </>
         )}
         {selectedGridItem && (
-          <Box as="section">
-            <Flex as="header" alignItems={'center'}>
-              <Text
-                fontWeight={'bold'}
-                my={4}
-                textColor={'gray.900'}
-                fontSize={'2xl'}
-                textTransform={'uppercase'}
-              >
-                LINE #{selectedGridItem.id}
-              </Text>
-              <Text fontSize={'md'} textColor={'gray.500'} ml={2}>
-                ({selectedGridItem.index.replace('-', ',')})
-              </Text>
-            </Flex>
+          <Box as="section" mt={4}>
             <Flex justifyContent={'space-between'}>
               <Box maxW={'60%'}>
+                <Flex as="header" alignItems={'center'} mb={4}>
+                  <Text
+                    fontWeight={'bold'}
+                    textColor={'gray.900'}
+                    fontSize={'2xl'}
+                    textTransform={'uppercase'}
+                  >
+                    LINE #{selectedGridItem.id}
+                  </Text>
+                  <Text fontSize={'md'} textColor={'gray.500'} ml={2}>
+                    ({selectedGridItem.index.replace('-', ',')})
+                  </Text>
+                </Flex>
                 <Image
                   src={selectedGridItem.image}
                   alt={`Token ${selectedGridItem.index}`}
@@ -117,8 +124,25 @@ export function SidebarDetailed({ ...props }: any) {
                   </Box>
                 )}
               </Box>
-              <Box ml={8} flexShrink={0}>
-                <Button variant={'solid'} w={'full'}>
+              <Box ml={8} mt={2} flexShrink={0}>
+                <Box pos={'relative'} w={'full'} h={'45px'}>
+                  <SidebarArrow
+                    displayCircle
+                    direction={selectedGridItem.direction}
+                    isAvailable
+                    handleOnClick={handleArrorOnClick}
+                    handleMouseOver={handleArrowMouseOver}
+                    selected={arrowSelected}
+                    hovered={arrowHover}
+                  />
+                </Box>
+                <Button
+                  variant={'solid'}
+                  w={'full'}
+                  mt={4}
+                  mb={6}
+                  isDisabled={!arrowSelected}
+                >
                   Move
                 </Button>
                 <TextLine title={'Origin point'}>
@@ -133,6 +157,7 @@ export function SidebarDetailed({ ...props }: any) {
                   {selectedGridItem.index.replace('-', ',')}
                 </TextLine>
                 <TextLine title={'Movements'}>-</TextLine>
+                <TextLine title={'Owner'}>0x00000</TextLine>
                 <Link
                   href={selectedGridItem.image}
                   isExternal

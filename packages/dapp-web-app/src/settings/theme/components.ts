@@ -50,6 +50,13 @@ const components = {
           borderWidth: '2px',
           borderColor: `${colorScheme}.900`,
           borderStyle: 'solid',
+          _disabled: {
+            bgColor: `${colorScheme}.900`,
+            color: 'gray.50',
+            borderWidth: '2px',
+            borderColor: `${colorScheme}.900`,
+            borderStyle: 'solid',
+          },
         },
         _active: {
           background: ``,
@@ -63,6 +70,9 @@ const components = {
     },
     baseStyle: {
       borderRadius: 0,
+      _disabled: {
+        transition: 'none',
+      },
     },
   }),
   Link: defineStyleConfig({

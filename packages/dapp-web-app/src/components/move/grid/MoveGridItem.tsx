@@ -3,7 +3,8 @@ import { Box, Flex, Tooltip, Image as ChackraImage } from '@chakra-ui/react'
 import { GridItemProperties } from 'contexts/MoveContext'
 import GridNumber from './GridNumber'
 import { Direction, GridSize } from 'types/grid'
-import { Arrow, ArrowDirections } from 'components/arrow'
+import { Arrow } from 'components/arrow/GridArrow'
+import { ArrowDirections } from 'components/arrow/utils'
 
 interface GridItemProps extends GridItemProperties {
   width: number
@@ -203,6 +204,8 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
               isSelected={isSelected}
               isAvailable={isAvailable}
               hide={hideArrows}
+              w={`${lineWidth * 2 - 8}px`}
+              h={`${lineHeight * 2 - 8}px`}
             />
             {/* {false && (
               <>
