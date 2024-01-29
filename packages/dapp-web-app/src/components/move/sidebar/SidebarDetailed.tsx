@@ -136,6 +136,12 @@ export function SidebarDetailed({ ...props }: any) {
                         hovered={arrowHover}
                       />
                     </Box>
+                    {!arrowSelected && (
+                      <Text fontSize={'xs'} fontWeight={'bold'} mt={1}>
+                        Select a direction <br />
+                        to move
+                      </Text>
+                    )}
                     {arrowSelected && (
                       <Flex alignItems={'flex-end'} mt={1}>
                         <Box>
