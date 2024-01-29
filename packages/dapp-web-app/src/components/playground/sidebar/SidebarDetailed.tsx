@@ -76,7 +76,7 @@ export function SidebarDetailed({ ...props }: any) {
               ({lastSelectedGridItem.index.replace('-', ',')})
             </Text>
           </Flex>
-          <Flex justifyContent={'space-between'}>
+          <Flex justifyContent={'flex-start'}>
             <Box maxW={'55%'}>
               <Image
                 src={lastSelectedGridItem.image}

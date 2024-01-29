@@ -24,7 +24,9 @@ function Providers({ children }: { children: React.ReactNode }) {
       <ChakraProvider theme={theme}>
         <WagmiConfig config={config}>
           {!mounted && <p>Loading</p>}
-          <ConnectKitProvider>{mounted && children}</ConnectKitProvider>
+          <ConnectKitProvider theme={'minimal'} mode="light">
+            {mounted && children}
+          </ConnectKitProvider>
         </WagmiConfig>
       </ChakraProvider>
     </CacheProvider>

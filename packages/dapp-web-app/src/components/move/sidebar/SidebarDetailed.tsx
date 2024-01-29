@@ -50,7 +50,7 @@ export function SidebarDetailed({ ...props }: any) {
   }, [selectedGridItem])
 
   return (
-    <Box {...props}>
+    <Box w={'100%'} {...props}>
       <Box as={'section'}>
         {!selectedGridItem && (
           <>
@@ -64,7 +64,7 @@ export function SidebarDetailed({ ...props }: any) {
         )}
         {selectedGridItem && (
           <Box as="section" mt={4}>
-            <Flex justifyContent={'space-between'}>
+            <Flex justifyContent={'flex-start'}>
               <Box maxW={'60%'}>
                 <Flex as="header" alignItems={'center'} mb={4}>
                   <Text
