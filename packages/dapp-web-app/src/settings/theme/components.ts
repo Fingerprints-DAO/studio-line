@@ -44,6 +44,8 @@ const components = {
       solid: defineStyle(({ colorScheme }) => ({
         bgColor: `${colorScheme}.900`,
         color: 'gray.50',
+        borderWidth: 2,
+        borderColor: `${colorScheme}.900`,
         _hover: {
           bgColor: `gray.50`,
           color: `${colorScheme}.900`,

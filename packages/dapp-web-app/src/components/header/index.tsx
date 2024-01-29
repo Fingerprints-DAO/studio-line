@@ -13,6 +13,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
+import Wallet from 'components/wallet'
 import Link from 'next/link'
 // import useMediaQuery from 'hooks/use-media-query'
 import { usePathname } from 'next/navigation'
@@ -77,6 +78,7 @@ const Header = () => {
               </Box>
             )
           })}
+          <Wallet ml={6} />
         </Flex>
       </GridItem>
     </Grid>
