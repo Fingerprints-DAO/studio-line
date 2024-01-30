@@ -69,7 +69,7 @@ export function SidebarDetailed({ ...props }: any) {
     maxSupply,
     auctionState,
   } = useAuctionContext()
-  const [counter, setCounter] = useState(1)
+  const [counter, setCounter] = useState(0)
   const { countdownInMili } = useCountdownTime()
   const startDate = dayjs.unix(Number(startTime))
 
@@ -214,7 +214,11 @@ export function SidebarDetailed({ ...props }: any) {
                   </Box>
                   <Box ml={4} flex={2}>
                     <Text fontSize={'xs'} fontWeight={'bold'}>
-                      Total: 1.69 ETH
+                      Total:{' '}
+                      {formatToEtherStringBN(
+                        BigInt(selectedItems.length) * currentPrice,
+                      )}{' '}
+                      ETH
                     </Text>
                     <FormControl
                       alignItems={'flex-start'}
@@ -296,9 +300,10 @@ export function SidebarDetailed({ ...props }: any) {
                 </Box>
                 <Box ml={4} flex={2}>
                   <Text fontSize={'xs'} fontWeight={'bold'} mb={2}>
-                    Total: 1.69 ETH
+                    Total:{' '}
+                    {formatToEtherStringBN(BigInt(counter) * currentPrice)} ETH
                   </Text>
-                  <Button variant={'solid'} w={'full'}>
+                  <Button variant={'solid'} w={'full'} isDisabled={counter < 1}>
                     Random Mint
                   </Button>
                 </Box>
