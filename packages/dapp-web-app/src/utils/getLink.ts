@@ -1,3 +1,5 @@
+import { getChain } from './chain'
+
 export const getBaseURL = () => {
   const base = process.env.NEXT_PUBLIC_VERCEL_URL
   let protocol = 'https://'
@@ -7,5 +9,9 @@ export const getBaseURL = () => {
 
 export const getExternalOpenseaUrl = (address: string, id?: string) => {
   const base = process.env.NEXT_PUBLIC_OPENSEA_URL
-  return `${base}/${address}${id ? `/${id}` : ''}`
+  return `${base}assets/${getChain().name.toLowerCase()}/${address}${id ? `/${id}` : ''}`
+}
+export const getExternalEtherscanUrl = (address: string) => {
+  const base = process.env.NEXT_PUBLIC_ETHERSCAN_URL
+  return `${base}address/${address}`
 }

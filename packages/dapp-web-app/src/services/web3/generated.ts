@@ -548,6 +548,10 @@ export const lineABI = [
   { type: 'error', inputs: [], name: 'ReentrancyGuardReentrantCall' },
 ] as const
 
+export const lineAddress = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512' as const
+
+export const lineConfig = { address: lineAddress, abi: lineABI } as const
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // React
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -556,18 +560,18 @@ export const lineABI = [
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__.
  */
 export function useLineRead<TFunctionName extends string, TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, ...config } as UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>)
+  return useContractRead({ abi: lineABI, address: lineAddress, ...config } as UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>)
 }
 
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"MAX_LOCKED_TOKENS"`.
  */
 export function useLineMaxLockedTokens<TFunctionName extends 'MAX_LOCKED_TOKENS', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'MAX_LOCKED_TOKENS', ...config } as UseContractReadConfig<
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'MAX_LOCKED_TOKENS', ...config } as UseContractReadConfig<
     typeof lineABI,
     TFunctionName,
     TSelectData
@@ -578,9 +582,9 @@ export function useLineMaxLockedTokens<TFunctionName extends 'MAX_LOCKED_TOKENS'
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"MAX_MINT_PER_TX"`.
  */
 export function useLineMaxMintPerTx<TFunctionName extends 'MAX_MINT_PER_TX', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'MAX_MINT_PER_TX', ...config } as UseContractReadConfig<
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'MAX_MINT_PER_TX', ...config } as UseContractReadConfig<
     typeof lineABI,
     TFunctionName,
     TSelectData
@@ -591,18 +595,22 @@ export function useLineMaxMintPerTx<TFunctionName extends 'MAX_MINT_PER_TX', TSe
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"MAX_SUPPLY"`.
  */
 export function useLineMaxSupply<TFunctionName extends 'MAX_SUPPLY', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'MAX_SUPPLY', ...config } as UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>)
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'MAX_SUPPLY', ...config } as UseContractReadConfig<
+    typeof lineABI,
+    TFunctionName,
+    TSelectData
+  >)
 }
 
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"NUM_COLUMNS"`.
  */
 export function useLineNumColumns<TFunctionName extends 'NUM_COLUMNS', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'NUM_COLUMNS', ...config } as UseContractReadConfig<
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'NUM_COLUMNS', ...config } as UseContractReadConfig<
     typeof lineABI,
     TFunctionName,
     TSelectData
@@ -613,9 +621,13 @@ export function useLineNumColumns<TFunctionName extends 'NUM_COLUMNS', TSelectDa
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"NUM_ROWS"`.
  */
 export function useLineNumRows<TFunctionName extends 'NUM_ROWS', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'NUM_ROWS', ...config } as UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>)
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'NUM_ROWS', ...config } as UseContractReadConfig<
+    typeof lineABI,
+    TFunctionName,
+    TSelectData
+  >)
 }
 
 /**
@@ -624,8 +636,8 @@ export function useLineNumRows<TFunctionName extends 'NUM_ROWS', TSelectData = R
 export function useLineAvailableCoordinates<
   TFunctionName extends 'availableCoordinates',
   TSelectData = ReadContractResult<typeof lineABI, TFunctionName>
->(config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any) {
-  return useContractRead({ abi: lineABI, functionName: 'availableCoordinates', ...config } as UseContractReadConfig<
+>(config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any) {
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'availableCoordinates', ...config } as UseContractReadConfig<
     typeof lineABI,
     TFunctionName,
     TSelectData
@@ -636,18 +648,22 @@ export function useLineAvailableCoordinates<
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"balanceOf"`.
  */
 export function useLineBalanceOf<TFunctionName extends 'balanceOf', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'balanceOf', ...config } as UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>)
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'balanceOf', ...config } as UseContractReadConfig<
+    typeof lineABI,
+    TFunctionName,
+    TSelectData
+  >)
 }
 
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"checkMerkleProof"`.
  */
 export function useLineCheckMerkleProof<TFunctionName extends 'checkMerkleProof', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'checkMerkleProof', ...config } as UseContractReadConfig<
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'checkMerkleProof', ...config } as UseContractReadConfig<
     typeof lineABI,
     TFunctionName,
     TSelectData
@@ -658,9 +674,13 @@ export function useLineCheckMerkleProof<TFunctionName extends 'checkMerkleProof'
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"config"`.
  */
 export function useLineConfig<TFunctionName extends 'config', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'config', ...config } as UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>)
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'config', ...config } as UseContractReadConfig<
+    typeof lineABI,
+    TFunctionName,
+    TSelectData
+  >)
 }
 
 /**
@@ -669,8 +689,8 @@ export function useLineConfig<TFunctionName extends 'config', TSelectData = Read
 export function useLineCoordinateHashToIndex<
   TFunctionName extends 'coordinateHashToIndex',
   TSelectData = ReadContractResult<typeof lineABI, TFunctionName>
->(config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any) {
-  return useContractRead({ abi: lineABI, functionName: 'coordinateHashToIndex', ...config } as UseContractReadConfig<
+>(config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any) {
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'coordinateHashToIndex', ...config } as UseContractReadConfig<
     typeof lineABI,
     TFunctionName,
     TSelectData
@@ -681,9 +701,9 @@ export function useLineCoordinateHashToIndex<
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"currentTokenId"`.
  */
 export function useLineCurrentTokenId<TFunctionName extends 'currentTokenId', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'currentTokenId', ...config } as UseContractReadConfig<
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'currentTokenId', ...config } as UseContractReadConfig<
     typeof lineABI,
     TFunctionName,
     TSelectData
@@ -694,18 +714,22 @@ export function useLineCurrentTokenId<TFunctionName extends 'currentTokenId', TS
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"descriptor"`.
  */
 export function useLineDescriptor<TFunctionName extends 'descriptor', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'descriptor', ...config } as UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>)
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'descriptor', ...config } as UseContractReadConfig<
+    typeof lineABI,
+    TFunctionName,
+    TSelectData
+  >)
 }
 
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"getApproved"`.
  */
 export function useLineGetApproved<TFunctionName extends 'getApproved', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'getApproved', ...config } as UseContractReadConfig<
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'getApproved', ...config } as UseContractReadConfig<
     typeof lineABI,
     TFunctionName,
     TSelectData
@@ -716,9 +740,9 @@ export function useLineGetApproved<TFunctionName extends 'getApproved', TSelectD
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"getCurrentPrice"`.
  */
 export function useLineGetCurrentPrice<TFunctionName extends 'getCurrentPrice', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'getCurrentPrice', ...config } as UseContractReadConfig<
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'getCurrentPrice', ...config } as UseContractReadConfig<
     typeof lineABI,
     TFunctionName,
     TSelectData
@@ -729,36 +753,48 @@ export function useLineGetCurrentPrice<TFunctionName extends 'getCurrentPrice', 
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"getGrid"`.
  */
 export function useLineGetGrid<TFunctionName extends 'getGrid', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'getGrid', ...config } as UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>)
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'getGrid', ...config } as UseContractReadConfig<
+    typeof lineABI,
+    TFunctionName,
+    TSelectData
+  >)
 }
 
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"getToken"`.
  */
 export function useLineGetToken<TFunctionName extends 'getToken', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'getToken', ...config } as UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>)
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'getToken', ...config } as UseContractReadConfig<
+    typeof lineABI,
+    TFunctionName,
+    TSelectData
+  >)
 }
 
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"grid"`.
  */
 export function useLineGrid<TFunctionName extends 'grid', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'grid', ...config } as UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>)
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'grid', ...config } as UseContractReadConfig<
+    typeof lineABI,
+    TFunctionName,
+    TSelectData
+  >)
 }
 
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"isApprovedForAll"`.
  */
 export function useLineIsApprovedForAll<TFunctionName extends 'isApprovedForAll', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'isApprovedForAll', ...config } as UseContractReadConfig<
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'isApprovedForAll', ...config } as UseContractReadConfig<
     typeof lineABI,
     TFunctionName,
     TSelectData
@@ -769,9 +805,13 @@ export function useLineIsApprovedForAll<TFunctionName extends 'isApprovedForAll'
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"merkleRoot"`.
  */
 export function useLineMerkleRoot<TFunctionName extends 'merkleRoot', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'merkleRoot', ...config } as UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>)
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'merkleRoot', ...config } as UseContractReadConfig<
+    typeof lineABI,
+    TFunctionName,
+    TSelectData
+  >)
 }
 
 /**
@@ -780,8 +820,8 @@ export function useLineMerkleRoot<TFunctionName extends 'merkleRoot', TSelectDat
 export function useLineMintableCoordinates<
   TFunctionName extends 'mintableCoordinates',
   TSelectData = ReadContractResult<typeof lineABI, TFunctionName>
->(config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any) {
-  return useContractRead({ abi: lineABI, functionName: 'mintableCoordinates', ...config } as UseContractReadConfig<
+>(config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any) {
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'mintableCoordinates', ...config } as UseContractReadConfig<
     typeof lineABI,
     TFunctionName,
     TSelectData
@@ -792,9 +832,13 @@ export function useLineMintableCoordinates<
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"name"`.
  */
 export function useLineName<TFunctionName extends 'name', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'name', ...config } as UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>)
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'name', ...config } as UseContractReadConfig<
+    typeof lineABI,
+    TFunctionName,
+    TSelectData
+  >)
 }
 
 /**
@@ -803,8 +847,8 @@ export function useLineName<TFunctionName extends 'name', TSelectData = ReadCont
 export function useLineNumLockedOriginPoints<
   TFunctionName extends 'numLockedOriginPoints',
   TSelectData = ReadContractResult<typeof lineABI, TFunctionName>
->(config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any) {
-  return useContractRead({ abi: lineABI, functionName: 'numLockedOriginPoints', ...config } as UseContractReadConfig<
+>(config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any) {
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'numLockedOriginPoints', ...config } as UseContractReadConfig<
     typeof lineABI,
     TFunctionName,
     TSelectData
@@ -815,27 +859,35 @@ export function useLineNumLockedOriginPoints<
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"owner"`.
  */
 export function useLineOwner<TFunctionName extends 'owner', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'owner', ...config } as UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>)
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'owner', ...config } as UseContractReadConfig<
+    typeof lineABI,
+    TFunctionName,
+    TSelectData
+  >)
 }
 
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"ownerOf"`.
  */
 export function useLineOwnerOf<TFunctionName extends 'ownerOf', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'ownerOf', ...config } as UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>)
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'ownerOf', ...config } as UseContractReadConfig<
+    typeof lineABI,
+    TFunctionName,
+    TSelectData
+  >)
 }
 
 /**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"pendingOwner"`.
  */
 export function useLinePendingOwner<TFunctionName extends 'pendingOwner', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'pendingOwner', ...config } as UseContractReadConfig<
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'pendingOwner', ...config } as UseContractReadConfig<
     typeof lineABI,
     TFunctionName,
     TSelectData
@@ -846,9 +898,9 @@ export function useLinePendingOwner<TFunctionName extends 'pendingOwner', TSelec
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"supportsInterface"`.
  */
 export function useLineSupportsInterface<TFunctionName extends 'supportsInterface', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'supportsInterface', ...config } as UseContractReadConfig<
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'supportsInterface', ...config } as UseContractReadConfig<
     typeof lineABI,
     TFunctionName,
     TSelectData
@@ -859,9 +911,13 @@ export function useLineSupportsInterface<TFunctionName extends 'supportsInterfac
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"symbol"`.
  */
 export function useLineSymbol<TFunctionName extends 'symbol', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'symbol', ...config } as UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>)
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'symbol', ...config } as UseContractReadConfig<
+    typeof lineABI,
+    TFunctionName,
+    TSelectData
+  >)
 }
 
 /**
@@ -870,8 +926,8 @@ export function useLineSymbol<TFunctionName extends 'symbol', TSelectData = Read
 export function useLineTokenIdToTokenInfo<
   TFunctionName extends 'tokenIdToTokenInfo',
   TSelectData = ReadContractResult<typeof lineABI, TFunctionName>
->(config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any) {
-  return useContractRead({ abi: lineABI, functionName: 'tokenIdToTokenInfo', ...config } as UseContractReadConfig<
+>(config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any) {
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'tokenIdToTokenInfo', ...config } as UseContractReadConfig<
     typeof lineABI,
     TFunctionName,
     TSelectData
@@ -882,9 +938,13 @@ export function useLineTokenIdToTokenInfo<
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"tokenURI"`.
  */
 export function useLineTokenUri<TFunctionName extends 'tokenURI', TSelectData = ReadContractResult<typeof lineABI, TFunctionName>>(
-  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return useContractRead({ abi: lineABI, functionName: 'tokenURI', ...config } as UseContractReadConfig<typeof lineABI, TFunctionName, TSelectData>)
+  return useContractRead({ abi: lineABI, address: lineAddress, functionName: 'tokenURI', ...config } as UseContractReadConfig<
+    typeof lineABI,
+    TFunctionName,
+    TSelectData
+  >)
 }
 
 /**
@@ -897,7 +957,7 @@ export function useLineWrite<TFunctionName extends string, TMode extends WriteCo
         abi?: never
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, TFunctionName, TMode>({ abi: lineABI, ...config } as any)
+  return useContractWrite<typeof lineABI, TFunctionName, TMode>({ abi: lineABI, address: lineAddress, ...config } as any)
 }
 
 /**
@@ -913,7 +973,12 @@ export function useLineAcceptOwnership<TMode extends WriteContractMode = undefin
         functionName?: 'acceptOwnership'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'acceptOwnership', TMode>({ abi: lineABI, functionName: 'acceptOwnership', ...config } as any)
+  return useContractWrite<typeof lineABI, 'acceptOwnership', TMode>({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'acceptOwnership',
+    ...config,
+  } as any)
 }
 
 /**
@@ -927,7 +992,7 @@ export function useLineApprove<TMode extends WriteContractMode = undefined>(
         functionName?: 'approve'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'approve', TMode>({ abi: lineABI, functionName: 'approve', ...config } as any)
+  return useContractWrite<typeof lineABI, 'approve', TMode>({ abi: lineABI, address: lineAddress, functionName: 'approve', ...config } as any)
 }
 
 /**
@@ -943,7 +1008,7 @@ export function useLineCloseMint<TMode extends WriteContractMode = undefined>(
         functionName?: 'closeMint'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'closeMint', TMode>({ abi: lineABI, functionName: 'closeMint', ...config } as any)
+  return useContractWrite<typeof lineABI, 'closeMint', TMode>({ abi: lineABI, address: lineAddress, functionName: 'closeMint', ...config } as any)
 }
 
 /**
@@ -959,7 +1024,12 @@ export function useLineLockOriginPoint<TMode extends WriteContractMode = undefin
         functionName?: 'lockOriginPoint'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'lockOriginPoint', TMode>({ abi: lineABI, functionName: 'lockOriginPoint', ...config } as any)
+  return useContractWrite<typeof lineABI, 'lockOriginPoint', TMode>({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'lockOriginPoint',
+    ...config,
+  } as any)
 }
 
 /**
@@ -975,7 +1045,12 @@ export function useLineMintAtPosition<TMode extends WriteContractMode = undefine
         functionName?: 'mintAtPosition'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'mintAtPosition', TMode>({ abi: lineABI, functionName: 'mintAtPosition', ...config } as any)
+  return useContractWrite<typeof lineABI, 'mintAtPosition', TMode>({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'mintAtPosition',
+    ...config,
+  } as any)
 }
 
 /**
@@ -991,7 +1066,7 @@ export function useLineMintRandom<TMode extends WriteContractMode = undefined>(
         functionName?: 'mintRandom'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'mintRandom', TMode>({ abi: lineABI, functionName: 'mintRandom', ...config } as any)
+  return useContractWrite<typeof lineABI, 'mintRandom', TMode>({ abi: lineABI, address: lineAddress, functionName: 'mintRandom', ...config } as any)
 }
 
 /**
@@ -1007,7 +1082,7 @@ export function useLineMoveEast<TMode extends WriteContractMode = undefined>(
         functionName?: 'moveEast'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'moveEast', TMode>({ abi: lineABI, functionName: 'moveEast', ...config } as any)
+  return useContractWrite<typeof lineABI, 'moveEast', TMode>({ abi: lineABI, address: lineAddress, functionName: 'moveEast', ...config } as any)
 }
 
 /**
@@ -1023,7 +1098,7 @@ export function useLineMoveNorth<TMode extends WriteContractMode = undefined>(
         functionName?: 'moveNorth'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'moveNorth', TMode>({ abi: lineABI, functionName: 'moveNorth', ...config } as any)
+  return useContractWrite<typeof lineABI, 'moveNorth', TMode>({ abi: lineABI, address: lineAddress, functionName: 'moveNorth', ...config } as any)
 }
 
 /**
@@ -1039,7 +1114,12 @@ export function useLineMoveNortheast<TMode extends WriteContractMode = undefined
         functionName?: 'moveNortheast'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'moveNortheast', TMode>({ abi: lineABI, functionName: 'moveNortheast', ...config } as any)
+  return useContractWrite<typeof lineABI, 'moveNortheast', TMode>({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'moveNortheast',
+    ...config,
+  } as any)
 }
 
 /**
@@ -1055,7 +1135,12 @@ export function useLineMoveNorthwest<TMode extends WriteContractMode = undefined
         functionName?: 'moveNorthwest'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'moveNorthwest', TMode>({ abi: lineABI, functionName: 'moveNorthwest', ...config } as any)
+  return useContractWrite<typeof lineABI, 'moveNorthwest', TMode>({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'moveNorthwest',
+    ...config,
+  } as any)
 }
 
 /**
@@ -1071,7 +1156,7 @@ export function useLineMoveSouth<TMode extends WriteContractMode = undefined>(
         functionName?: 'moveSouth'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'moveSouth', TMode>({ abi: lineABI, functionName: 'moveSouth', ...config } as any)
+  return useContractWrite<typeof lineABI, 'moveSouth', TMode>({ abi: lineABI, address: lineAddress, functionName: 'moveSouth', ...config } as any)
 }
 
 /**
@@ -1087,7 +1172,12 @@ export function useLineMoveSoutheast<TMode extends WriteContractMode = undefined
         functionName?: 'moveSoutheast'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'moveSoutheast', TMode>({ abi: lineABI, functionName: 'moveSoutheast', ...config } as any)
+  return useContractWrite<typeof lineABI, 'moveSoutheast', TMode>({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'moveSoutheast',
+    ...config,
+  } as any)
 }
 
 /**
@@ -1103,7 +1193,12 @@ export function useLineMoveSouthwest<TMode extends WriteContractMode = undefined
         functionName?: 'moveSouthwest'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'moveSouthwest', TMode>({ abi: lineABI, functionName: 'moveSouthwest', ...config } as any)
+  return useContractWrite<typeof lineABI, 'moveSouthwest', TMode>({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'moveSouthwest',
+    ...config,
+  } as any)
 }
 
 /**
@@ -1119,7 +1214,7 @@ export function useLineMoveWest<TMode extends WriteContractMode = undefined>(
         functionName?: 'moveWest'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'moveWest', TMode>({ abi: lineABI, functionName: 'moveWest', ...config } as any)
+  return useContractWrite<typeof lineABI, 'moveWest', TMode>({ abi: lineABI, address: lineAddress, functionName: 'moveWest', ...config } as any)
 }
 
 /**
@@ -1135,7 +1230,12 @@ export function useLineRenounceOwnership<TMode extends WriteContractMode = undef
         functionName?: 'renounceOwnership'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'renounceOwnership', TMode>({ abi: lineABI, functionName: 'renounceOwnership', ...config } as any)
+  return useContractWrite<typeof lineABI, 'renounceOwnership', TMode>({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'renounceOwnership',
+    ...config,
+  } as any)
 }
 
 /**
@@ -1151,7 +1251,12 @@ export function useLineSafeTransferFrom<TMode extends WriteContractMode = undefi
         functionName?: 'safeTransferFrom'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'safeTransferFrom', TMode>({ abi: lineABI, functionName: 'safeTransferFrom', ...config } as any)
+  return useContractWrite<typeof lineABI, 'safeTransferFrom', TMode>({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'safeTransferFrom',
+    ...config,
+  } as any)
 }
 
 /**
@@ -1167,7 +1272,12 @@ export function useLineSetApprovalForAll<TMode extends WriteContractMode = undef
         functionName?: 'setApprovalForAll'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'setApprovalForAll', TMode>({ abi: lineABI, functionName: 'setApprovalForAll', ...config } as any)
+  return useContractWrite<typeof lineABI, 'setApprovalForAll', TMode>({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'setApprovalForAll',
+    ...config,
+  } as any)
 }
 
 /**
@@ -1183,7 +1293,12 @@ export function useLineSetDescriptor<TMode extends WriteContractMode = undefined
         functionName?: 'setDescriptor'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'setDescriptor', TMode>({ abi: lineABI, functionName: 'setDescriptor', ...config } as any)
+  return useContractWrite<typeof lineABI, 'setDescriptor', TMode>({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'setDescriptor',
+    ...config,
+  } as any)
 }
 
 /**
@@ -1203,6 +1318,7 @@ export function useLineSetInitialAvailableCoordinates<TMode extends WriteContrac
 ) {
   return useContractWrite<typeof lineABI, 'setInitialAvailableCoordinates', TMode>({
     abi: lineABI,
+    address: lineAddress,
     functionName: 'setInitialAvailableCoordinates',
     ...config,
   } as any)
@@ -1221,7 +1337,12 @@ export function useLineTransferFrom<TMode extends WriteContractMode = undefined>
         functionName?: 'transferFrom'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'transferFrom', TMode>({ abi: lineABI, functionName: 'transferFrom', ...config } as any)
+  return useContractWrite<typeof lineABI, 'transferFrom', TMode>({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'transferFrom',
+    ...config,
+  } as any)
 }
 
 /**
@@ -1237,7 +1358,12 @@ export function useLineTransferOwnership<TMode extends WriteContractMode = undef
         functionName?: 'transferOwnership'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'transferOwnership', TMode>({ abi: lineABI, functionName: 'transferOwnership', ...config } as any)
+  return useContractWrite<typeof lineABI, 'transferOwnership', TMode>({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'transferOwnership',
+    ...config,
+  } as any)
 }
 
 /**
@@ -1253,7 +1379,12 @@ export function useLineUpdateConfig<TMode extends WriteContractMode = undefined>
         functionName?: 'updateConfig'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'updateConfig', TMode>({ abi: lineABI, functionName: 'updateConfig', ...config } as any)
+  return useContractWrite<typeof lineABI, 'updateConfig', TMode>({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'updateConfig',
+    ...config,
+  } as any)
 }
 
 /**
@@ -1269,7 +1400,12 @@ export function useLineUpdateMerkleRoot<TMode extends WriteContractMode = undefi
         functionName?: 'updateMerkleRoot'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'updateMerkleRoot', TMode>({ abi: lineABI, functionName: 'updateMerkleRoot', ...config } as any)
+  return useContractWrite<typeof lineABI, 'updateMerkleRoot', TMode>({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'updateMerkleRoot',
+    ...config,
+  } as any)
 }
 
 /**
@@ -1285,25 +1421,25 @@ export function useLineWithdraw<TMode extends WriteContractMode = undefined>(
         functionName?: 'withdraw'
       } = {} as any
 ) {
-  return useContractWrite<typeof lineABI, 'withdraw', TMode>({ abi: lineABI, functionName: 'withdraw', ...config } as any)
+  return useContractWrite<typeof lineABI, 'withdraw', TMode>({ abi: lineABI, address: lineAddress, functionName: 'withdraw', ...config } as any)
 }
 
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__.
  */
 export function usePrepareLineWrite<TFunctionName extends string>(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, TFunctionName>, 'abi'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, TFunctionName>, 'abi' | 'address'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, ...config } as UsePrepareContractWriteConfig<typeof lineABI, TFunctionName>)
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, ...config } as UsePrepareContractWriteConfig<typeof lineABI, TFunctionName>)
 }
 
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"acceptOwnership"`.
  */
 export function usePrepareLineAcceptOwnership(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'acceptOwnership'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'acceptOwnership'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'acceptOwnership', ...config } as UsePrepareContractWriteConfig<
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'acceptOwnership', ...config } as UsePrepareContractWriteConfig<
     typeof lineABI,
     'acceptOwnership'
   >)
@@ -1312,26 +1448,34 @@ export function usePrepareLineAcceptOwnership(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"approve"`.
  */
-export function usePrepareLineApprove(config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'approve'>, 'abi' | 'functionName'> = {} as any) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'approve', ...config } as UsePrepareContractWriteConfig<typeof lineABI, 'approve'>)
+export function usePrepareLineApprove(
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'approve'>, 'abi' | 'address' | 'functionName'> = {} as any
+) {
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'approve', ...config } as UsePrepareContractWriteConfig<
+    typeof lineABI,
+    'approve'
+  >)
 }
 
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"closeMint"`.
  */
 export function usePrepareLineCloseMint(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'closeMint'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'closeMint'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'closeMint', ...config } as UsePrepareContractWriteConfig<typeof lineABI, 'closeMint'>)
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'closeMint', ...config } as UsePrepareContractWriteConfig<
+    typeof lineABI,
+    'closeMint'
+  >)
 }
 
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"lockOriginPoint"`.
  */
 export function usePrepareLineLockOriginPoint(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'lockOriginPoint'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'lockOriginPoint'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'lockOriginPoint', ...config } as UsePrepareContractWriteConfig<
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'lockOriginPoint', ...config } as UsePrepareContractWriteConfig<
     typeof lineABI,
     'lockOriginPoint'
   >)
@@ -1341,9 +1485,9 @@ export function usePrepareLineLockOriginPoint(
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"mintAtPosition"`.
  */
 export function usePrepareLineMintAtPosition(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'mintAtPosition'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'mintAtPosition'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'mintAtPosition', ...config } as UsePrepareContractWriteConfig<
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'mintAtPosition', ...config } as UsePrepareContractWriteConfig<
     typeof lineABI,
     'mintAtPosition'
   >)
@@ -1353,9 +1497,9 @@ export function usePrepareLineMintAtPosition(
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"mintRandom"`.
  */
 export function usePrepareLineMintRandom(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'mintRandom'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'mintRandom'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'mintRandom', ...config } as UsePrepareContractWriteConfig<
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'mintRandom', ...config } as UsePrepareContractWriteConfig<
     typeof lineABI,
     'mintRandom'
   >)
@@ -1364,26 +1508,34 @@ export function usePrepareLineMintRandom(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"moveEast"`.
  */
-export function usePrepareLineMoveEast(config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'moveEast'>, 'abi' | 'functionName'> = {} as any) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'moveEast', ...config } as UsePrepareContractWriteConfig<typeof lineABI, 'moveEast'>)
+export function usePrepareLineMoveEast(
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'moveEast'>, 'abi' | 'address' | 'functionName'> = {} as any
+) {
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'moveEast', ...config } as UsePrepareContractWriteConfig<
+    typeof lineABI,
+    'moveEast'
+  >)
 }
 
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"moveNorth"`.
  */
 export function usePrepareLineMoveNorth(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'moveNorth'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'moveNorth'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'moveNorth', ...config } as UsePrepareContractWriteConfig<typeof lineABI, 'moveNorth'>)
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'moveNorth', ...config } as UsePrepareContractWriteConfig<
+    typeof lineABI,
+    'moveNorth'
+  >)
 }
 
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"moveNortheast"`.
  */
 export function usePrepareLineMoveNortheast(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'moveNortheast'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'moveNortheast'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'moveNortheast', ...config } as UsePrepareContractWriteConfig<
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'moveNortheast', ...config } as UsePrepareContractWriteConfig<
     typeof lineABI,
     'moveNortheast'
   >)
@@ -1393,9 +1545,9 @@ export function usePrepareLineMoveNortheast(
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"moveNorthwest"`.
  */
 export function usePrepareLineMoveNorthwest(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'moveNorthwest'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'moveNorthwest'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'moveNorthwest', ...config } as UsePrepareContractWriteConfig<
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'moveNorthwest', ...config } as UsePrepareContractWriteConfig<
     typeof lineABI,
     'moveNorthwest'
   >)
@@ -1405,18 +1557,21 @@ export function usePrepareLineMoveNorthwest(
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"moveSouth"`.
  */
 export function usePrepareLineMoveSouth(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'moveSouth'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'moveSouth'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'moveSouth', ...config } as UsePrepareContractWriteConfig<typeof lineABI, 'moveSouth'>)
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'moveSouth', ...config } as UsePrepareContractWriteConfig<
+    typeof lineABI,
+    'moveSouth'
+  >)
 }
 
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"moveSoutheast"`.
  */
 export function usePrepareLineMoveSoutheast(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'moveSoutheast'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'moveSoutheast'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'moveSoutheast', ...config } as UsePrepareContractWriteConfig<
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'moveSoutheast', ...config } as UsePrepareContractWriteConfig<
     typeof lineABI,
     'moveSoutheast'
   >)
@@ -1426,9 +1581,9 @@ export function usePrepareLineMoveSoutheast(
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"moveSouthwest"`.
  */
 export function usePrepareLineMoveSouthwest(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'moveSouthwest'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'moveSouthwest'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'moveSouthwest', ...config } as UsePrepareContractWriteConfig<
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'moveSouthwest', ...config } as UsePrepareContractWriteConfig<
     typeof lineABI,
     'moveSouthwest'
   >)
@@ -1437,29 +1592,36 @@ export function usePrepareLineMoveSouthwest(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"moveWest"`.
  */
-export function usePrepareLineMoveWest(config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'moveWest'>, 'abi' | 'functionName'> = {} as any) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'moveWest', ...config } as UsePrepareContractWriteConfig<typeof lineABI, 'moveWest'>)
+export function usePrepareLineMoveWest(
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'moveWest'>, 'abi' | 'address' | 'functionName'> = {} as any
+) {
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'moveWest', ...config } as UsePrepareContractWriteConfig<
+    typeof lineABI,
+    'moveWest'
+  >)
 }
 
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"renounceOwnership"`.
  */
 export function usePrepareLineRenounceOwnership(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'renounceOwnership'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'renounceOwnership'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'renounceOwnership', ...config } as UsePrepareContractWriteConfig<
-    typeof lineABI,
-    'renounceOwnership'
-  >)
+  return usePrepareContractWrite({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'renounceOwnership',
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof lineABI, 'renounceOwnership'>)
 }
 
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"safeTransferFrom"`.
  */
 export function usePrepareLineSafeTransferFrom(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'safeTransferFrom'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'safeTransferFrom'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'safeTransferFrom', ...config } as UsePrepareContractWriteConfig<
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'safeTransferFrom', ...config } as UsePrepareContractWriteConfig<
     typeof lineABI,
     'safeTransferFrom'
   >)
@@ -1469,21 +1631,23 @@ export function usePrepareLineSafeTransferFrom(
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"setApprovalForAll"`.
  */
 export function usePrepareLineSetApprovalForAll(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'setApprovalForAll'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'setApprovalForAll'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'setApprovalForAll', ...config } as UsePrepareContractWriteConfig<
-    typeof lineABI,
-    'setApprovalForAll'
-  >)
+  return usePrepareContractWrite({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'setApprovalForAll',
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof lineABI, 'setApprovalForAll'>)
 }
 
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"setDescriptor"`.
  */
 export function usePrepareLineSetDescriptor(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'setDescriptor'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'setDescriptor'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'setDescriptor', ...config } as UsePrepareContractWriteConfig<
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'setDescriptor', ...config } as UsePrepareContractWriteConfig<
     typeof lineABI,
     'setDescriptor'
   >)
@@ -1493,21 +1657,23 @@ export function usePrepareLineSetDescriptor(
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"setInitialAvailableCoordinates"`.
  */
 export function usePrepareLineSetInitialAvailableCoordinates(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'setInitialAvailableCoordinates'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'setInitialAvailableCoordinates'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'setInitialAvailableCoordinates', ...config } as UsePrepareContractWriteConfig<
-    typeof lineABI,
-    'setInitialAvailableCoordinates'
-  >)
+  return usePrepareContractWrite({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'setInitialAvailableCoordinates',
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof lineABI, 'setInitialAvailableCoordinates'>)
 }
 
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"transferFrom"`.
  */
 export function usePrepareLineTransferFrom(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'transferFrom'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'transferFrom'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'transferFrom', ...config } as UsePrepareContractWriteConfig<
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'transferFrom', ...config } as UsePrepareContractWriteConfig<
     typeof lineABI,
     'transferFrom'
   >)
@@ -1517,21 +1683,23 @@ export function usePrepareLineTransferFrom(
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"transferOwnership"`.
  */
 export function usePrepareLineTransferOwnership(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'transferOwnership'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'transferOwnership'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'transferOwnership', ...config } as UsePrepareContractWriteConfig<
-    typeof lineABI,
-    'transferOwnership'
-  >)
+  return usePrepareContractWrite({
+    abi: lineABI,
+    address: lineAddress,
+    functionName: 'transferOwnership',
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof lineABI, 'transferOwnership'>)
 }
 
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"updateConfig"`.
  */
 export function usePrepareLineUpdateConfig(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'updateConfig'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'updateConfig'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'updateConfig', ...config } as UsePrepareContractWriteConfig<
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'updateConfig', ...config } as UsePrepareContractWriteConfig<
     typeof lineABI,
     'updateConfig'
   >)
@@ -1541,9 +1709,9 @@ export function usePrepareLineUpdateConfig(
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"updateMerkleRoot"`.
  */
 export function usePrepareLineUpdateMerkleRoot(
-  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'updateMerkleRoot'>, 'abi' | 'functionName'> = {} as any
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'updateMerkleRoot'>, 'abi' | 'address' | 'functionName'> = {} as any
 ) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'updateMerkleRoot', ...config } as UsePrepareContractWriteConfig<
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'updateMerkleRoot', ...config } as UsePrepareContractWriteConfig<
     typeof lineABI,
     'updateMerkleRoot'
   >)
@@ -1552,38 +1720,53 @@ export function usePrepareLineUpdateMerkleRoot(
 /**
  * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link lineABI}__ and `functionName` set to `"withdraw"`.
  */
-export function usePrepareLineWithdraw(config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'withdraw'>, 'abi' | 'functionName'> = {} as any) {
-  return usePrepareContractWrite({ abi: lineABI, functionName: 'withdraw', ...config } as UsePrepareContractWriteConfig<typeof lineABI, 'withdraw'>)
+export function usePrepareLineWithdraw(
+  config: Omit<UsePrepareContractWriteConfig<typeof lineABI, 'withdraw'>, 'abi' | 'address' | 'functionName'> = {} as any
+) {
+  return usePrepareContractWrite({ abi: lineABI, address: lineAddress, functionName: 'withdraw', ...config } as UsePrepareContractWriteConfig<
+    typeof lineABI,
+    'withdraw'
+  >)
 }
 
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link lineABI}__.
  */
-export function useLineEvent<TEventName extends string>(config: Omit<UseContractEventConfig<typeof lineABI, TEventName>, 'abi'> = {} as any) {
-  return useContractEvent({ abi: lineABI, ...config } as UseContractEventConfig<typeof lineABI, TEventName>)
+export function useLineEvent<TEventName extends string>(
+  config: Omit<UseContractEventConfig<typeof lineABI, TEventName>, 'abi' | 'address'> = {} as any
+) {
+  return useContractEvent({ abi: lineABI, address: lineAddress, ...config } as UseContractEventConfig<typeof lineABI, TEventName>)
 }
 
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link lineABI}__ and `eventName` set to `"Approval"`.
  */
-export function useLineApprovalEvent(config: Omit<UseContractEventConfig<typeof lineABI, 'Approval'>, 'abi' | 'eventName'> = {} as any) {
-  return useContractEvent({ abi: lineABI, eventName: 'Approval', ...config } as UseContractEventConfig<typeof lineABI, 'Approval'>)
+export function useLineApprovalEvent(config: Omit<UseContractEventConfig<typeof lineABI, 'Approval'>, 'abi' | 'address' | 'eventName'> = {} as any) {
+  return useContractEvent({ abi: lineABI, address: lineAddress, eventName: 'Approval', ...config } as UseContractEventConfig<
+    typeof lineABI,
+    'Approval'
+  >)
 }
 
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link lineABI}__ and `eventName` set to `"ApprovalForAll"`.
  */
-export function useLineApprovalForAllEvent(config: Omit<UseContractEventConfig<typeof lineABI, 'ApprovalForAll'>, 'abi' | 'eventName'> = {} as any) {
-  return useContractEvent({ abi: lineABI, eventName: 'ApprovalForAll', ...config } as UseContractEventConfig<typeof lineABI, 'ApprovalForAll'>)
+export function useLineApprovalForAllEvent(
+  config: Omit<UseContractEventConfig<typeof lineABI, 'ApprovalForAll'>, 'abi' | 'address' | 'eventName'> = {} as any
+) {
+  return useContractEvent({ abi: lineABI, address: lineAddress, eventName: 'ApprovalForAll', ...config } as UseContractEventConfig<
+    typeof lineABI,
+    'ApprovalForAll'
+  >)
 }
 
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link lineABI}__ and `eventName` set to `"OwnershipTransferStarted"`.
  */
 export function useLineOwnershipTransferStartedEvent(
-  config: Omit<UseContractEventConfig<typeof lineABI, 'OwnershipTransferStarted'>, 'abi' | 'eventName'> = {} as any
+  config: Omit<UseContractEventConfig<typeof lineABI, 'OwnershipTransferStarted'>, 'abi' | 'address' | 'eventName'> = {} as any
 ) {
-  return useContractEvent({ abi: lineABI, eventName: 'OwnershipTransferStarted', ...config } as UseContractEventConfig<
+  return useContractEvent({ abi: lineABI, address: lineAddress, eventName: 'OwnershipTransferStarted', ...config } as UseContractEventConfig<
     typeof lineABI,
     'OwnershipTransferStarted'
   >)
@@ -1593,9 +1776,9 @@ export function useLineOwnershipTransferStartedEvent(
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link lineABI}__ and `eventName` set to `"OwnershipTransferred"`.
  */
 export function useLineOwnershipTransferredEvent(
-  config: Omit<UseContractEventConfig<typeof lineABI, 'OwnershipTransferred'>, 'abi' | 'eventName'> = {} as any
+  config: Omit<UseContractEventConfig<typeof lineABI, 'OwnershipTransferred'>, 'abi' | 'address' | 'eventName'> = {} as any
 ) {
-  return useContractEvent({ abi: lineABI, eventName: 'OwnershipTransferred', ...config } as UseContractEventConfig<
+  return useContractEvent({ abi: lineABI, address: lineAddress, eventName: 'OwnershipTransferred', ...config } as UseContractEventConfig<
     typeof lineABI,
     'OwnershipTransferred'
   >)
@@ -1604,8 +1787,11 @@ export function useLineOwnershipTransferredEvent(
 /**
  * Wraps __{@link useContractEvent}__ with `abi` set to __{@link lineABI}__ and `eventName` set to `"Transfer"`.
  */
-export function useLineTransferEvent(config: Omit<UseContractEventConfig<typeof lineABI, 'Transfer'>, 'abi' | 'eventName'> = {} as any) {
-  return useContractEvent({ abi: lineABI, eventName: 'Transfer', ...config } as UseContractEventConfig<typeof lineABI, 'Transfer'>)
+export function useLineTransferEvent(config: Omit<UseContractEventConfig<typeof lineABI, 'Transfer'>, 'abi' | 'address' | 'eventName'> = {} as any) {
+  return useContractEvent({ abi: lineABI, address: lineAddress, eventName: 'Transfer', ...config } as UseContractEventConfig<
+    typeof lineABI,
+    'Transfer'
+  >)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1615,8 +1801,8 @@ export function useLineTransferEvent(config: Omit<UseContractEventConfig<typeof 
 /**
  * Wraps __{@link getContract}__ with `abi` set to __{@link lineABI}__.
  */
-export function getLine(config: Omit<GetContractArgs, 'abi'>) {
-  return getContract({ abi: lineABI, ...config })
+export function getLine(config: Omit<GetContractArgs, 'abi' | 'address'>) {
+  return getContract({ abi: lineABI, address: lineAddress, ...config })
 }
 
 /**
@@ -1624,27 +1810,27 @@ export function getLine(config: Omit<GetContractArgs, 'abi'>) {
  */
 export function writeLine<TFunctionName extends string>(
   config:
-    | Omit<WriteContractPreparedArgs<typeof lineABI, TFunctionName>, 'abi'>
-    | Omit<WriteContractUnpreparedArgs<typeof lineABI, TFunctionName>, 'abi'>
+    | Omit<WriteContractPreparedArgs<typeof lineABI, TFunctionName>, 'abi' | 'address'>
+    | Omit<WriteContractUnpreparedArgs<typeof lineABI, TFunctionName>, 'abi' | 'address'>
 ) {
-  return writeContract({ abi: lineABI, ...config } as unknown as WriteContractArgs<typeof lineABI, TFunctionName>)
+  return writeContract({ abi: lineABI, address: lineAddress, ...config } as unknown as WriteContractArgs<typeof lineABI, TFunctionName>)
 }
 
 /**
  * Wraps __{@link prepareWriteContract}__ with `abi` set to __{@link lineABI}__.
  */
 export function prepareWriteLine<TAbi extends readonly unknown[] = typeof lineABI, TFunctionName extends string = string>(
-  config: Omit<PrepareWriteContractConfig<TAbi, TFunctionName>, 'abi'>
+  config: Omit<PrepareWriteContractConfig<TAbi, TFunctionName>, 'abi' | 'address'>
 ) {
-  return prepareWriteContract({ abi: lineABI, ...config } as unknown as PrepareWriteContractConfig<TAbi, TFunctionName>)
+  return prepareWriteContract({ abi: lineABI, address: lineAddress, ...config } as unknown as PrepareWriteContractConfig<TAbi, TFunctionName>)
 }
 
 /**
  * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link lineABI}__.
  */
 export function watchLineEvent<TAbi extends readonly unknown[] = typeof lineABI, TEventName extends string = string>(
-  config: Omit<WatchContractEventConfig<TAbi, TEventName>, 'abi'>,
+  config: Omit<WatchContractEventConfig<TAbi, TEventName>, 'abi' | 'address'>,
   callback: WatchContractEventCallback<TAbi, TEventName>
 ) {
-  return watchContractEvent({ abi: lineABI, ...config } as WatchContractEventConfig<TAbi, TEventName>, callback)
+  return watchContractEvent({ abi: lineABI, address: lineAddress, ...config } as WatchContractEventConfig<TAbi, TEventName>, callback)
 }
