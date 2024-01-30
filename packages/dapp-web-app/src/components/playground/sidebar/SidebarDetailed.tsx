@@ -8,6 +8,7 @@ import {
   Text,
   Image as ChackraImage,
 } from '@chakra-ui/react'
+import { AuctionBanner } from 'components/auctionBanner'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 import Image from 'next/image'
 import { Direction, GridSize } from 'types/grid'
@@ -46,6 +47,7 @@ export function SidebarDetailed({ ...props }: any) {
     <Box {...props}>
       {!lastSelectedGridItem && (
         <>
+          <AuctionBanner displayMintNow />
           <Text fontWeight={'bold'} mt={4} fontSize={'2xl'} as={'h1'}>
             Select a token to get started
           </Text>

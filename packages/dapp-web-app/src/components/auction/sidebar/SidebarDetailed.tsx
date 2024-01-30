@@ -26,6 +26,7 @@ import { formatToEtherStringBN } from 'utils/price'
 import useCountdownTime from 'hooks/use-countdown-timer'
 import Countdown from 'components/countdown'
 import { useAuctionContext } from 'contexts/AuctionContext'
+import { AuctionBanner } from 'components/auctionBanner'
 
 const TextLine = ({ children, title = '', direction, ...props }: any) => (
   <ListItem
@@ -60,45 +61,16 @@ const TextLine = ({ children, title = '', direction, ...props }: any) => (
 export function SidebarDetailed({ ...props }: any) {
   const { selectedItems, gridItemsState, toggleSelectedItem } =
     useTokensContext()
-  const {
-    startTime,
-    startPrice,
-    endPrice,
-    currentPrice,
-    minted,
-    maxSupply,
-    auctionState,
-  } = useAuctionContext()
+  const { startPrice, currentPrice, minted, maxSupply, auctionState } =
+    useAuctionContext()
   const [counter, setCounter] = useState(0)
   const { countdownInMili } = useCountdownTime()
-  const startDate = dayjs.unix(Number(startTime))
 
   return (
     <Skeleton isLoaded={startPrice !== 0n} {...props}>
       <Box {...props}>
         <Box as={'section'}>
-          {auctionState === AuctionState.NOT_STARTED && (
-            <Box as={'section'} bgColor={'gray.200'} p={4} mb={4}>
-              <Text
-                as={'h2'}
-                fontWeight={'bold'}
-                textColor={'gray.700'}
-                fontSize={'lg'}
-              >
-                Minting opens {startDate.format('dddd, MMMM D, HH:mm')}.
-              </Text>
-              <Text fontSize={'xs'} my={1}>
-                Descending dutch auction over 1 hour. Starting price of{' '}
-                {formatEther(startPrice).toString()}ETH, resting price of{' '}
-                {formatEther(endPrice).toString()} ETH, no rebate. Bidders can
-                select specific tokens before minting or mint randomly. As soon
-                as you place your bid your tokens will be minted. Supply of{' '}
-                {maxSupply.toString()}.
-              </Text>
-              <Link href={'#'}>Add to calendar</Link>
-            </Box>
-          )}
-
+          <AuctionBanner />
           {auctionState === AuctionState.STARTED && (
             <>
               <Flex justifyContent={'space-between'}>
