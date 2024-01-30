@@ -6,7 +6,6 @@ import {
   Flex,
   Link,
   Text,
-  Image as ChackraImage,
   List,
   ListItem,
   Checkbox,
@@ -17,22 +16,16 @@ import {
 } from '@chakra-ui/react'
 import { BsX } from 'react-icons/bs'
 
-import { useAuctionContext } from 'contexts/AuctionContext'
+import { useTokensContext } from 'contexts/TokensContext'
 import { Direction } from 'types/grid'
 import { useState } from 'react'
-import { useLineConfig } from 'services/web3/generated'
 import dayjs from 'dayjs'
-import { formatEther, parseEther } from 'viem'
+import { formatEther } from 'viem'
 import { AuctionState } from 'types/auction'
-import {
-  formatBigNumberUp,
-  formatToEtherString,
-  formatToEtherStringBN,
-  roundEtherUp,
-} from 'utils/price'
-import { NumberSettings } from 'types/number-settings'
+import { formatToEtherStringBN } from 'utils/price'
 import useCountdownTime from 'hooks/use-countdown-timer'
 import Countdown from 'components/countdown'
+import { useAuctionContext } from 'contexts/AuctionContext'
 
 const TextLine = ({ children, title = '', direction, ...props }: any) => (
   <ListItem
@@ -65,21 +58,23 @@ const TextLine = ({ children, title = '', direction, ...props }: any) => (
 )
 
 export function SidebarDetailed({ ...props }: any) {
+  const { selectedItems, gridItemsState, toggleSelectedItem } =
+    useTokensContext()
   const {
-    selectedItems,
-    gridItemsState,
-    toggleSelectedItem,
-    auctionConfig,
+    startTime,
+    startPrice,
+    endPrice,
+    currentPrice,
+    minted,
+    maxSupply,
     auctionState,
-    auctionData,
   } = useAuctionContext()
   const [counter, setCounter] = useState(1)
-  const { countdown, countdownInMili } = useCountdownTime()
-  const startDate = dayjs.unix(Number(auctionConfig.startTime))
-  console.log(auctionConfig, auctionData)
+  const { countdownInMili } = useCountdownTime()
+  const startDate = dayjs.unix(Number(startTime))
 
   return (
-    <Skeleton isLoaded={auctionConfig.startPrice !== 0n} {...props}>
+    <Skeleton isLoaded={startPrice !== 0n} {...props}>
       <Box {...props}>
         <Box as={'section'}>
           {auctionState === AuctionState.NOT_STARTED && (
@@ -94,11 +89,11 @@ export function SidebarDetailed({ ...props }: any) {
               </Text>
               <Text fontSize={'xs'} my={1}>
                 Descending dutch auction over 1 hour. Starting price of{' '}
-                {formatEther(auctionConfig.startPrice).toString()}ETH, resting
-                price of {formatEther(auctionConfig.endPrice).toString()} ETH,
-                no rebate. Bidders can select specific tokens before minting or
-                mint randomly. As soon as you place your bid your tokens will be
-                minted. Supply of {auctionData.maxSupply.toString()}.
+                {formatEther(startPrice).toString()}ETH, resting price of{' '}
+                {formatEther(endPrice).toString()} ETH, no rebate. Bidders can
+                select specific tokens before minting or mint randomly. As soon
+                as you place your bid your tokens will be minted. Supply of{' '}
+                {maxSupply.toString()}.
               </Text>
               <Link href={'#'}>Add to calendar</Link>
             </Box>
@@ -126,7 +121,7 @@ export function SidebarDetailed({ ...props }: any) {
                     fontWeight={'bold'}
                     textColor={'gray.900'}
                   >
-                    {formatToEtherStringBN(auctionData.price)} ETH
+                    {formatToEtherStringBN(currentPrice)} ETH
                   </Text>
                 </Flex>
                 <Flex
@@ -171,7 +166,7 @@ export function SidebarDetailed({ ...props }: any) {
                     fontWeight={'bold'}
                     textColor={'gray.900'}
                   >
-                    {Number(auctionData.minted)}/{Number(auctionData.maxSupply)}
+                    {Number(minted)}/{Number(maxSupply)}
                   </Text>
                 </Flex>
               </Flex>

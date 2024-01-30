@@ -1,4 +1,4 @@
-import { useAuctionContext } from 'contexts/AuctionContext'
+import { useTokensContext } from 'contexts/TokensContext'
 import dayjs from 'dayjs'
 import { useCallback, useEffect, useState } from 'react'
 import { AuctionState } from 'types/auction'
@@ -33,7 +33,7 @@ export const displayCountdown = (endTime: number) => {
 }
 
 const useCountdownTime = () => {
-  const { auctionConfig, auctionState } = useAuctionContext()
+  const { auctionConfig, auctionState } = useTokensContext()
 
   const [countdown, setCountdown] = useState(0)
   const [countdownInMili, setCountdownInMili] = useState(0)

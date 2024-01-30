@@ -2,7 +2,7 @@ import React, { useMemo, useRef } from 'react'
 import { Box, SimpleGrid } from '@chakra-ui/react'
 import AuctionGridItem from './AuctionGridItem'
 import useContainerSizes from 'hooks/useContainerSizes'
-import { useAuctionContext } from 'contexts/AuctionContext'
+import { useTokensContext } from 'contexts/TokensContext'
 import { GridItemsTotal, GridSize, GridSpace } from 'types/grid'
 
 const AuctionGrid: React.FC = () => {
@@ -13,7 +13,7 @@ const AuctionGrid: React.FC = () => {
     mintedItems,
     availableItems,
     selectedItems,
-  } = useAuctionContext()
+  } = useTokensContext()
 
   const { itemHeight, itemWidth, gridSpaceX } = useMemo(() => {
     const totalSpacing = GridSize * GridSpace
@@ -56,7 +56,7 @@ const AuctionGrid: React.FC = () => {
           isAvailable={availableItems.includes(id)}
           isSelected={selectedItems.includes(id)}
           {...gridItemsState[id]}
-        />
+        />,
       )
     }
     return items

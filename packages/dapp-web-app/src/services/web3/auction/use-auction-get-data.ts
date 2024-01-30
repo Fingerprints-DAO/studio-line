@@ -15,14 +15,14 @@ const useAuctionData = (): AuctionData => {
 
   if (!price || !currentTokenId || !maxSupply) {
     return {
-      price: 0n,
+      currentPrice: 0n,
       minted: 0n,
       maxSupply: 0n,
     }
   }
 
   return {
-    price,
+    currentPrice: price,
     minted: currentTokenId - 1n,
     maxSupply,
   }

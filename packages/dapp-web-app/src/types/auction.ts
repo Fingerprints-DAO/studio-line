@@ -12,7 +12,7 @@ export type AuctionConfig = {
 }
 
 export type AuctionData = {
-  price: bigint
+  currentPrice: bigint
   minted: bigint
   maxSupply: bigint
 }
