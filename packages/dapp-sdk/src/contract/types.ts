@@ -1,12 +1,6 @@
-import { ERC20Factory } from '@dapp/contracts'
-
 export interface ContractAddress {
-  ERC20Mock: string
+  Line: string
   chainId: number
-}
-
-export interface Contracts {
-  ERC20Factory: ReturnType<typeof ERC20Factory.connect>
 }
 
 export enum ChainId {
