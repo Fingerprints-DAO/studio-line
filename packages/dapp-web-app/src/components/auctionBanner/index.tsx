@@ -41,7 +41,7 @@ export function AuctionBanner({ displayMintNow = false }) {
         Minting opens {startDate.format('dddd, MMMM D, hh:mma')}.
       </Text>
       <Text fontSize={'xs'} my={1}>
-        Descending dutch auction over 1 hour. Starting price of{' '}
+        Linear dutch auction over 1 hour. Starting price of{' '}
         {formatEther(startPrice).toString()}ETH, resting price of{' '}
         {formatEther(endPrice).toString()} ETH, no rebate. Bidders can select
         specific tokens before minting or mint randomly. As soon as you place

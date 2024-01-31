@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Flex,
-  Link,
   Text,
   List,
   ListItem,
@@ -29,11 +28,10 @@ import {
   useLineMintAtPosition,
   useLineMintRandom,
 } from 'services/web3/generated'
-import { Address, zeroAddress } from 'viem'
-import { useAccount, useWaitForTransaction } from 'wagmi'
+import { Address, formatEther } from 'viem'
+import { useWaitForTransaction } from 'wagmi'
 import ForceConnectButton from 'components/forceConnectButton'
 import { TransactionError } from 'types/transaction'
-import { getExternalEtherscanUrl } from 'utils/getLink'
 import { TxMessage } from 'components/txMessage'
 
 const TextLine = ({ children, title = '', direction, ...props }: any) => (
@@ -69,8 +67,14 @@ const merkleProof: Address[] = []
 export function SidebarDetailed({ ...props }: any) {
   const { selectedItems, gridItemsState, toggleSelectedItem } =
     useTokensContext()
-  const { startPrice, currentPrice, minted, maxSupply, auctionState } =
-    useAuctionContext()
+  const {
+    startPrice,
+    endPrice,
+    currentPrice,
+    minted,
+    maxSupply,
+    auctionState,
+  } = useAuctionContext()
   const [counter, setCounter] = useState(0)
   const { countdownInMili } = useCountdownTime()
   const mintRandom = useLineMintRandom({
@@ -92,7 +96,6 @@ export function SidebarDetailed({ ...props }: any) {
       const [y, x] = coordinate.split('-')
       return { x: BigInt(x), y: BigInt(y) }
     })
-    console.log(coordinates)
     mintWrite({
       args: [coordinates, merkleProof],
       value: BigInt(coordinates.length) * currentPrice,
@@ -176,11 +179,12 @@ export function SidebarDetailed({ ...props }: any) {
                 </Flex>
               </Flex>
               <Text fontSize={'xs'} color={'gray.500'} mt={2} mb={6}>
-                <b>Linear dutch auction over 1 hour</b>.{' '}
-                <b>Starting price of 1ETH</b>,{' '}
-                <b>resting price of 0.2 ETH, no rebate</b>. Bidders can select
-                specific tokens before minting or mint randomly. As soon as you
-                place your bid your tokens will be minted. <b>Supply of 200</b>.
+                Linear dutch auction over 1 hour. Starting price of{' '}
+                {formatEther(startPrice).toString()}ETH, resting price of{' '}
+                {formatEther(endPrice).toString()} ETH, no rebate. Bidders can
+                select specific tokens before minting or mint randomly. As soon
+                as you place your bid your tokens will be minted. Supply of{' '}
+                {maxSupply.toString()}.
               </Text>
             </>
           )}
