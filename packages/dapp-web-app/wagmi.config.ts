@@ -36,6 +36,7 @@ export default defineConfig({
     actions({
       prepareWriteContract: true,
       readContract: false,
+      watchContractEvent: false,
     }),
   ],
 })
