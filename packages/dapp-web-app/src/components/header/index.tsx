@@ -25,7 +25,7 @@ import { usePathname } from 'next/navigation'
 const nav = [
   { href: '/', label: 'playground' },
   { href: '/auction', label: 'auction' },
-  { href: '/move', label: 'tokens' },
+  // { href: '/move', label: 'tokens' },
   { href: '/about', label: 'about' },
 ]
 
