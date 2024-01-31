@@ -28,24 +28,6 @@ export const gridItemDefaultState = {
   direction: Direction.UP,
 }
 
-const generateAvailableItems = (size = 200) => {
-  const array: string[] = []
-  for (let i = 0; i < size; i++) {
-    let row: number
-    let col: number
-    do {
-      row = Math.floor(Math.random() * 25) + 1
-      col = Math.floor(Math.random() * 25) + 1
-    } while (row === 0 || row === 24)
-    array.push(`${row}-${col}`)
-  }
-  return array
-}
-const getRandomItems = (array: string[], count: number): string[] => {
-  const shuffled = array.sort(() => 0.5 - Math.random())
-  return shuffled.slice(0, count)
-}
-
 const generateFullGridDefaultState = () => {
   const grid = {} as GridItemState
   for (let row = GridSize - 1; row >= 0; row--) {
@@ -103,12 +85,8 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
     setSelectedItems([])
   }
 
-  // TODO: load contract states
   useEffect(() => {
-    // const availableItemsGenerated = generateAvailableItems()
     setGridItemsState(generateFullGridDefaultState())
-    // setAvailableItems(availableItemsGenerated)
-    // setMintedItems(getRandomItems(availableItemsGenerated, 100))
   }, [])
 
   useEffect(() => {

@@ -84,12 +84,13 @@ export function SidebarDetailed({ ...props }: any) {
   const mintRandomTx = useWaitForTransaction({
     hash: mintRandom.data?.hash,
     enabled: mintRandom.data?.hash !== undefined,
+    staleTime: 1_000,
   })
   const mintPositionsTx = useWaitForTransaction({
     hash: mintPositions.data?.hash,
     enabled: mintPositions.data?.hash !== undefined,
+    staleTime: 1_000,
   })
-
   useEffect(() => {
     if (mintPositionsTx.isSuccess || mintRandomTx.isSuccess) {
       setCounter(0)
