@@ -105,7 +105,6 @@ export const AuctionProvider = ({
     return () => clearInterval(intervalRef.current!)
   }, [startTime, endTime])
 
-  console.log(currentTokenId)
   return (
     <AuctionContext.Provider
       value={{

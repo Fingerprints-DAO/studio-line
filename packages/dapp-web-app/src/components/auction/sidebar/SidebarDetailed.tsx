@@ -17,7 +17,7 @@ import { BsX } from 'react-icons/bs'
 
 import { useTokensContext } from 'contexts/TokensContext'
 import { Direction } from 'types/grid'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AuctionState } from 'types/auction'
 import { formatToEtherStringBN } from 'utils/price'
 import useCountdownTime from 'hooks/use-countdown-timer'
@@ -65,7 +65,7 @@ const TextLine = ({ children, title = '', direction, ...props }: any) => (
 )
 const merkleProof: Address[] = []
 export function SidebarDetailed({ ...props }: any) {
-  const { selectedItems, gridItemsState, toggleSelectedItem } =
+  const { selectedItems, gridItemsState, toggleSelectedItem, resetSelection } =
     useTokensContext()
   const {
     startPrice,
@@ -80,11 +80,26 @@ export function SidebarDetailed({ ...props }: any) {
   const mintRandom = useLineMintRandom({
     args: [BigInt(counter), merkleProof],
   })
-  const { data: mintResult, write: mintWrite } = useLineMintAtPosition()
+  const mintPositions = useLineMintAtPosition()
   const mintRandomTx = useWaitForTransaction({
     hash: mintRandom.data?.hash,
     enabled: mintRandom.data?.hash !== undefined,
   })
+  const mintPositionsTx = useWaitForTransaction({
+    hash: mintPositions.data?.hash,
+    enabled: mintPositions.data?.hash !== undefined,
+  })
+
+  useEffect(() => {
+    if (mintPositionsTx.isSuccess || mintRandomTx.isSuccess) {
+      setCounter(0)
+      resetSelection()
+    }
+
+    // DONT ADD resetSelection to dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mintPositionsTx.isSuccess, mintRandomTx.isSuccess])
+
   const handleRandomMint = () => {
     mintRandom.write({
       value: BigInt(counter) * currentPrice,
@@ -96,7 +111,7 @@ export function SidebarDetailed({ ...props }: any) {
       const [y, x] = coordinate.split('-')
       return { x: BigInt(x), y: BigInt(y) }
     })
-    mintWrite({
+    mintPositions.write({
       args: [coordinates, merkleProof],
       value: BigInt(coordinates.length) * currentPrice,
     })
@@ -195,19 +210,14 @@ export function SidebarDetailed({ ...props }: any) {
               <Text fontWeight={'bold'} mt={4} fontSize={'2xl'} as={'h1'}>
                 Select tokens on the grid
               </Text>
-              {selectedItems.length > 0 && (
-                <Flex
-                  mt={4}
-                  justifyContent={'space-between'}
-                  shrink={0}
-                  flex={1}
-                >
-                  <Box>
-                    <Text fontSize={'xs'} fontWeight={'bold'}>
-                      Selected tokens
-                    </Text>
-                    <List spacing={2} mt={2}>
-                      {selectedItems
+              <Flex mt={4} justifyContent={'space-between'} shrink={0} flex={1}>
+                <Box minW={'30%'}>
+                  <Text fontSize={'xs'} fontWeight={'bold'}>
+                    Selected tokens
+                  </Text>
+                  <List spacing={2} mt={2}>
+                    {selectedItems.length > 0 &&
+                      selectedItems
                         .map((item) => gridItemsState[item])
                         .map((item) => (
                           <TextLine
@@ -219,53 +229,68 @@ export function SidebarDetailed({ ...props }: any) {
                             {item.index.replace('-', ',')}
                           </TextLine>
                         ))}
-                    </List>
-                  </Box>
-                  <Box ml={4} flex={2}>
-                    <Text fontSize={'xs'} fontWeight={'bold'}>
-                      Total:{' '}
-                      {formatToEtherStringBN(
-                        BigInt(selectedItems.length) * currentPrice,
-                      )}{' '}
-                      ETH
-                    </Text>
-                    <FormControl
-                      alignItems={'flex-start'}
-                      mt={2}
-                      mb={1}
-                      display={'flex'}
+                  </List>
+                </Box>
+                <Box ml={4} flex={2}>
+                  <Text fontSize={'xs'} fontWeight={'bold'}>
+                    Total:{' '}
+                    {formatToEtherStringBN(
+                      BigInt(selectedItems.length) * currentPrice,
+                    )}{' '}
+                    ETH
+                  </Text>
+                  <FormControl
+                    alignItems={'flex-start'}
+                    mt={2}
+                    mb={1}
+                    display={'flex'}
+                  >
+                    <Checkbox
+                      colorScheme="gray"
+                      mt={'2px'}
+                      mr={2}
+                      borderRadius={0}
+                      rounded={'none'}
+                      style={{ borderRadius: 0 }}
+                      variant={'solid'}
+                      isChecked
+                    />
+                    <FormLabel
+                      fontSize={'xs'}
+                      fontWeight={'normal'}
+                      cursor={'pointer'}
                     >
-                      <Checkbox
-                        colorScheme="gray"
-                        mt={'2px'}
-                        mr={2}
-                        borderRadius={0}
-                        rounded={'none'}
-                        style={{ borderRadius: 0 }}
-                        variant={'solid'}
-                      />
-                      <FormLabel
-                        fontSize={'xs'}
-                        fontWeight={'normal'}
-                        cursor={'pointer'}
-                      >
-                        I agree to mint available tokens and be refunded for
-                        unavailable ones.
-                      </FormLabel>
-                    </FormControl>
+                      I agree to mint available tokens and be refunded for
+                      unavailable ones.
+                    </FormLabel>
+                  </FormControl>
 
-                    <ForceConnectButton buttonText="Connect to mint">
+                  <ForceConnectButton buttonText="Connect to mint">
+                    <>
                       <Button
                         variant={'solid'}
                         w={'full'}
                         onClick={handleMintAtPositions}
+                        isDisabled={
+                          selectedItems.length < 1 ||
+                          mintPositions.isLoading ||
+                          mintPositionsTx.isLoading
+                        }
                       >
-                        Mint selected tokens
+                        {mintPositions.isLoading
+                          ? 'Waiting for approval...'
+                          : mintPositionsTx.isLoading
+                            ? 'Processing...'
+                            : ' Mint selected tokens'}
                       </Button>
-                    </ForceConnectButton>
-                  </Box>
-                </Flex>
-              )}
+                      <TxMessage
+                        hash={mintPositions.data?.hash}
+                        error={mintPositions.error as TransactionError}
+                      />
+                    </>
+                  </ForceConnectButton>
+                </Box>
+              </Flex>
             </Box>
             <Text fontSize={'md'} fontWeight={'bold'} mt={4}>
               or
@@ -275,7 +300,7 @@ export function SidebarDetailed({ ...props }: any) {
                 Random mint
               </Text>
               <Flex mt={4} justifyContent={'space-between'} shrink={0} flex={1}>
-                <Box>
+                <Box minW={'30%'}>
                   <Text fontSize={'xs'} fontWeight={'bold'} mb={2}>
                     Quantity
                   </Text>

@@ -1,5 +1,9 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import {
+  useLineGetAvailableCoordinates,
+  useLineGetGrid,
+} from 'services/web3/generated'
+import {
   Direction,
   GridItemBaseProperties,
   GridSize,
@@ -65,7 +69,7 @@ const TokensContext = createContext<{
   gridItemsState: GridItemState
   selectedItems: string[]
   availableItems: string[]
-  mintedItems: string[]
+  mintedItems: (string | null)[]
   toggleSelectedItem: (index: string) => void
   resetSelection: () => void
 }>({
@@ -83,7 +87,9 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
   const [gridItemsState, setGridItemsState] = useState<GridItemState>({})
   const [selectedItems, setSelectedItems] = useState<string[]>([])
   const [availableItems, setAvailableItems] = useState<string[]>([])
-  const [mintedItems, setMintedItems] = useState<string[]>([])
+  const [mintedItems, setMintedItems] = useState<(string | null)[]>([])
+  const getAvailableTokens = useLineGetAvailableCoordinates({ watch: true })
+  const getGrid = useLineGetGrid({ watch: true })
 
   const toggleSelectedItem = (index: string) => {
     setSelectedItems(
@@ -99,11 +105,35 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
 
   // TODO: load contract states
   useEffect(() => {
-    const availableItemsGenerated = generateAvailableItems()
+    // const availableItemsGenerated = generateAvailableItems()
     setGridItemsState(generateFullGridDefaultState())
-    setAvailableItems(availableItemsGenerated)
-    setMintedItems(getRandomItems(availableItemsGenerated, 100))
+    // setAvailableItems(availableItemsGenerated)
+    // setMintedItems(getRandomItems(availableItemsGenerated, 100))
   }, [])
+
+  useEffect(() => {
+    if (getAvailableTokens.data && getAvailableTokens.data.length > 0) {
+      setAvailableItems(
+        getAvailableTokens.data.map((item) => `${item.y}-${item.x}`),
+      )
+    }
+  }, [getAvailableTokens.data, gridItemsState])
+
+  useEffect(() => {
+    if (getGrid.data && getGrid.data.length > 0) {
+      const transformedArray = getGrid.data
+        .flatMap((row, rowIndex) =>
+          row.map((value, colIndex) => {
+            if (value > 0) {
+              return `${colIndex}-${rowIndex}`
+            }
+            return null
+          }),
+        )
+        .filter(Boolean)
+      setMintedItems(transformedArray)
+    }
+  }, [getGrid.data])
 
   return (
     <TokensContext.Provider
