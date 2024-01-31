@@ -1,4 +1,4 @@
-import { Box, Link, Text, ToastId } from '@chakra-ui/react'
+import { Box, Link, Text } from '@chakra-ui/react'
 import { TransactionError } from 'types/transaction'
 import { getExternalEtherscanUrl } from 'utils/getLink'
 import { Address, useWaitForTransaction } from 'wagmi'
