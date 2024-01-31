@@ -1,3 +1,4 @@
+import { Address } from 'viem'
 import { getChain } from './chain'
 
 export const getBaseURL = () => {
@@ -9,9 +10,11 @@ export const getBaseURL = () => {
 
 export const getExternalOpenseaUrl = (address: string, id?: string) => {
   const base = process.env.NEXT_PUBLIC_OPENSEA_URL
-  return `${base}assets/${getChain().name.toLowerCase()}/${address}${id ? `/${id}` : ''}`
+  return `${base}assets/${getChain().name.toLowerCase()}/${address}${
+    id ? `/${id}` : ''
+  }`
 }
-export const getExternalEtherscanUrl = (address: string) => {
+export const getExternalEtherscanUrl = (address?: Address) => {
   const base = process.env.NEXT_PUBLIC_ETHERSCAN_URL
-  return `${base}address/${address}`
+  return `${base}address/${address ?? ''}`
 }

@@ -21,10 +21,10 @@ const { chains } = configureChains(selectedChain, [
 
 export const config: Config = createConfig(
   getDefaultConfig({
-    autoConnect: false,
+    autoConnect: true,
     appName: 'Line by Figure31',
     walletConnectProjectId,
     infuraId: process.env.NEXT_PUBLIC_PROVIDER_KEY,
     chains,
-  })
+  }),
 )

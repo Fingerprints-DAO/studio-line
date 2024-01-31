@@ -19,14 +19,22 @@ import { BsX } from 'react-icons/bs'
 import { useTokensContext } from 'contexts/TokensContext'
 import { Direction } from 'types/grid'
 import { useState } from 'react'
-import dayjs from 'dayjs'
-import { formatEther } from 'viem'
 import { AuctionState } from 'types/auction'
 import { formatToEtherStringBN } from 'utils/price'
 import useCountdownTime from 'hooks/use-countdown-timer'
 import Countdown from 'components/countdown'
 import { useAuctionContext } from 'contexts/AuctionContext'
 import { AuctionBanner } from 'components/auctionBanner'
+import {
+  useLineMintAtPosition,
+  useLineMintRandom,
+} from 'services/web3/generated'
+import { Address, zeroAddress } from 'viem'
+import { useAccount, useWaitForTransaction } from 'wagmi'
+import ForceConnectButton from 'components/forceConnectButton'
+import { TransactionError } from 'types/transaction'
+import { getExternalEtherscanUrl } from 'utils/getLink'
+import { TxMessage } from 'components/txMessage'
 
 const TextLine = ({ children, title = '', direction, ...props }: any) => (
   <ListItem
@@ -57,7 +65,7 @@ const TextLine = ({ children, title = '', direction, ...props }: any) => (
     </Button>
   </ListItem>
 )
-
+const merkleProof: Address[] = []
 export function SidebarDetailed({ ...props }: any) {
   const { selectedItems, gridItemsState, toggleSelectedItem } =
     useTokensContext()
@@ -65,6 +73,31 @@ export function SidebarDetailed({ ...props }: any) {
     useAuctionContext()
   const [counter, setCounter] = useState(0)
   const { countdownInMili } = useCountdownTime()
+  const mintRandom = useLineMintRandom({
+    args: [BigInt(counter), merkleProof],
+  })
+  const { data: mintResult, write: mintWrite } = useLineMintAtPosition()
+  const mintRandomTx = useWaitForTransaction({
+    hash: mintRandom.data?.hash,
+    enabled: mintRandom.data?.hash !== undefined,
+  })
+  const handleRandomMint = () => {
+    mintRandom.write({
+      value: BigInt(counter) * currentPrice,
+    })
+  }
+
+  const handleMintAtPositions = () => {
+    const coordinates = selectedItems.map((coordinate) => {
+      const [y, x] = coordinate.split('-')
+      return { x: BigInt(x), y: BigInt(y) }
+    })
+    console.log(coordinates)
+    mintWrite({
+      args: [coordinates, merkleProof],
+      value: BigInt(coordinates.length) * currentPrice,
+    })
+  }
 
   return (
     <Skeleton isLoaded={startPrice !== 0n} {...props}>
@@ -131,7 +164,7 @@ export function SidebarDetailed({ ...props }: any) {
                     fontWeight={'bold'}
                     textColor={'gray.500'}
                   >
-                    Available/minted
+                    Minted/Available
                   </Text>
                   <Text
                     fontSize={'lg'}
@@ -216,9 +249,16 @@ export function SidebarDetailed({ ...props }: any) {
                         unavailable ones.
                       </FormLabel>
                     </FormControl>
-                    <Button variant={'solid'} w={'full'}>
-                      Mint selected tokens
-                    </Button>
+
+                    <ForceConnectButton buttonText="Connect to mint">
+                      <Button
+                        variant={'solid'}
+                        w={'full'}
+                        onClick={handleMintAtPositions}
+                      >
+                        Mint selected tokens
+                      </Button>
+                    </ForceConnectButton>
                   </Box>
                 </Flex>
               )}
@@ -275,9 +315,30 @@ export function SidebarDetailed({ ...props }: any) {
                     Total:{' '}
                     {formatToEtherStringBN(BigInt(counter) * currentPrice)} ETH
                   </Text>
-                  <Button variant={'solid'} w={'full'} isDisabled={counter < 1}>
-                    Random Mint
-                  </Button>
+                  <ForceConnectButton buttonText="Connect to mint">
+                    <>
+                      <Button
+                        variant={'solid'}
+                        w={'full'}
+                        isDisabled={
+                          counter < 1 ||
+                          mintRandom.isLoading ||
+                          mintRandomTx.isLoading
+                        }
+                        onClick={handleRandomMint}
+                      >
+                        {mintRandom.isLoading
+                          ? 'Waiting for approval...'
+                          : mintRandomTx.isLoading
+                            ? 'Processing...'
+                            : 'Random Mint'}
+                      </Button>
+                      <TxMessage
+                        hash={mintRandom.data?.hash}
+                        error={mintRandom.error as TransactionError}
+                      />
+                    </>
+                  </ForceConnectButton>
                 </Box>
               </Flex>
             </Box>
