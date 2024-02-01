@@ -1,0 +1,54 @@
+import { FC, useState } from 'react'
+import Image from 'next/image'
+import { Box, Skeleton } from '@chakra-ui/react'
+
+// Define props type
+export interface ChakraNextImageLoaderProps {
+  src: string
+  alt: string
+  width: number
+  height: number
+  layout?: 'fixed' | 'intrinsic' | 'responsive' | undefined // Optional, if you want to override the layout prop
+  // Add any additional props you want to pass to either the Skeleton or Image components
+}
+
+export const ChakraNextImageLoader: FC<ChakraNextImageLoaderProps> = ({
+  src,
+  alt,
+  width,
+  height,
+  ...rest
+}) => {
+  const [isLoading, setLoading] = useState(true)
+
+  return (
+    <Box
+      position="relative"
+      width={width}
+      height={'auto'}
+      maxW={'100%'}
+      maxH={'100%'}
+      {...rest}
+    >
+      {isLoading && (
+        <Skeleton
+          left={0}
+          top={0}
+          bottom={0}
+          right={0}
+          pos={'absolute'}
+          zIndex={2}
+        />
+      )}
+      <Image
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        onLoadingComplete={() => setLoading(false)}
+      />
+    </Box>
+  )
+}
+
+export default ChakraNextImageLoader

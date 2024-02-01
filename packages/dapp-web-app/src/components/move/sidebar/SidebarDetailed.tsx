@@ -1,12 +1,22 @@
 'use client'
 
-import { Box, Button, Flex, Link, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, Link, SkeletonText, Text } from '@chakra-ui/react'
 import { SidebarArrow } from 'components/arrow/SidebarArrow'
 import { ArrowDirections } from 'components/arrow/utils'
 
 import { useMoveContext } from 'contexts/MoveContext'
 import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
+import {
+  useLineGetToken,
+  useLineOwnerOf,
+  useLineTokenUri,
+} from 'services/web3/generated'
+import { getExternalOpenseaUrl } from 'utils/getLink'
+import { shortenAddress } from 'utils/string'
+import { contractAddresses } from '@dapp/contracts'
+import { getChainId } from 'utils/chain'
+import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 
 const TextLine = ({ children, title = '', ...props }: any) => (
   <Text fontSize={'md'} color={'gray.500'} mb={1} {...props}>
@@ -26,6 +36,28 @@ export function SidebarDetailed({ ...props }: any) {
   const [arrowSelected, setArrowSelected] = useState<
     ArrowDirections | undefined
   >()
+  const tokenData = useLineTokenUri({
+    args: [BigInt(selectedGridItem?.id || 0)],
+    enabled: !!selectedGridItem,
+  })
+  const tokenOwner = useLineOwnerOf({
+    args: [BigInt(selectedGridItem?.id || 0)],
+    enabled: !!selectedGridItem,
+  })
+
+  const tokenJson = useMemo(() => {
+    try {
+      console.log('tokenData', tokenData?.data)
+      if (tokenData?.data) {
+        const json = atob(tokenData?.data.substring(29))
+        return JSON.parse(json)
+      }
+    } catch (error) {
+      console.log('error tokenData', error)
+      console.error(error)
+    }
+    return { attributes: [] }
+  }, [tokenData?.data])
 
   const handleArrowMouseOver = (direction?: ArrowDirections) => {
     setArrowHover(direction)
@@ -41,7 +73,7 @@ export function SidebarDetailed({ ...props }: any) {
         .map((item) => gridItemsState[item])
         .filter((item) => item),
     ],
-    [gridItemsState, highlightGridItem, selectedGridItem]
+    [gridItemsState, highlightGridItem, selectedGridItem],
   )
 
   useEffect(() => {
@@ -67,24 +99,26 @@ export function SidebarDetailed({ ...props }: any) {
             <Flex justifyContent={'flex-start'}>
               <Box maxW={'60%'}>
                 <Flex as="header" alignItems={'center'} mb={4}>
-                  <Text
+                  <SkeletonText
+                    noOfLines={1}
+                    skeletonHeight="8"
                     fontWeight={'bold'}
                     textColor={'gray.900'}
                     fontSize={'2xl'}
                     textTransform={'uppercase'}
+                    isLoaded={!!tokenJson.name}
                   >
-                    LINE #{selectedGridItem.id}
-                  </Text>
+                    {tokenJson.name}
+                  </SkeletonText>
                   <Text fontSize={'md'} textColor={'gray.500'} ml={2}>
                     ({selectedGridItem.index.replace('-', ',')})
                   </Text>
                 </Flex>
-                <Image
-                  src={selectedGridItem.image}
-                  alt={`Token ${selectedGridItem.index}`}
+                <ChakraNextImageLoader
+                  src={tokenJson.image}
+                  alt={tokenJson.name}
                   width={400}
-                  height={200}
-                  style={{ maxWidth: '100%' }}
+                  height={600}
                 />
                 {highlightItems.length > 0 && (
                   <Box
@@ -106,12 +140,11 @@ export function SidebarDetailed({ ...props }: any) {
                                 }%`
                           }
                         >
-                          <Image
+                          <ChakraNextImageLoader
                             src={item!.image}
                             alt={`Token ${item!.index}`}
-                            width={78}
-                            height={20}
-                            style={{ maxWidth: '100%' }}
+                            width={60}
+                            height={180}
                           />
                           <Text fontSize={'11px'} mt={1}>
                             ({item!.index.replace('-', ',')})
@@ -155,7 +188,7 @@ export function SidebarDetailed({ ...props }: any) {
                             src={'/move-to.svg'}
                             width={16}
                             height={16}
-                            alt={'Illustrate movement'}
+                            alt={'Arrow to right'}
                           />
                         </Box>
                         <Box>
@@ -180,33 +213,41 @@ export function SidebarDetailed({ ...props }: any) {
                   <Box w={'full'} h={'45px'} />
                 )}
 
-                <TextLine title={'Origin point'}>
-                  {selectedGridItem.index.replace('-', ',')}
-                </TextLine>
-                <TextLine title={'Image point'}>
-                  {selectedGridItem.index.replace('-', ',')}
-                </TextLine>
-                <TextLine title={'Type'}>{selectedGridItem.direction}</TextLine>
-                <TextLine title={'Limit'}>No</TextLine>
-                <TextLine title={'Starting point'}>
-                  {selectedGridItem.index.replace('-', ',')}
-                </TextLine>
-                <TextLine title={'Movements'}>-</TextLine>
-                <TextLine title={'Owner'}>0x00000</TextLine>
-                <Link
-                  href={selectedGridItem.image}
-                  isExternal
-                  display={'block'}
+                <SkeletonText
+                  noOfLines={9}
+                  skeletonHeight="5"
+                  isLoaded={!!tokenJson.attributes}
                 >
-                  View on Opensea
-                </Link>
-                <Link
-                  href={selectedGridItem.image}
-                  isExternal
-                  display={'block'}
-                >
-                  Preview in new tab
-                </Link>
+                  {tokenJson.attributes.map(
+                    ({
+                      trait_type,
+                      value,
+                    }: {
+                      trait_type: string
+                      value: string
+                    }) => (
+                      <TextLine key={trait_type} title={trait_type}>
+                        {value}
+                      </TextLine>
+                    ),
+                  )}
+                  <TextLine title={'Owner'}>
+                    {shortenAddress(tokenOwner.data)}
+                  </TextLine>
+                  <Link
+                    href={getExternalOpenseaUrl(
+                      contractAddresses[getChainId()].Line,
+                      selectedGridItem.id?.toString(),
+                    )}
+                    isExternal
+                    display={'block'}
+                  >
+                    View on Opensea
+                  </Link>
+                  <Link href={tokenJson.image} isExternal display={'block'}>
+                    Preview in new tab
+                  </Link>
+                </SkeletonText>
               </Box>
             </Flex>
           </Box>

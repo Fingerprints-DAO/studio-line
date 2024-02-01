@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
+import { useLineGetGrid } from 'services/web3/generated'
 import {
   Direction,
   GridItemBaseProperties,
@@ -35,7 +36,10 @@ const generateAvailableItems = (size = 200) => {
   }
   return array
 }
-const getRandomItems = (array: string[], count: number): string[] => {
+const getRandomItems = (
+  array: (string | null)[],
+  count: number,
+): (string | null)[] => {
   const shuffled = array.sort(() => 0.5 - Math.random())
   return shuffled.slice(0, count)
 }
@@ -62,8 +66,8 @@ const generateFullGridDefaultState = () => {
 const MoveContext = createContext<{
   gridItemsState: GridItemState
   highlightGridItem: string[]
-  myItems: string[]
-  mintedItems: string[]
+  myItems: (string | null)[]
+  mintedItems: (string | null)[]
   toggleSelectedItem: (index: string) => void
   selectedGridItem?: {
     direction: Direction
@@ -81,13 +85,18 @@ export const useMoveContext = () => useContext(MoveContext)
 
 export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
   const [gridItemsState, setGridItemsState] = useState<GridItemState>({})
-  const [myItems, setMyItems] = useState<string[]>([])
+  const [myItems, setMyItems] = useState<(string | null)[]>([])
   const [highlightGridItem, setHighlightGridItem] = useState<string[]>([])
-  const [mintedItems, setMintedItems] = useState<string[]>([])
+  const [mintedItems, setMintedItems] = useState<(string | null)[]>([])
   const [selectedGridItem, setSelectedGridItem] = useState<GridItemProperties>()
+  const getGrid = useLineGetGrid({ watch: true })
 
   const toggleSelectedItem = (index: string) => {
-    setSelectedGridItem(gridItemsState[index])
+    const [y, x] = index.split('-').map((n) => Number(n))
+    setSelectedGridItem({
+      ...gridItemsState[index],
+      id: getGrid.data ? Number(getGrid?.data[x][y]) : gridItemsState[index].id,
+    })
 
     const [row, col] = index.split('-').map((n) => Number(n))
     const nextRow =
@@ -101,25 +110,38 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
       `${row}-${col + 1}`,
     ]
 
-    if (gridItemsState[index].direction === Direction.ALL) {
-      newHighlightGridItem.push(
-        `${row + 1}-${col}`,
-        `${row + 1}-${col - 1}`,
-        `${row + 1}-${col + 1}`
-      )
-    }
+    // if (gridItemsState[index].direction === Direction.ALL) {
+    //   newHighlightGridItem.push(
+    //     `${row + 1}-${col}`,
+    //     `${row + 1}-${col - 1}`,
+    //     `${row + 1}-${col + 1}`,
+    //   )
+    // }
 
     setHighlightGridItem(newHighlightGridItem)
   }
 
+  useEffect(() => {
+    if (getGrid.data && getGrid.data.length > 0) {
+      const transformedArray = getGrid.data
+        .flatMap((row, rowIndex) =>
+          row.map((value, colIndex) => {
+            if (value > 0) {
+              return `${colIndex}-${rowIndex}`
+            }
+            return null
+          }),
+        )
+        .filter(Boolean)
+      setMintedItems(transformedArray)
+    }
+  }, [getGrid.data])
+
   // TODO: load contract states
   useEffect(() => {
-    const availableItemsGenerated = generateAvailableItems()
-    const mintedTokens = getRandomItems(availableItemsGenerated, 200)
     setGridItemsState(generateFullGridDefaultState())
-    setMintedItems(mintedTokens)
-    setMyItems(getRandomItems(mintedTokens, 10))
-  }, [])
+    setMyItems(getRandomItems(mintedItems, 10))
+  }, [mintedItems])
 
   return (
     <MoveContext.Provider
