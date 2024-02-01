@@ -1,4 +1,4 @@
-import { Box, Theme, theme, useTheme } from '@chakra-ui/react'
+import { Box, useTheme } from '@chakra-ui/react'
 import { useMemo, useState } from 'react'
 import { Direction } from 'types/grid'
 import {
@@ -28,15 +28,18 @@ export function SidebarArrow({
   handleMouseOver,
   ...props
 }: SidebarArrowProp) {
+  const theme = useTheme()
   const hexColor = useHexColor({
     isAvailable,
     isSelected,
     direction,
   })
   const [hoverHex, selectedHex] = useArrowColors({ direction })
-  const handleFillColor = (isHover: boolean, isSelected: boolean) => {
-    if (isSelected) return selectedHex
-    if (isHover) return hoverHex
+  const handleFillColor = (arrowDirection: ArrowDirections) => {
+    if (hide.includes(arrowDirection)) return theme.colors['gray'][200]
+    if (selected === arrowDirection) return selectedHex
+
+    if (hovered === arrowDirection) return hoverHex
     return hexColor
   }
 
@@ -56,19 +59,16 @@ export function SidebarArrow({
       >
         <g>
           {/* LEFT */}
-          {hide.includes(ArrowDirections.LEFT) ? null : (
-            <>
-              <Box
-                as="path"
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M6.78061 36.0332L0.15921 40.1715L6.78061 44.3098L5.32521 40.6715L39.8872 40.6715C40.1634 40.6715 40.3872 40.4476 40.3872 40.1715C40.3872 39.8953 40.1634 39.6715 39.8872 39.6715L5.32521 39.6715L6.78061 36.0332Z"
-                transition={'fill 0.3s'}
-                fill={handleFillColor(
-                  hovered === ArrowDirections.LEFT,
-                  selected === ArrowDirections.LEFT
-                )}
-              />
+          <>
+            <Box
+              as="path"
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M6.78061 36.0332L0.15921 40.1715L6.78061 44.3098L5.32521 40.6715L39.8872 40.6715C40.1634 40.6715 40.3872 40.4476 40.3872 40.1715C40.3872 39.8953 40.1634 39.6715 39.8872 39.6715L5.32521 39.6715L6.78061 36.0332Z"
+              transition={'fill 0.3s'}
+              fill={handleFillColor(ArrowDirections.LEFT)}
+            />
+            {hide.includes(ArrowDirections.LEFT) ? null : (
               <rect
                 x="0"
                 y="30"
@@ -79,23 +79,20 @@ export function SidebarArrow({
                 onMouseLeave={() => handleMouseOver()}
                 fill="transparent"
               />
-            </>
-          )}
+            )}
+          </>
 
           {/* DIAGONAL LEFT */}
-          {hide.includes(ArrowDirections.DIAGONAL_LEFT) ? null : (
-            <>
-              <Box
-                as="path"
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M40.2393 40.1738C40.4345 40.369 40.4345 40.6856 40.2393 40.8809C40.044 41.0762 39.7274 41.0762 39.5322 40.8809L3.31674 4.6655L1.75584 8.3075L0.000141144 0.699299L7.60834 2.4551L4.04694 3.9814L40.2393 40.1738Z"
-                transition={'fill 0.3s'}
-                fill={handleFillColor(
-                  hovered === ArrowDirections.DIAGONAL_LEFT,
-                  selected === ArrowDirections.DIAGONAL_LEFT
-                )}
-              />
+          <>
+            <Box
+              as="path"
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M40.2393 40.1738C40.4345 40.369 40.4345 40.6856 40.2393 40.8809C40.044 41.0762 39.7274 41.0762 39.5322 40.8809L3.31674 4.6655L1.75584 8.3075L0.000141144 0.699299L7.60834 2.4551L4.04694 3.9814L40.2393 40.1738Z"
+              transition={'fill 0.3s'}
+              fill={handleFillColor(ArrowDirections.DIAGONAL_LEFT)}
+            />
+            {hide.includes(ArrowDirections.DIAGONAL_LEFT) ? null : (
               <rect
                 x="4"
                 y="-2"
@@ -109,23 +106,20 @@ export function SidebarArrow({
                 onMouseLeave={() => handleMouseOver()}
                 fill="transparent"
               />
-            </>
-          )}
+            )}
+          </>
 
           {/* CENTER */}
-          {hide.includes(ArrowDirections.CENTER) ? null : (
-            <>
-              <Box
-                as="path"
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M39.387 40.1716C39.387 40.4478 39.6109 40.6716 39.887 40.6716C40.1632 40.6716 40.387 40.4478 40.387 40.1716L40.387 5.6096L44.0254 7.065L39.887 0.4436L35.7487 7.065L39.387 5.6096L39.387 40.1716Z"
-                transition={'fill 0.3s'}
-                fill={handleFillColor(
-                  hovered === ArrowDirections.CENTER,
-                  selected === ArrowDirections.CENTER
-                )}
-              />
+          <>
+            <Box
+              as="path"
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M39.387 40.1716C39.387 40.4478 39.6109 40.6716 39.887 40.6716C40.1632 40.6716 40.387 40.4478 40.387 40.1716L40.387 5.6096L44.0254 7.065L39.887 0.4436L35.7487 7.065L39.387 5.6096L39.387 40.1716Z"
+              transition={'fill 0.3s'}
+              fill={handleFillColor(ArrowDirections.CENTER)}
+            />
+            {hide.includes(ArrowDirections.CENTER) ? null : (
               <rect
                 x="42"
                 y="20"
@@ -137,23 +131,20 @@ export function SidebarArrow({
                 onMouseLeave={() => handleMouseOver()}
                 fill="transparent"
               />
-            </>
-          )}
+            )}
+          </>
 
           {/* DIAGONAL RIGHT */}
-          {hide.includes(ArrowDirections.DIAGONAL_RIGHT) ? null : (
-            <>
-              <Box
-                as="path"
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M39.7608 40.1738C39.5656 40.369 39.5656 40.6856 39.7608 40.8809C39.9561 41.0762 40.2727 41.0762 40.4679 40.8809L76.6834 4.6655L78.2443 8.3075L80 0.699299L72.3918 2.4551L75.9532 3.9814L39.7608 40.1738Z"
-                transition={'fill 0.3s'}
-                fill={handleFillColor(
-                  hovered === ArrowDirections.DIAGONAL_RIGHT,
-                  selected === ArrowDirections.DIAGONAL_RIGHT
-                )}
-              />
+          <>
+            <Box
+              as="path"
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M39.7608 40.1738C39.5656 40.369 39.5656 40.6856 39.7608 40.8809C39.9561 41.0762 40.2727 41.0762 40.4679 40.8809L76.6834 4.6655L78.2443 8.3075L80 0.699299L72.3918 2.4551L75.9532 3.9814L39.7608 40.1738Z"
+              transition={'fill 0.3s'}
+              fill={handleFillColor(ArrowDirections.DIAGONAL_RIGHT)}
+            />
+            {hide.includes(ArrowDirections.DIAGONAL_RIGHT) ? null : (
               <rect
                 x="88"
                 y="8"
@@ -167,23 +158,20 @@ export function SidebarArrow({
                 onMouseLeave={() => handleMouseOver()}
                 fill="transparent"
               />
-            </>
-          )}
+            )}
+          </>
 
           {/* RIGHT */}
-          {hide.includes(ArrowDirections.RIGHT) ? null : (
-            <>
-              <Box
-                as="path"
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M72.9939 36.0332L79.6152 40.1715L72.9939 44.3098L74.4492 40.6715L39.8872 40.6715C39.6111 40.6715 39.3872 40.4476 39.3872 40.1715C39.3872 39.8953 39.6111 39.6715 39.8872 39.6715L74.4492 39.6715L72.9939 36.0332Z"
-                transition={'fill 0.3s'}
-                fill={handleFillColor(
-                  hovered === ArrowDirections.RIGHT,
-                  selected === ArrowDirections.RIGHT
-                )}
-              />
+          <>
+            <Box
+              as="path"
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M72.9939 36.0332L79.6152 40.1715L72.9939 44.3098L74.4492 40.6715L39.8872 40.6715C39.6111 40.6715 39.3872 40.4476 39.3872 40.1715C39.3872 39.8953 39.6111 39.6715 39.8872 39.6715L74.4492 39.6715L72.9939 36.0332Z"
+              transition={'fill 0.3s'}
+              fill={handleFillColor(ArrowDirections.RIGHT)}
+            />
+            {hide.includes(ArrowDirections.RIGHT) ? null : (
               <rect
                 x="80"
                 y="45"
@@ -195,8 +183,8 @@ export function SidebarArrow({
                 onMouseLeave={() => handleMouseOver()}
                 fill="transparent"
               />
-            </>
-          )}
+            )}
+          </>
           {/* CIRCLE */}
           {displayCircle && (
             <circle
