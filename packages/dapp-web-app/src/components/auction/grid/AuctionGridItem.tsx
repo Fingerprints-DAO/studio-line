@@ -69,7 +69,7 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
   const widthPx = `${width}px`
   const heightPx = `${height}px`
 
-  const disableClick = isLastRow || isFirstRow || isMinted || !isAvailable
+  const disableClick = isMinted || !isAvailable
   const renderPoint = isMinted || isAvailable || isSelected
 
   const handleClick = () => {

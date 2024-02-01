@@ -72,7 +72,7 @@ export const PlaygroundProvider = ({
   children: React.ReactNode
 }) => {
   const [gridItemsState, setGridItemsState] = useState<GridItemState>(
-    generateFullGridDefaultState()
+    generateFullGridDefaultState(),
   )
   const [highlightGridItem, setHighlightGridItem] = useState<string[]>([])
   const [lastSelectedGridItem, setLastSelectedGridItem] =
@@ -88,9 +88,7 @@ export const PlaygroundProvider = ({
     }
     setGridItemsState((prevState) => {
       const direction =
-        prevState[index].row === 0 || prevState[index].row === GridSize - 1
-          ? Direction.ALL
-          : lastSelectedGridItem?.direction ?? prevState[index].direction
+        lastSelectedGridItem?.direction ?? prevState[index].direction
       setLastSelectedGridItem({
         ...prevState[index],
         direction,
@@ -106,13 +104,13 @@ export const PlaygroundProvider = ({
         `${row}-${col + 1}`,
       ]
 
-      if (direction === Direction.ALL) {
-        newHighlightGridItem.push(
-          `${row + 1}-${col}`,
-          `${row + 1}-${col - 1}`,
-          `${row + 1}-${col + 1}`
-        )
-      }
+      // if (direction === Direction.ALL) {
+      //   newHighlightGridItem.push(
+      //     `${row + 1}-${col}`,
+      //     `${row + 1}-${col - 1}`,
+      //     `${row + 1}-${col + 1}`
+      //   )
+      // }
 
       setHighlightGridItem(newHighlightGridItem)
       return {
