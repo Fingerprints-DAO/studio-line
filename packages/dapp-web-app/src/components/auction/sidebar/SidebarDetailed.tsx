@@ -212,7 +212,8 @@ export function SidebarDetailed({ ...props }: any) {
             </>
           )}
         </Box>
-        {auctionState === AuctionState.STARTED && (
+        {(auctionState === AuctionState.STARTED ||
+          auctionState === AuctionState.RESTING) && (
           <>
             <Box as={'section'}>
               <Text fontWeight={'bold'} mt={4} fontSize={'2xl'} as={'h1'}>
