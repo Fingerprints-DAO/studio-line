@@ -7,11 +7,7 @@ import { ArrowDirections } from 'components/arrow/utils'
 import { useMoveContext } from 'contexts/MoveContext'
 import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
-import {
-  useLineGetToken,
-  useLineOwnerOf,
-  useLineTokenUri,
-} from 'services/web3/generated'
+import { useLineOwnerOf, useLineTokenUri } from 'services/web3/generated'
 import { getExternalOpenseaUrl } from 'utils/getLink'
 import { shortenAddress } from 'utils/string'
 import { contractAddresses } from '@dapp/contracts'
@@ -30,8 +26,13 @@ const TextLine = ({ children, title = '', ...props }: any) => (
 )
 
 export function SidebarDetailed({ ...props }: any) {
-  const { gridItemsState, selectedGridItem, highlightGridItem, myItems } =
-    useMoveContext()
+  const {
+    gridItemsState,
+    selectedGridItem,
+    highlightGridItem,
+    myItems,
+    unavailableDirections,
+  } = useMoveContext()
   const [arrowHover, setArrowHover] = useState<ArrowDirections | undefined>()
   const [arrowSelected, setArrowSelected] = useState<
     ArrowDirections | undefined
@@ -47,13 +48,11 @@ export function SidebarDetailed({ ...props }: any) {
 
   const tokenJson = useMemo(() => {
     try {
-      console.log('tokenData', tokenData?.data)
       if (tokenData?.data) {
         const json = atob(tokenData?.data.substring(29))
         return JSON.parse(json)
       }
     } catch (error) {
-      console.log('error tokenData', error)
       console.error(error)
     }
     return { attributes: [] }
@@ -167,6 +166,7 @@ export function SidebarDetailed({ ...props }: any) {
                         handleMouseOver={handleArrowMouseOver}
                         selected={arrowSelected}
                         hovered={arrowHover}
+                        hide={unavailableDirections}
                       />
                     </Box>
                     {!arrowSelected && (

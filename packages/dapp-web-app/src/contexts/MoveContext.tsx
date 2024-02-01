@@ -1,3 +1,4 @@
+import { ArrowDirections } from 'components/arrow/utils'
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import { useLineGetGrid } from 'services/web3/generated'
 import {
@@ -25,17 +26,6 @@ export const gridItemDefaultState = {
   direction: Direction.UP,
 }
 
-const generateAvailableItems = (size = 200) => {
-  const array: string[] = []
-  for (let i = 0; i < size; i++) {
-    let row: number
-    let col: number
-    row = Math.floor(Math.random() * 25)
-    col = Math.floor(Math.random() * 25)
-    array.push(`${row}-${col}`)
-  }
-  return array
-}
 const getRandomItems = (
   array: (string | null)[],
   count: number,
@@ -66,6 +56,7 @@ const generateFullGridDefaultState = () => {
 const MoveContext = createContext<{
   gridItemsState: GridItemState
   highlightGridItem: string[]
+  unavailableDirections: ArrowDirections[]
   myItems: (string | null)[]
   mintedItems: (string | null)[]
   toggleSelectedItem: (index: string) => void
@@ -75,6 +66,7 @@ const MoveContext = createContext<{
 }>({
   gridItemsState: {},
   highlightGridItem: [],
+  unavailableDirections: [],
   myItems: [],
   mintedItems: [],
   toggleSelectedItem: () => {},
@@ -87,6 +79,9 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
   const [gridItemsState, setGridItemsState] = useState<GridItemState>({})
   const [myItems, setMyItems] = useState<(string | null)[]>([])
   const [highlightGridItem, setHighlightGridItem] = useState<string[]>([])
+  const [unavailableDirections, setUnavailableDirections] = useState<
+    ArrowDirections[]
+  >([])
   const [mintedItems, setMintedItems] = useState<(string | null)[]>([])
   const [selectedGridItem, setSelectedGridItem] = useState<GridItemProperties>()
   const getGrid = useLineGetGrid({ watch: true })
@@ -101,8 +96,9 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
     const [row, col] = index.split('-').map((n) => Number(n))
     const nextRow =
       gridItemsState[index].direction !== Direction.UP ? row - 1 : row + 1
-    // TODO: if all, order should be different
-    const newHighlightGridItem = [
+    const unavailableDirections = [] as ArrowDirections[]
+
+    const [leftPos, diagonalLeftPos, centerPos, diagonalRightPos, rightPos] = [
       `${row}-${col - 1}`,
       `${nextRow}-${col - 1}`,
       `${nextRow}-${col}`,
@@ -110,15 +106,26 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
       `${row}-${col + 1}`,
     ]
 
-    // if (gridItemsState[index].direction === Direction.ALL) {
-    //   newHighlightGridItem.push(
-    //     `${row + 1}-${col}`,
-    //     `${row + 1}-${col - 1}`,
-    //     `${row + 1}-${col + 1}`,
-    //   )
-    // }
+    if (mintedItems.includes(leftPos))
+      unavailableDirections.push(ArrowDirections.LEFT)
+    if (mintedItems.includes(diagonalLeftPos))
+      unavailableDirections.push(ArrowDirections.DIAGONAL_LEFT)
+    if (mintedItems.includes(centerPos))
+      unavailableDirections.push(ArrowDirections.CENTER)
+    if (mintedItems.includes(diagonalRightPos))
+      unavailableDirections.push(ArrowDirections.DIAGONAL_RIGHT)
+    if (mintedItems.includes(rightPos))
+      unavailableDirections.push(ArrowDirections.RIGHT)
 
-    setHighlightGridItem(newHighlightGridItem)
+    setHighlightGridItem([
+      leftPos,
+      diagonalLeftPos,
+      centerPos,
+      diagonalRightPos,
+      rightPos,
+    ])
+
+    setUnavailableDirections(unavailableDirections)
   }
 
   useEffect(() => {
@@ -152,6 +159,7 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
         myItems,
         mintedItems,
         toggleSelectedItem,
+        unavailableDirections,
       }}
     >
       {children}

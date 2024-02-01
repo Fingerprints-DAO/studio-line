@@ -14,6 +14,7 @@ interface GridItemProps extends GridItemProperties {
   isMinted: boolean
   isAvailable: boolean
   isSelected: boolean
+  mintedItems: (string | null)[]
   toggleGridItem: (index: string) => void
 }
 
@@ -60,6 +61,7 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
   isMinted,
   isAvailable,
   isSelected,
+  mintedItems,
 }) => {
   const [isFirstRow, isLastRow, isFirstCol, isLastCol] = [
     row === GridSize - 1,
@@ -84,12 +86,39 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
   }
 
   const hideArrows = useMemo(() => {
-    if (isLastCol)
-      return [ArrowDirections.RIGHT, ArrowDirections.DIAGONAL_RIGHT]
-    if (isFirstCol) return [ArrowDirections.LEFT, ArrowDirections.DIAGONAL_LEFT]
+    const unavailableDirections = [] as ArrowDirections[]
 
-    return []
-  }, [isFirstCol, isLastCol])
+    if (isLastCol) {
+      unavailableDirections.push(ArrowDirections.RIGHT)
+      unavailableDirections.push(ArrowDirections.DIAGONAL_RIGHT)
+    }
+    if (isFirstCol) {
+      unavailableDirections.push(ArrowDirections.LEFT)
+      unavailableDirections.push(ArrowDirections.DIAGONAL_LEFT)
+    }
+
+    const nextRow = direction !== Direction.UP ? row - 1 : row + 1
+    const [leftPos, diagonalLeftPos, centerPos, diagonalRightPos, rightPos] = [
+      `${row}-${col - 1}`,
+      `${nextRow}-${col - 1}`,
+      `${nextRow}-${col}`,
+      `${nextRow}-${col + 1}`,
+      `${row}-${col + 1}`,
+    ]
+
+    if (mintedItems.includes(leftPos))
+      unavailableDirections.push(ArrowDirections.LEFT)
+    if (mintedItems.includes(diagonalLeftPos))
+      unavailableDirections.push(ArrowDirections.DIAGONAL_LEFT)
+    if (mintedItems.includes(centerPos))
+      unavailableDirections.push(ArrowDirections.CENTER)
+    if (mintedItems.includes(diagonalRightPos))
+      unavailableDirections.push(ArrowDirections.DIAGONAL_RIGHT)
+    if (mintedItems.includes(rightPos))
+      unavailableDirections.push(ArrowDirections.RIGHT)
+
+    return unavailableDirections
+  }, [col, direction, isFirstCol, isLastCol, mintedItems, row])
 
   const arrowsProps = {
     w: `100%`,

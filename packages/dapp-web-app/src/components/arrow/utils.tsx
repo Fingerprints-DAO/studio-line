@@ -2,7 +2,7 @@ import { Box, useTheme } from '@chakra-ui/react'
 import { Direction } from 'types/grid'
 
 export enum ArrowDirections {
-  CENTER = 'CENTER',
+  CENTER = 'center',
   LEFT = 'left',
   RIGHT = 'right',
   DIAGONAL_LEFT = 'diagonal-left',
