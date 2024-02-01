@@ -1,6 +1,7 @@
 export enum AuctionState {
   NOT_STARTED,
   STARTED,
+  RESTING,
   ENDED,
 }
 

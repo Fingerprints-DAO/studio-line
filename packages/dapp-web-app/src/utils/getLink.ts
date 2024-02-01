@@ -18,3 +18,7 @@ export const getExternalEtherscanUrl = (address?: Address) => {
   const base = process.env.NEXT_PUBLIC_ETHERSCAN_URL
   return `${base}address/${address ?? ''}`
 }
+export const getExternalTxUrl = (address?: Address) => {
+  const base = process.env.NEXT_PUBLIC_ETHERSCAN_URL
+  return `${base}tx/${address ?? ''}`
+}

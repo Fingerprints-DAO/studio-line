@@ -10,7 +10,10 @@ export function AuctionBanner({ displayMintNow = false }) {
     useAuctionContext()
   const startDate = dayjs.unix(Number(startTime))
 
-  if (auctionState === AuctionState.STARTED) {
+  if (
+    auctionState === AuctionState.STARTED ||
+    auctionState === AuctionState.RESTING
+  ) {
     if (!displayMintNow) return null
     return (
       <Box as={'section'} bgColor={'gray.200'} p={4} mb={4}>

@@ -34,9 +34,16 @@ const AuctionContext = createContext<
 
 export const useAuctionContext = () => useContext(AuctionContext)
 
-const getCurrentState = (startTime?: number, endTime?: number) => {
+const getCurrentState = (
+  startTime?: number,
+  endTime?: number,
+  isEnded = false,
+) => {
   if (!startTime || !endTime) {
     return AuctionState.NOT_STARTED
+  }
+  if (isEnded) {
+    return AuctionState.ENDED
   }
 
   const now = dayjs()
@@ -44,7 +51,7 @@ const getCurrentState = (startTime?: number, endTime?: number) => {
   const end = dayjs.unix(endTime)
 
   if (now.isAfter(end)) {
-    return AuctionState.ENDED
+    return AuctionState.RESTING
   }
 
   if (now.isAfter(start)) {

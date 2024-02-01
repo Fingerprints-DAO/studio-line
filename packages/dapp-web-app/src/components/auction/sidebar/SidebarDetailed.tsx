@@ -123,7 +123,8 @@ export function SidebarDetailed({ ...props }: any) {
       <Box {...props}>
         <Box as={'section'}>
           <AuctionBanner />
-          {auctionState === AuctionState.STARTED && (
+          {(auctionState === AuctionState.STARTED ||
+            auctionState === AuctionState.RESTING) && (
             <>
               <Flex justifyContent={'space-between'}>
                 <Flex
@@ -138,7 +139,9 @@ export function SidebarDetailed({ ...props }: any) {
                     fontWeight={'bold'}
                     textColor={'gray.500'}
                   >
-                    Current price
+                    {auctionState === AuctionState.RESTING
+                      ? 'Resting price'
+                      : 'Current price'}
                   </Text>
                   <Text
                     fontSize={'lg'}
@@ -148,34 +151,38 @@ export function SidebarDetailed({ ...props }: any) {
                     {formatToEtherStringBN(currentPrice)} ETH
                   </Text>
                 </Flex>
+                {auctionState !== AuctionState.RESTING && (
+                  <Flex
+                    bgColor={'gray.100'}
+                    flexDirection={'column'}
+                    py={1}
+                    px={3}
+                    ml={2}
+                    flex={1}
+                  >
+                    <Text
+                      fontSize={'xs'}
+                      fontWeight={'bold'}
+                      textColor={'gray.500'}
+                    >
+                      Remaining time
+                    </Text>
+                    <Text
+                      fontSize={'lg'}
+                      fontWeight={'bold'}
+                      textColor={'gray.900'}
+                    >
+                      <Countdown futureTimestamp={countdownInMili} />
+                    </Text>
+                  </Flex>
+                )}
+
                 <Flex
                   bgColor={'gray.100'}
                   flexDirection={'column'}
                   py={1}
                   px={3}
-                  flex={1}
-                  mx={2}
-                >
-                  <Text
-                    fontSize={'xs'}
-                    fontWeight={'bold'}
-                    textColor={'gray.500'}
-                  >
-                    Remaining time
-                  </Text>
-                  <Text
-                    fontSize={'lg'}
-                    fontWeight={'bold'}
-                    textColor={'gray.900'}
-                  >
-                    <Countdown futureTimestamp={countdownInMili} />
-                  </Text>
-                </Flex>
-                <Flex
-                  bgColor={'gray.100'}
-                  flexDirection={'column'}
-                  py={1}
-                  px={3}
+                  ml={2}
                   flex={1}
                 >
                   <Text
@@ -240,31 +247,10 @@ export function SidebarDetailed({ ...props }: any) {
                     )}{' '}
                     ETH
                   </Text>
-                  <FormControl
-                    alignItems={'flex-start'}
-                    mt={2}
-                    mb={1}
-                    display={'flex'}
-                  >
-                    <Checkbox
-                      colorScheme="gray"
-                      mt={'2px'}
-                      mr={2}
-                      borderRadius={0}
-                      rounded={'none'}
-                      style={{ borderRadius: 0 }}
-                      variant={'solid'}
-                      isChecked
-                    />
-                    <FormLabel
-                      fontSize={'xs'}
-                      fontWeight={'normal'}
-                      cursor={'pointer'}
-                    >
-                      I agree to mint available tokens and be refunded for
-                      unavailable ones.
-                    </FormLabel>
-                  </FormControl>
+                  <Text fontSize={'xs'} fontWeight={'normal'} my={2}>
+                    Unavailable tokens for minting will be refunded in the same
+                    transaction.
+                  </Text>
 
                   <ForceConnectButton buttonText="Connect to mint">
                     <>

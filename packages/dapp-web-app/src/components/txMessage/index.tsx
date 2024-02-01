@@ -1,7 +1,7 @@
 import { Box, Link, Text } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { TransactionError } from 'types/transaction'
-import { getExternalEtherscanUrl } from 'utils/getLink'
+import { getExternalTxUrl } from 'utils/getLink'
 import { Address, useWaitForTransaction } from 'wagmi'
 
 type TxMessageProps = {
@@ -70,7 +70,7 @@ export const TxMessage = ({ hash, error }: TxMessageProps) => {
         </Box>
       )}
       {(txData.isLoading || txData.isSuccess) && (
-        <Link href={getExternalEtherscanUrl(hash)} display={'block'} mt={2}>
+        <Link href={getExternalTxUrl(hash)} display={'block'} mt={2}>
           View your transaction on Etherscan
         </Link>
       )}
