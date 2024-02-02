@@ -79,6 +79,13 @@
   },
   {
     "type": "function",
+    "name": "canMove",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "checkMerkleProof",
     "inputs": [
       {
@@ -201,6 +208,56 @@
         "name": "",
         "type": "tuple",
         "internalType": "struct ITokenDescriptor.Token",
+        "components": [
+          {
+            "name": "initial",
+            "type": "tuple",
+            "internalType": "struct ITokenDescriptor.Coordinate",
+            "components": [
+              { "name": "x", "type": "uint256", "internalType": "uint256" },
+              { "name": "y", "type": "uint256", "internalType": "uint256" }
+            ]
+          },
+          {
+            "name": "current",
+            "type": "tuple",
+            "internalType": "struct ITokenDescriptor.Coordinate",
+            "components": [
+              { "name": "x", "type": "uint256", "internalType": "uint256" },
+              { "name": "y", "type": "uint256", "internalType": "uint256" }
+            ]
+          },
+          {
+            "name": "timestamp",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          { "name": "hasReachedEnd", "type": "bool", "internalType": "bool" },
+          { "name": "isLocked", "type": "bool", "internalType": "bool" },
+          {
+            "name": "direction",
+            "type": "uint8",
+            "internalType": "enum ITokenDescriptor.Direction"
+          },
+          {
+            "name": "numMovements",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getTokens",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple[]",
+        "internalType": "struct ITokenDescriptor.Token[]",
         "components": [
           {
             "name": "initial",
@@ -554,6 +611,24 @@
     "name": "tokenURI",
     "inputs": [{ "name": "id", "type": "uint256", "internalType": "uint256" }],
     "outputs": [{ "name": "", "type": "string", "internalType": "string" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "tokensOfOwner",
+    "inputs": [
+      { "name": "_owner", "type": "address", "internalType": "address" }
+    ],
+    "outputs": [
+      { "name": "", "type": "uint256[]", "internalType": "uint256[]" }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "totalSupply",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
     "stateMutability": "view"
   },
   {

@@ -1,6 +1,6 @@
 import { ArrowDirections } from 'components/arrow/utils'
 import React, { createContext, useState, useContext, useEffect } from 'react'
-import { useLineGetGrid } from 'services/web3/generated'
+import { useLineGetGrid, useLineTokensOfOwner } from 'services/web3/generated'
 import {
   Direction,
   GridItemBaseProperties,
@@ -8,6 +8,7 @@ import {
   generateImage,
   getDirection,
 } from 'types/grid'
+import { useAccount } from 'wagmi'
 
 export interface GridItemProperties extends GridItemBaseProperties {
   id: number | null
@@ -84,7 +85,13 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
   >([])
   const [mintedItems, setMintedItems] = useState<(string | null)[]>([])
   const [selectedGridItem, setSelectedGridItem] = useState<GridItemProperties>()
+  const { address } = useAccount()
   const getGrid = useLineGetGrid({ watch: true })
+  // const ownedTokens = useLineTokensOfOwner({
+  //   args: [address!],
+  //   enabled: !!address,
+  //   watch: true,
+  // })
 
   const toggleSelectedItem = (index: string) => {
     const [y, x] = index.split('-').map((n) => Number(n))
@@ -143,6 +150,11 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
       setMintedItems(transformedArray)
     }
   }, [getGrid.data])
+
+  // useEffect(() => {
+  //   console.log(ownedTokens)
+  //   // setMyItems()
+  // }, [ownedTokens])
 
   // TODO: load contract states
   useEffect(() => {

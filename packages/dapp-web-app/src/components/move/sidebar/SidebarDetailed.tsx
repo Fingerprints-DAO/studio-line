@@ -13,6 +13,7 @@ import { shortenAddress } from 'utils/string'
 import { contractAddresses } from '@dapp/contracts'
 import { getChainId } from 'utils/chain'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
+import { GridSize } from 'types/grid'
 
 const TextLine = ({ children, title = '', ...props }: any) => (
   <Text fontSize={'md'} color={'gray.500'} mb={1} {...props}>
@@ -74,6 +75,16 @@ export function SidebarDetailed({ ...props }: any) {
     ],
     [gridItemsState, highlightGridItem, selectedGridItem],
   )
+
+  const hideArrows = useMemo(() => {
+    const [_, col] = selectedGridItem?.index?.split('-') ?? [0]
+    if (Number(col) === GridSize - 1) {
+      return [ArrowDirections.RIGHT, ArrowDirections.DIAGONAL_RIGHT]
+    }
+    if (Number(col) === 0) {
+      return [ArrowDirections.LEFT, ArrowDirections.DIAGONAL_LEFT]
+    }
+  }, [selectedGridItem?.index])
 
   useEffect(() => {
     setArrowHover(undefined)
@@ -166,7 +177,8 @@ export function SidebarDetailed({ ...props }: any) {
                         handleMouseOver={handleArrowMouseOver}
                         selected={arrowSelected}
                         hovered={arrowHover}
-                        hide={unavailableDirections}
+                        disableArrows={unavailableDirections}
+                        hideArrows={hideArrows}
                       />
                     </Box>
                     {!arrowSelected && (

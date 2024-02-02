@@ -84,19 +84,17 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
   const handleClick = () => {
     toggleGridItem(index)
   }
-
   const hideArrows = useMemo(() => {
-    const unavailableDirections = [] as ArrowDirections[]
-
     if (isLastCol) {
-      unavailableDirections.push(ArrowDirections.RIGHT)
-      unavailableDirections.push(ArrowDirections.DIAGONAL_RIGHT)
+      return [ArrowDirections.RIGHT, ArrowDirections.DIAGONAL_RIGHT]
     }
     if (isFirstCol) {
-      unavailableDirections.push(ArrowDirections.LEFT)
-      unavailableDirections.push(ArrowDirections.DIAGONAL_LEFT)
+      return [ArrowDirections.LEFT, ArrowDirections.DIAGONAL_LEFT]
     }
+  }, [isFirstCol, isLastCol])
 
+  const disableArrows = useMemo(() => {
+    const unavailableDirections = [] as ArrowDirections[]
     const nextRow = direction !== Direction.UP ? row - 1 : row + 1
     const [leftPos, diagonalLeftPos, centerPos, diagonalRightPos, rightPos] = [
       `${row}-${col - 1}`,
@@ -118,7 +116,7 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
       unavailableDirections.push(ArrowDirections.RIGHT)
 
     return unavailableDirections
-  }, [col, direction, isFirstCol, isLastCol, mintedItems, row])
+  }, [col, direction, mintedItems, row])
 
   const arrowsProps = {
     w: `100%`,
@@ -227,7 +225,8 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
               direction={direction}
               isSelected={isSelected}
               isAvailable={isAvailable}
-              hide={hideArrows}
+              disableArrows={disableArrows}
+              hideArrows={hideArrows}
               w={`${lineWidth * 2 - 8}px`}
               h={`${lineHeight * 2 - 8}px`}
             />

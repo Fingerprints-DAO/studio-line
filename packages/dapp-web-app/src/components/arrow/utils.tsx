@@ -12,7 +12,8 @@ export enum ArrowDirections {
 export type ArrowProps = React.ComponentProps<typeof Box> & {
   isAvailable?: boolean
   isSelected?: boolean
-  hide?: ArrowDirections[]
+  disableArrows?: ArrowDirections[]
+  hideArrows?: ArrowDirections[]
   displayCircle?: boolean
   hasMouseOver?: boolean
   direction: Direction
