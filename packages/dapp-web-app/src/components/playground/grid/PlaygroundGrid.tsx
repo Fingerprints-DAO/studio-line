@@ -55,7 +55,7 @@ const PlaygroundGrid: React.FC = () => {
           lineWidth={Math.round(itemWidth + gridSpaceX)}
           lineHeight={Math.round(itemHeight + GridSpace)}
           {...gridItemsState[id]}
-        />
+        />,
       )
     }
     return items

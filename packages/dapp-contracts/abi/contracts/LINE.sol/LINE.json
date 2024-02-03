@@ -543,13 +543,9 @@
     "name": "setInitialAvailableCoordinates",
     "inputs": [
       {
-        "name": "coordinates",
-        "type": "tuple[]",
-        "internalType": "struct ITokenDescriptor.Coordinate[]",
-        "components": [
-          { "name": "x", "type": "uint256", "internalType": "uint256" },
-          { "name": "y", "type": "uint256", "internalType": "uint256" }
-        ]
+        "name": "positions",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
       }
     ],
     "outputs": [],

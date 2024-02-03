@@ -1,6 +1,7 @@
 import { Box, useTheme } from '@chakra-ui/react'
-import { ArrowDirections, ArrowProps, useHexColor } from './utils'
+import { ArrowProps, useHexColor } from './utils'
 import { Direction } from 'types/grid'
+import { ArrowDirections } from 'types/movements'
 
 export function Arrow({
   isSelected,

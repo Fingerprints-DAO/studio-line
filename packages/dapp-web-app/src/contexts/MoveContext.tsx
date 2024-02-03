@@ -1,4 +1,3 @@
-import { ArrowDirections } from 'components/arrow/utils'
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import { useLineGetGrid, useLineTokensOfOwner } from 'services/web3/generated'
 import {
@@ -8,6 +7,7 @@ import {
   generateImage,
   getDirection,
 } from 'types/grid'
+import { ArrowDirections } from 'types/movements'
 import { useAccount } from 'wagmi'
 
 export interface GridItemProperties extends GridItemBaseProperties {
@@ -59,7 +59,7 @@ const MoveContext = createContext<{
   highlightGridItem: string[]
   unavailableDirections: ArrowDirections[]
   myItems: (string | null)[]
-  mintedItems: (string | null)[]
+  mintedItems: ({ id: number; index: string } | null)[]
   toggleSelectedItem: (index: string) => void
   selectedGridItem?: {
     direction: Direction
@@ -83,16 +83,16 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
   const [unavailableDirections, setUnavailableDirections] = useState<
     ArrowDirections[]
   >([])
-  const [mintedItems, setMintedItems] = useState<(string | null)[]>([])
+  const [mintedItems, setMintedItems] = useState<
+    ({ id: number; index: string } | null)[]
+  >([])
   const [selectedGridItem, setSelectedGridItem] = useState<GridItemProperties>()
   const { address } = useAccount()
   const getGrid = useLineGetGrid({ watch: true })
-  // const ownedTokens = useLineTokensOfOwner({
-  //   args: [address!],
-  //   enabled: !!address,
-  //   watch: true,
-  // })
-
+  const ownedTokens = useLineTokensOfOwner({
+    args: [address!],
+    enabled: !!address,
+  })
   const toggleSelectedItem = (index: string) => {
     const [y, x] = index.split('-').map((n) => Number(n))
     setSelectedGridItem({
@@ -112,16 +112,17 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
       `${nextRow}-${col + 1}`,
       `${row}-${col + 1}`,
     ]
+    const mintedIndexes = mintedItems.map((item) => item?.index)
 
-    if (mintedItems.includes(leftPos))
+    if (mintedIndexes.includes(leftPos))
       unavailableDirections.push(ArrowDirections.LEFT)
-    if (mintedItems.includes(diagonalLeftPos))
+    if (mintedIndexes.includes(diagonalLeftPos))
       unavailableDirections.push(ArrowDirections.DIAGONAL_LEFT)
-    if (mintedItems.includes(centerPos))
+    if (mintedIndexes.includes(centerPos))
       unavailableDirections.push(ArrowDirections.CENTER)
-    if (mintedItems.includes(diagonalRightPos))
+    if (mintedIndexes.includes(diagonalRightPos))
       unavailableDirections.push(ArrowDirections.DIAGONAL_RIGHT)
-    if (mintedItems.includes(rightPos))
+    if (mintedIndexes.includes(rightPos))
       unavailableDirections.push(ArrowDirections.RIGHT)
 
     setHighlightGridItem([
@@ -139,9 +140,9 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
     if (getGrid.data && getGrid.data.length > 0) {
       const transformedArray = getGrid.data
         .flatMap((row, rowIndex) =>
-          row.map((value, colIndex) => {
-            if (value > 0) {
-              return `${colIndex}-${rowIndex}`
+          row.map((value: bigint, colIndex) => {
+            if (value > 0n) {
+              return { index: `${colIndex}-${rowIndex}`, id: Number(value) }
             }
             return null
           }),
@@ -151,17 +152,22 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [getGrid.data])
 
-  // useEffect(() => {
-  //   console.log(ownedTokens)
-  //   // setMyItems()
-  // }, [ownedTokens])
+  useEffect(() => {
+    if (typeof ownedTokens.data === 'object') {
+      const ownedTokensIds = ownedTokens.data.map(Number)
+      setMyItems(
+        mintedItems
+          .filter((item) => item && ownedTokensIds.includes(item.id))
+          .map((item) => item!.index),
+      )
+    }
+  }, [mintedItems, ownedTokens.data])
 
-  // TODO: load contract states
   useEffect(() => {
     setGridItemsState(generateFullGridDefaultState())
-    setMyItems(getRandomItems(mintedItems, 10))
-  }, [mintedItems])
+  }, [])
 
+  // console.log(myItems, mintedItems)
   return (
     <MoveContext.Provider
       value={{

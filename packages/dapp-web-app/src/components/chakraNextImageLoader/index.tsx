@@ -46,6 +46,9 @@ export const ChakraNextImageLoader: FC<ChakraNextImageLoaderProps> = ({
         width={width}
         height={height}
         onLoadingComplete={() => setLoading(false)}
+        style={{
+          width: '100%',
+        }}
       />
     </Box>
   )

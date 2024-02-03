@@ -110,7 +110,7 @@ export function SidebarDetailed({ ...props }: any) {
                           alt={`Token ${item.index}`}
                           width={78}
                           height={20}
-                          style={{ maxWidth: '100%' }}
+                          style={{ width: '100%' }}
                         />
                         <Text fontSize={'xs'} mt={1}>
                           ({item.index.replace('-', ',')})

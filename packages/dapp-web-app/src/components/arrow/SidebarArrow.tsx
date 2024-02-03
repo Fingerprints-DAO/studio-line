@@ -1,12 +1,7 @@
 import { Box, useTheme } from '@chakra-ui/react'
-import { useMemo, useState } from 'react'
 import { Direction } from 'types/grid'
-import {
-  ArrowDirections,
-  ArrowProps,
-  useArrowColors,
-  useHexColor,
-} from './utils'
+import { ArrowProps, useArrowColors, useHexColor } from './utils'
+import { ArrowDirections } from 'types/movements'
 
 type SidebarArrowProp = ArrowProps & {
   hovered?: ArrowDirections

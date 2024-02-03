@@ -2,18 +2,28 @@
 
 import { Box, Button, Flex, Link, SkeletonText, Text } from '@chakra-ui/react'
 import { SidebarArrow } from 'components/arrow/SidebarArrow'
-import { ArrowDirections } from 'components/arrow/utils'
 
 import { useMoveContext } from 'contexts/MoveContext'
 import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
-import { useLineOwnerOf, useLineTokenUri } from 'services/web3/generated'
+import {
+  useLineOwnerOf,
+  useLineTokenUri,
+  useLineWrite,
+} from 'services/web3/generated'
 import { getExternalOpenseaUrl } from 'utils/getLink'
 import { shortenAddress } from 'utils/string'
 import { contractAddresses } from '@dapp/contracts'
 import { getChainId } from 'utils/chain'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 import { GridSize } from 'types/grid'
+import { ArrowDirections, movementContractMap } from 'types/movements'
+import { TRAITS } from 'types/nft'
+import { getSpecificArrowMoveDirection } from 'components/arrow/utils'
+import useMovePoint from 'hooks/useMovePoint'
+import { TxMessage } from 'components/txMessage'
+import { TransactionError } from 'types/transaction'
+import { useWaitForTransaction } from 'wagmi'
 
 const TextLine = ({ children, title = '', ...props }: any) => (
   <Text fontSize={'md'} color={'gray.500'} mb={1} {...props}>
@@ -46,6 +56,12 @@ export function SidebarDetailed({ ...props }: any) {
     args: [BigInt(selectedGridItem?.id || 0)],
     enabled: !!selectedGridItem,
   })
+  const { getMoveFunction, getCurrentMoveToCall } = useMovePoint()
+  const moveTx = useWaitForTransaction({
+    hash: getCurrentMoveToCall().data?.hash,
+    enabled: getCurrentMoveToCall().data?.hash !== undefined,
+    staleTime: 1_000,
+  })
 
   const tokenJson = useMemo(() => {
     try {
@@ -62,8 +78,27 @@ export function SidebarDetailed({ ...props }: any) {
   const handleArrowMouseOver = (direction?: ArrowDirections) => {
     setArrowHover(direction)
   }
-  const handleArrorOnClick = (direction: ArrowDirections) => {
+  const handleArrowOnClick = (direction: ArrowDirections) => {
     setArrowSelected(direction)
+  }
+  const handleMove = () => {
+    const tokenDirection = tokenJson.attributes
+      .find((attr: any) => attr.trait_type === TRAITS.DIRECTION)
+      .value.toLowerCase()
+    const pointDirection = getSpecificArrowMoveDirection(
+      tokenDirection,
+      arrowSelected!,
+    )
+    const moveFunction = getMoveFunction(pointDirection!)
+    // console.log(
+    //   'handleMove',
+    //   selectedGridItem?.id,
+    //   pointDirection,
+    //   pointDirection && movementContractMap[pointDirection],
+    // )
+    moveFunction.write({
+      args: [BigInt(selectedGridItem?.id || 0)],
+    })
   }
 
   const highlightItems = useMemo(
@@ -106,7 +141,7 @@ export function SidebarDetailed({ ...props }: any) {
         )}
         {selectedGridItem && (
           <Box as="section" mt={4}>
-            <Flex justifyContent={'flex-start'}>
+            <Flex justifyContent={'flex-start'} flexShrink={2}>
               <Box maxW={'60%'}>
                 <Flex as="header" alignItems={'center'} mb={4}>
                   <SkeletonText
@@ -121,7 +156,7 @@ export function SidebarDetailed({ ...props }: any) {
                     {tokenJson.name}
                   </SkeletonText>
                   <Text fontSize={'md'} textColor={'gray.500'} ml={2}>
-                    ({selectedGridItem.index.replace('-', ',')})
+                    ({selectedGridItem.col},{selectedGridItem.row})
                   </Text>
                 </Flex>
                 <ChakraNextImageLoader
@@ -165,7 +200,7 @@ export function SidebarDetailed({ ...props }: any) {
                   </Box>
                 )}
               </Box>
-              <Box ml={8} mt={2} flexShrink={0}>
+              <Box ml={8} mt={2} flexShrink={1}>
                 {myItems.includes(selectedGridItem.index) ? (
                   <>
                     <Box pos={'relative'} w={'full'} h={'45px'}>
@@ -173,7 +208,7 @@ export function SidebarDetailed({ ...props }: any) {
                         displayCircle
                         direction={selectedGridItem.direction}
                         isAvailable
-                        handleOnClick={handleArrorOnClick}
+                        handleOnClick={handleArrowOnClick}
                         handleMouseOver={handleArrowMouseOver}
                         selected={arrowSelected}
                         hovered={arrowHover}
@@ -193,7 +228,9 @@ export function SidebarDetailed({ ...props }: any) {
                           <Text fontSize={'xs'} fontWeight={'bold'}>
                             From
                           </Text>
-                          <Text fontSize={'xs'}>(10,18)</Text>
+                          <Text fontSize={'xs'}>
+                            ({selectedGridItem.col},{selectedGridItem.row})
+                          </Text>
                         </Box>
                         <Box mx={1}>
                           <Image
@@ -215,11 +252,25 @@ export function SidebarDetailed({ ...props }: any) {
                       variant={'solid'}
                       w={'full'}
                       mt={4}
-                      mb={6}
-                      isDisabled={!arrowSelected}
+                      mb={1}
+                      onClick={handleMove}
+                      isDisabled={
+                        !arrowSelected ||
+                        getCurrentMoveToCall().isLoading ||
+                        moveTx.isLoading
+                      }
                     >
-                      Move
+                      {getCurrentMoveToCall().isLoading
+                        ? 'Waiting for approval...'
+                        : moveTx.isLoading
+                          ? 'Processing...'
+                          : 'Move'}
                     </Button>
+                    <TxMessage
+                      hash={getCurrentMoveToCall().data?.hash}
+                      error={getCurrentMoveToCall().error as TransactionError}
+                      successMessage="Token moved successfully!"
+                    />
                   </>
                 ) : (
                   <Box w={'full'} h={'45px'} />
@@ -229,6 +280,7 @@ export function SidebarDetailed({ ...props }: any) {
                   noOfLines={9}
                   skeletonHeight="5"
                   isLoaded={!!tokenJson.attributes}
+                  mt={5}
                 >
                   {tokenJson.attributes.map(
                     ({

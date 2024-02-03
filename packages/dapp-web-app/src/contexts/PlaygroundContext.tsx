@@ -10,6 +10,7 @@ import {
 export interface GridItemProperties extends GridItemBaseProperties {
   isOpened: boolean
   isBlocked: boolean
+  id: number
 }
 
 export type GridItemState = {
@@ -33,6 +34,8 @@ const generateFullGridDefaultState = () => {
       const index = `${row}-${col}`
       grid[index] = {
         ...gridItemDefaultState,
+        id: col + row * GridSize,
+        // id: GridSize - col + row * GridSize - 1,
         index,
         row,
         col,

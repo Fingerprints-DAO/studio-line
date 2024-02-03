@@ -4,7 +4,8 @@ import { GridItemProperties } from 'contexts/MoveContext'
 import GridNumber from './GridNumber'
 import { Direction, GridSize } from 'types/grid'
 import { Arrow } from 'components/arrow/GridArrow'
-import { ArrowDirections, useHexColor } from 'components/arrow/utils'
+import { useHexColor } from 'components/arrow/utils'
+import { ArrowDirections } from 'types/movements'
 
 interface GridItemProps extends GridItemProperties {
   width: number
@@ -14,7 +15,7 @@ interface GridItemProps extends GridItemProperties {
   isMinted: boolean
   isAvailable: boolean
   isSelected: boolean
-  mintedItems: (string | null)[]
+  mintedItems: (string | undefined)[]
   toggleGridItem: (index: string) => void
 }
 
@@ -230,38 +231,6 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
               w={`${lineWidth * 2 - 8}px`}
               h={`${lineHeight * 2 - 8}px`}
             />
-            {/* {false && (
-              <>
-                <ChackraImage
-                  {...arrowsProps}
-                  src={`/${arrowImage}.svg`}
-                  hidden={hideLastColumnDown || hideFirstColumUp}
-                />
-                <ChackraImage
-                  {...arrowsProps}
-                  src={`/${arrowImage}.svg`}
-                  transform={'rotate(90deg)'}
-                />
-                <ChackraImage
-                  {...arrowsProps}
-                  src={`/${arrowImage}.svg`}
-                  transform={'rotate(180deg)'}
-                  hidden={hideLastColumUp || hideFirstColumnDown}
-                />
-                <ChackraImage
-                  {...arrowsProps}
-                  src={`/${arrowImage}-diagonal.svg`}
-                  transform={'rotate(0deg)'}
-                  hidden={hideLastColumnDown || hideFirstColumUp}
-                />
-                <ChackraImage
-                  {...arrowsProps}
-                  src={`/${arrowImage}-diagonal.svg`}
-                  transform={'rotate(90deg)'}
-                  hidden={hideLastColumUp || hideFirstColumnDown}
-                />
-              </>
-            )} */}
           </Box>
         </>
       )}

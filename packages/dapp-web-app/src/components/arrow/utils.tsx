@@ -1,12 +1,26 @@
 import { Box, useTheme } from '@chakra-ui/react'
 import { Direction } from 'types/grid'
+import { ArrowDirections, ArrowMoveDirections } from 'types/movements'
 
-export enum ArrowDirections {
-  CENTER = 'center',
-  LEFT = 'left',
-  RIGHT = 'right',
-  DIAGONAL_LEFT = 'diagonal-left',
-  DIAGONAL_RIGHT = 'diagonal-right',
+export function getSpecificArrowMoveDirection(
+  direction: Direction,
+  arrowDirection: ArrowDirections,
+) {
+  if (arrowDirection === ArrowDirections.LEFT) return ArrowMoveDirections.WEST
+  if (arrowDirection === ArrowDirections.RIGHT) return ArrowMoveDirections.EAST
+  if (arrowDirection === ArrowDirections.DIAGONAL_LEFT) {
+    if (direction === Direction.UP) return ArrowMoveDirections.NORTH_WEST
+    if (direction === Direction.DOWN) return ArrowMoveDirections.SOUTH_EAST
+  }
+  if (arrowDirection === ArrowDirections.DIAGONAL_RIGHT) {
+    if (direction === Direction.UP) return ArrowMoveDirections.NORTH_EAST
+    if (direction === Direction.DOWN) return ArrowMoveDirections.SOUTH_WEST
+  }
+  if (arrowDirection === ArrowDirections.CENTER) {
+    if (direction === Direction.UP) return ArrowMoveDirections.NORTH
+    if (direction === Direction.DOWN) return ArrowMoveDirections.SOUTH
+  }
+  return null
 }
 
 export type ArrowProps = React.ComponentProps<typeof Box> & {

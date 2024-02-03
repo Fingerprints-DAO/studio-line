@@ -3,8 +3,7 @@ import { Box, SimpleGrid } from '@chakra-ui/react'
 import MoveGridItem from './MoveGridItem'
 import useContainerSizes from 'hooks/useContainerSizes'
 import { useMoveContext } from 'contexts/MoveContext'
-import { Direction, GridItemsTotal, GridSize, GridSpace } from 'types/grid'
-import { ArrowDirections } from 'components/arrow/utils'
+import { GridItemsTotal, GridSize, GridSpace } from 'types/grid'
 
 const MoveGrid: React.FC = () => {
   const { ref, height, width } = useContainerSizes()
@@ -51,6 +50,7 @@ const MoveGrid: React.FC = () => {
         col = GridSize - col
       }
       const id = `${row}-${col}`
+      const mintedItem = mintedItems.find((minted) => minted?.index === id)
 
       items.push(
         <MoveGridItem
@@ -60,8 +60,8 @@ const MoveGrid: React.FC = () => {
           toggleGridItem={toggleSelectedItem}
           lineWidth={Math.round(itemWidth + gridSpaceX)}
           lineHeight={Math.round(itemHeight + GridSpace)}
-          mintedItems={mintedItems}
-          isMinted={mintedItems.includes(id)}
+          mintedItems={mintedItems.map((item) => item?.index)}
+          isMinted={!!mintedItem}
           isAvailable={myItems.includes(id)}
           isSelected={selectedGridItem?.index === id}
           {...gridItemsState[id]}

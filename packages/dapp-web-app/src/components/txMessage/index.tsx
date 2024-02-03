@@ -7,15 +7,17 @@ import { Address, useWaitForTransaction } from 'wagmi'
 type TxMessageProps = {
   hash?: Address
   error?: Error
+  successMessage?: string
 }
 
 const defaultTxData = {
   isLoading: false,
   isSuccess: false,
   isError: false,
+  successMessage: 'Tokens successfully minted!',
 }
 
-export const TxMessage = ({ hash, error }: TxMessageProps) => {
+export const TxMessage = ({ hash, error, successMessage }: TxMessageProps) => {
   const [txData, setTxData] = useState<{
     isLoading: Boolean
     isSuccess: Boolean
@@ -65,7 +67,7 @@ export const TxMessage = ({ hash, error }: TxMessageProps) => {
       {txData.isSuccess && (
         <Box bgColor={'green.500'} p={2} mt={2}>
           <Text fontSize={'md'} fontWeight={'bold'} color={'white'}>
-            Tokens successfully minted!
+            {successMessage}
           </Text>
         </Box>
       )}

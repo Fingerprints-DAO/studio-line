@@ -14,6 +14,7 @@ interface GridItemProps extends GridItemProperties {
   isHighlighted: boolean
   onlyHighlightedClick: boolean
   toggleGridItem: (index: string) => void
+  // id: number
 }
 
 const lineStyle = ({
@@ -59,6 +60,7 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   isHighlighted,
   toggleGridItem,
   onlyHighlightedClick,
+  // id,
 }) => {
   const [isFirstRow, isLastRow, isFirstCol, isLastCol] = [
     row === GridSize - 1,
@@ -192,7 +194,10 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
             w={'100%'}
             h={'100%'}
             zIndex={isBlocked || isOpened ? 0 : 1}
-          />
+            fontSize={'xx-small'}
+          >
+            {/* {id} */}
+          </Box>
         </Tooltip>
       </Box>
     </Box>
