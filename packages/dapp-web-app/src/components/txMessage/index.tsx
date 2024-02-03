@@ -17,7 +17,11 @@ const defaultTxData = {
   successMessage: 'Tokens successfully minted!',
 }
 
-export const TxMessage = ({ hash, error, successMessage }: TxMessageProps) => {
+export const TxMessage = ({
+  hash,
+  error,
+  successMessage = defaultTxData.successMessage,
+}: TxMessageProps) => {
   const [txData, setTxData] = useState<{
     isLoading: Boolean
     isSuccess: Boolean

@@ -7,6 +7,8 @@ import { useMoveContext } from 'contexts/MoveContext'
 import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
 import {
+  useLineCanMove,
+  useLineMaxSupply,
   useLineOwnerOf,
   useLineTokenUri,
   useLineWrite,
@@ -19,7 +21,10 @@ import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 import { GridSize } from 'types/grid'
 import { ArrowDirections, movementContractMap } from 'types/movements'
 import { TRAITS } from 'types/nft'
-import { getSpecificArrowMoveDirection } from 'components/arrow/utils'
+import {
+  getNextPoint,
+  getSpecificArrowMoveDirection,
+} from 'components/arrow/utils'
 import useMovePoint from 'hooks/useMovePoint'
 import { TxMessage } from 'components/txMessage'
 import { TransactionError } from 'types/transaction'
@@ -43,8 +48,13 @@ export function SidebarDetailed({ ...props }: any) {
     highlightGridItem,
     myItems,
     unavailableDirections,
+    toggleSelectedItem,
   } = useMoveContext()
   const [arrowHover, setArrowHover] = useState<ArrowDirections | undefined>()
+  const [nextPoint, setNextPoint] = useState<{
+    col: number | null
+    row: number | null
+  }>({ col: null, row: null })
   const [arrowSelected, setArrowSelected] = useState<
     ArrowDirections | undefined
   >()
@@ -75,27 +85,36 @@ export function SidebarDetailed({ ...props }: any) {
     return { attributes: [] }
   }, [tokenData?.data])
 
+  const tokenDirection = useMemo(() => {
+    if (!tokenJson) return ''
+    return (
+      tokenJson.attributes
+        .find((attr: any) => attr.trait_type === TRAITS.DIRECTION)
+        ?.value.toLowerCase() ?? ''
+    )
+  }, [tokenJson])
+
   const handleArrowMouseOver = (direction?: ArrowDirections) => {
     setArrowHover(direction)
   }
   const handleArrowOnClick = (direction: ArrowDirections) => {
+    if (!selectedGridItem) return
     setArrowSelected(direction)
+    const { row, col } = getNextPoint(
+      Number(selectedGridItem.col),
+      Number(selectedGridItem.row),
+      tokenDirection,
+      direction,
+    )
+    setNextPoint({ row, col })
   }
   const handleMove = () => {
-    const tokenDirection = tokenJson.attributes
-      .find((attr: any) => attr.trait_type === TRAITS.DIRECTION)
-      .value.toLowerCase()
     const pointDirection = getSpecificArrowMoveDirection(
       tokenDirection,
       arrowSelected!,
     )
+
     const moveFunction = getMoveFunction(pointDirection!)
-    // console.log(
-    //   'handleMove',
-    //   selectedGridItem?.id,
-    //   pointDirection,
-    //   pointDirection && movementContractMap[pointDirection],
-    // )
     moveFunction.write({
       args: [BigInt(selectedGridItem?.id || 0)],
     })
@@ -125,6 +144,13 @@ export function SidebarDetailed({ ...props }: any) {
     setArrowHover(undefined)
     setArrowSelected(undefined)
   }, [selectedGridItem])
+
+  useEffect(() => {
+    if (moveTx.isSuccess && !!arrowSelected) {
+      // toggleSelectedItem(`${nextPoint.row}-${nextPoint.col}`)
+      window.location.reload()
+    }
+  }, [arrowSelected, moveTx.isSuccess])
 
   return (
     <Box w={'100%'} {...props}>
@@ -244,7 +270,9 @@ export function SidebarDetailed({ ...props }: any) {
                           <Text fontSize={'xs'} fontWeight={'bold'}>
                             To
                           </Text>
-                          <Text fontSize={'xs'}>(10,18)</Text>
+                          <Text fontSize={'xs'}>
+                            ({nextPoint.col},{nextPoint.row})
+                          </Text>
                         </Box>
                       </Flex>
                     )}

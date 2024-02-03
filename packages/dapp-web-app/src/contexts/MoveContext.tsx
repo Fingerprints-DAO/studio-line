@@ -61,6 +61,7 @@ const MoveContext = createContext<{
   myItems: (string | null)[]
   mintedItems: ({ id: number; index: string } | null)[]
   toggleSelectedItem: (index: string) => void
+  resetSelection: () => void
   selectedGridItem?: {
     direction: Direction
   } & GridItemProperties
@@ -71,6 +72,7 @@ const MoveContext = createContext<{
   myItems: [],
   mintedItems: [],
   toggleSelectedItem: () => {},
+  resetSelection: () => {},
   selectedGridItem: undefined,
 })
 
@@ -135,7 +137,11 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
 
     setUnavailableDirections(unavailableDirections)
   }
-
+  const resetSelection = () => {
+    setSelectedGridItem(undefined)
+    setHighlightGridItem([])
+    setUnavailableDirections([])
+  }
   useEffect(() => {
     if (getGrid.data && getGrid.data.length > 0) {
       const transformedArray = getGrid.data
@@ -178,6 +184,7 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
         mintedItems,
         toggleSelectedItem,
         unavailableDirections,
+        resetSelection,
       }}
     >
       {children}
