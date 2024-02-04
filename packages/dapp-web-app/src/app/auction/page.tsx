@@ -1,15 +1,17 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box } from '@chakra-ui/react'
 import Auction from 'components/auction'
+import { useLineCanMove } from 'services/web3/generated'
 
 export default function AuctionPage() {
-  // const { chain } = useNetwork()
-  // if (chain?.id) {
-  //   getContractsDataForChainOrThrow(chain?.id).then((a) =>
-  //     console.log('log', a)
-  //   )
-  // }
+  const { data: canMove } = useLineCanMove({ watch: true })
+
+  useEffect(() => {
+    if (canMove) {
+      window.location.href = '/move'
+    }
+  }, [canMove])
 
   return (
     <Box as={'main'}>

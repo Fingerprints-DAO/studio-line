@@ -42,7 +42,7 @@ const generateFullGridDefaultState = () => {
       const index = `${row}-${col}`
       grid[index] = {
         ...gridItemDefaultState,
-        id: col + row * GridSize,
+        id: null,
         index,
         row,
         col,
@@ -62,6 +62,7 @@ const MoveContext = createContext<{
   mintedItems: ({ id: number; index: string } | null)[]
   toggleSelectedItem: (index: string) => void
   resetSelection: () => void
+  refreshAfterMove: () => void
   selectedGridItem?: {
     direction: Direction
   } & GridItemProperties
@@ -73,6 +74,7 @@ const MoveContext = createContext<{
   mintedItems: [],
   toggleSelectedItem: () => {},
   resetSelection: () => {},
+  refreshAfterMove: () => {},
   selectedGridItem: undefined,
 })
 
@@ -94,12 +96,12 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
   const ownedTokens = useLineTokensOfOwner({
     args: [address!],
     enabled: !!address,
+    watch: true,
   })
   const toggleSelectedItem = (index: string) => {
-    const [y, x] = index.split('-').map((n) => Number(n))
     setSelectedGridItem({
       ...gridItemsState[index],
-      id: getGrid.data ? Number(getGrid?.data[x][y]) : gridItemsState[index].id,
+      id: mintedItems.find((item) => item?.index === index)?.id ?? null,
     })
 
     const [row, col] = index.split('-').map((n) => Number(n))
@@ -142,13 +144,22 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
     setHighlightGridItem([])
     setUnavailableDirections([])
   }
+
+  const refreshAfterMove = () => {
+    getGrid.refetch()
+    ownedTokens.refetch()
+  }
+
   useEffect(() => {
     if (getGrid.data && getGrid.data.length > 0) {
       const transformedArray = getGrid.data
         .flatMap((row, rowIndex) =>
           row.map((value: bigint, colIndex) => {
             if (value > 0n) {
-              return { index: `${colIndex}-${rowIndex}`, id: Number(value) }
+              return {
+                index: `${GridSize - 1 - rowIndex}-${colIndex}`,
+                id: Number(value),
+              }
             }
             return null
           }),
@@ -185,6 +196,7 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
         toggleSelectedItem,
         unavailableDirections,
         resetSelection,
+        refreshAfterMove,
       }}
     >
       {children}

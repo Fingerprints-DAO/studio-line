@@ -103,7 +103,7 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
         .flatMap((row, rowIndex) =>
           row.map((value, colIndex) => {
             if (value > 0) {
-              return `${colIndex}-${rowIndex}`
+              return `${GridSize - 1 - rowIndex}-${colIndex}`
             }
             return null
           }),

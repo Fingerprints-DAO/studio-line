@@ -48,7 +48,8 @@ export function SidebarDetailed({ ...props }: any) {
     highlightGridItem,
     myItems,
     unavailableDirections,
-    toggleSelectedItem,
+    // toggleSelectedItem,
+    // refreshAfterMove,
   } = useMoveContext()
   const [arrowHover, setArrowHover] = useState<ArrowDirections | undefined>()
   const [nextPoint, setNextPoint] = useState<{
@@ -58,13 +59,16 @@ export function SidebarDetailed({ ...props }: any) {
   const [arrowSelected, setArrowSelected] = useState<
     ArrowDirections | undefined
   >()
+  // const [justMoved, setJustMoved] = useState(false)
   const tokenData = useLineTokenUri({
-    args: [BigInt(selectedGridItem?.id || 0)],
-    enabled: !!selectedGridItem,
+    args: [BigInt(selectedGridItem?.id ?? 0)],
+    watch: true,
+    enabled: !!selectedGridItem?.id,
   })
   const tokenOwner = useLineOwnerOf({
-    args: [BigInt(selectedGridItem?.id || 0)],
-    enabled: !!selectedGridItem,
+    args: [BigInt(selectedGridItem?.id ?? 0)],
+    watch: true,
+    enabled: !!selectedGridItem?.id,
   })
   const { getMoveFunction, getCurrentMoveToCall } = useMovePoint()
   const moveTx = useWaitForTransaction({
@@ -77,6 +81,7 @@ export function SidebarDetailed({ ...props }: any) {
     try {
       if (tokenData?.data) {
         const json = atob(tokenData?.data.substring(29))
+        console.log(json)
         return JSON.parse(json)
       }
     } catch (error) {
@@ -143,14 +148,33 @@ export function SidebarDetailed({ ...props }: any) {
   useEffect(() => {
     setArrowHover(undefined)
     setArrowSelected(undefined)
+    setNextPoint({ col: null, row: null })
+    setArrowHover(undefined)
+    setArrowSelected(undefined)
   }, [selectedGridItem])
 
   useEffect(() => {
-    if (moveTx.isSuccess && !!arrowSelected) {
+    if (
+      moveTx.isSuccess &&
+      !!arrowSelected
+      // !!nextPoint.col &&
+      // !!nextPoint.row &&
+      // !justMoved
+    ) {
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
+      // refreshAfterMove()
       // toggleSelectedItem(`${nextPoint.row}-${nextPoint.col}`)
-      window.location.reload()
+      // setJustMoved(true)
     }
   }, [arrowSelected, moveTx.isSuccess])
+
+  // useEffect(() => {
+  //   if (moveTx.isFetching) setJustMoved(false)
+  // }, [moveTx.isFetching])
+
+  // useEffect(() => {}, [arrowSelected, moveTx.isSuccess, refreshAfterMove])
 
   return (
     <Box w={'100%'} {...props}>
@@ -297,7 +321,7 @@ export function SidebarDetailed({ ...props }: any) {
                     <TxMessage
                       hash={getCurrentMoveToCall().data?.hash}
                       error={getCurrentMoveToCall().error as TransactionError}
-                      successMessage="Token moved successfully!"
+                      successMessage="Token moved successfully! Reloading the page..."
                     />
                   </>
                 ) : (
