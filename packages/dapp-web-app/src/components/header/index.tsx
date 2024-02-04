@@ -17,22 +17,38 @@ import Wallet from 'components/wallet'
 import Link from 'next/link'
 // import useMediaQuery from 'hooks/use-media-query'
 import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useLineCanMove } from 'services/web3/generated'
 // import Grid from 'components/grid'
 // import Wallet from 'components/wallet'
 // import { isAfterStage, PageState } from 'utils/currentStage'
 
 // let nav = isAfterStage(PageState.Released) ? [{ href: '/auction', label: 'auction' }] : []
-const nav = [
+const navLinks = [
   { href: '/', label: 'playground' },
-  { href: '/auction', label: 'auction' },
-  // { href: '/move', label: 'tokens' },
+  { href: '/move', label: '' },
   { href: '/about', label: 'about' },
 ]
 
 const Header = () => {
   const pathname = usePathname()
+  const [nav, setNav] = useState(navLinks)
+  const { data: canMove, isSuccess: isCanMoveSuccess } = useLineCanMove({
+    watch: true,
+  })
   // const { isOpen, onOpen, onClose } = useDisclosure()
   // const [isMobile] = useMediaQuery('(max-width: 767px)')
+
+  useEffect(() => {
+    if (!isCanMoveSuccess) return
+    const newNav = [...navLinks]
+    if (!canMove) {
+      newNav[1] = { href: '/auction', label: 'auction' }
+    } else {
+      newNav[1].label = 'tokens'
+    }
+    setNav(newNav)
+  }, [canMove, isCanMoveSuccess])
 
   return (
     <Grid
@@ -57,6 +73,7 @@ const Header = () => {
         >
           {nav.map((item, index) => {
             const isActive = pathname === item.href
+            if (item.label === '') return
 
             return (
               <Box

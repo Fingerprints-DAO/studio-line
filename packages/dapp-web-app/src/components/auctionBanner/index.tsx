@@ -2,6 +2,7 @@ import { Box, Text, Link as ChakraLink, Button, Flex } from '@chakra-ui/react'
 import { useAuctionContext } from 'contexts/AuctionContext'
 import dayjs from 'dayjs'
 import Link from 'next/link'
+import { useLineCanMove } from 'services/web3/generated'
 import { AuctionState } from 'types/auction'
 import { formatEther } from 'viem'
 
@@ -9,6 +10,11 @@ export function AuctionBanner({ displayMintNow = false }) {
   const { startTime, startPrice, endPrice, maxSupply, auctionState } =
     useAuctionContext()
   const startDate = dayjs.unix(Number(startTime))
+  const { data: canMove, isSuccess: isCanMoveSuccess } = useLineCanMove({
+    watch: true,
+  })
+
+  if (!isCanMoveSuccess || canMove) return null
 
   if (
     auctionState === AuctionState.STARTED ||
