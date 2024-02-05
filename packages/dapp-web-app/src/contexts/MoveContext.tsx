@@ -1,11 +1,16 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
-import { useLineGetGrid, useLineTokensOfOwner } from 'services/web3/generated'
+import {
+  useLineGetGrid,
+  useLineGetTokens,
+  useLineTokensOfOwner,
+} from 'services/web3/generated'
 import {
   Direction,
   GridItemBaseProperties,
   GridSize,
   generateImage,
   getDirection,
+  handleDirectionFromContract,
 } from 'types/grid'
 import { ArrowDirections } from 'types/movements'
 import { useAccount } from 'wagmi'
@@ -91,6 +96,10 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
     ({ id: number; index: string } | null)[]
   >([])
   const [selectedGridItem, setSelectedGridItem] = useState<GridItemProperties>()
+  const [tokensDirection, setTokensDirection] = useState<Record<string, any>>(
+    [],
+  )
+  const [tokensDiretionHandled, setTokensDirectionHandled] = useState(false)
   const { address } = useAccount()
   const getGrid = useLineGetGrid({ watch: true })
   const ownedTokens = useLineTokensOfOwner({
@@ -98,12 +107,13 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
     enabled: !!address,
     watch: true,
   })
+  const getTokens = useLineGetTokens()
+
   const toggleSelectedItem = (index: string) => {
     setSelectedGridItem({
       ...gridItemsState[index],
       id: mintedItems.find((item) => item?.index === index)?.id ?? null,
     })
-
     const [row, col] = index.split('-').map((n) => Number(n))
     const nextRow =
       gridItemsState[index].direction !== Direction.UP ? row - 1 : row + 1
@@ -183,6 +193,45 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     setGridItemsState(generateFullGridDefaultState())
   }, [])
+
+  useEffect(() => {
+    if (getTokens.isSuccess) {
+      const handledGetTokens: Record<string, any> =
+        getTokens.data?.reduce(
+          (acc, item) => ({
+            ...acc,
+            [item.current.y + '-' + item.current.x]: item,
+          }),
+          {},
+        ) ?? {}
+      setTokensDirection(handledGetTokens)
+      setTokensDirectionHandled(false)
+    }
+  }, [getTokens.data, getTokens.isSuccess])
+
+  useEffect(() => {
+    const gridItemStateValues = Object.values(gridItemsState)
+    if (
+      !tokensDiretionHandled &&
+      tokensDirection &&
+      gridItemStateValues.length > 0
+    ) {
+      const newGrid = gridItemStateValues.reduce((acc, item) => {
+        if (!tokensDirection[item.index]) return { ...acc, [item.index]: item }
+        return {
+          ...acc,
+          [item.index]: {
+            ...item,
+            direction: handleDirectionFromContract(
+              tokensDirection[item.index]?.direction,
+            ),
+          },
+        }
+      }, {})
+      setGridItemsState(newGrid)
+      setTokensDirectionHandled(true)
+    }
+  }, [gridItemsState, tokensDirection, tokensDiretionHandled])
 
   // console.log(myItems, mintedItems)
   return (

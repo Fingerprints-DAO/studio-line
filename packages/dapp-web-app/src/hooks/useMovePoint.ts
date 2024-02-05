@@ -32,10 +32,10 @@ function useMovePoint() {
     [ArrowMoveDirections.SOUTH]: moveSouth,
     [ArrowMoveDirections.EAST]: moveEast,
     [ArrowMoveDirections.WEST]: moveWest,
-    [ArrowMoveDirections.NORTH_EAST]: moveNorthwest,
-    [ArrowMoveDirections.NORTH_WEST]: moveNortheast,
-    [ArrowMoveDirections.SOUTH_EAST]: moveSouthwest,
-    [ArrowMoveDirections.SOUTH_WEST]: moveSoutheast,
+    [ArrowMoveDirections.NORTH_EAST]: moveNortheast,
+    [ArrowMoveDirections.NORTH_WEST]: moveNorthwest,
+    [ArrowMoveDirections.SOUTH_EAST]: moveSoutheast,
+    [ArrowMoveDirections.SOUTH_WEST]: moveSouthwest,
   }
 
   const getMoveFunction = (moveTo: ArrowMoveDirections) => {

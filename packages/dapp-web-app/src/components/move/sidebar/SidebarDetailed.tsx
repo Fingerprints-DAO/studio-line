@@ -48,8 +48,6 @@ export function SidebarDetailed({ ...props }: any) {
     highlightGridItem,
     myItems,
     unavailableDirections,
-    // toggleSelectedItem,
-    // refreshAfterMove,
   } = useMoveContext()
   const [arrowHover, setArrowHover] = useState<ArrowDirections | undefined>()
   const [nextPoint, setNextPoint] = useState<{
@@ -59,7 +57,6 @@ export function SidebarDetailed({ ...props }: any) {
   const [arrowSelected, setArrowSelected] = useState<
     ArrowDirections | undefined
   >()
-  // const [justMoved, setJustMoved] = useState(false)
   const tokenData = useLineTokenUri({
     args: [BigInt(selectedGridItem?.id ?? 0)],
     watch: true,
@@ -81,7 +78,6 @@ export function SidebarDetailed({ ...props }: any) {
     try {
       if (tokenData?.data) {
         const json = atob(tokenData?.data.substring(29))
-        console.log(json)
         return JSON.parse(json)
       }
     } catch (error) {
@@ -154,27 +150,12 @@ export function SidebarDetailed({ ...props }: any) {
   }, [selectedGridItem])
 
   useEffect(() => {
-    if (
-      moveTx.isSuccess &&
-      !!arrowSelected
-      // !!nextPoint.col &&
-      // !!nextPoint.row &&
-      // !justMoved
-    ) {
+    if (moveTx.isSuccess && !!arrowSelected) {
       setTimeout(() => {
         window.location.reload()
-      }, 1000)
-      // refreshAfterMove()
-      // toggleSelectedItem(`${nextPoint.row}-${nextPoint.col}`)
-      // setJustMoved(true)
+      }, 500)
     }
   }, [arrowSelected, moveTx.isSuccess])
-
-  // useEffect(() => {
-  //   if (moveTx.isFetching) setJustMoved(false)
-  // }, [moveTx.isFetching])
-
-  // useEffect(() => {}, [arrowSelected, moveTx.isSuccess, refreshAfterMove])
 
   return (
     <Box w={'100%'} {...props}>

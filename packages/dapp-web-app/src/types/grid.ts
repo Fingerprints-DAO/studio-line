@@ -8,6 +8,12 @@ export enum Direction {
   ALL = 'all',
 }
 
+export function handleDirectionFromContract(direction: number): Direction {
+  if (direction === 0) return Direction.UP
+  if (direction === 1) return Direction.DOWN
+  return Direction.ALL
+}
+
 export function getDirection(row: number): Direction {
   return row >= 13 ? Direction.DOWN : Direction.UP
 }

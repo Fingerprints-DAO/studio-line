@@ -29,21 +29,19 @@ export function getNextPoint(
   direction: Direction,
   arrowDirection: ArrowDirections,
 ) {
-  if (arrowDirection === ArrowDirections.LEFT)
-    return { col: col - 1, row: row + 0 }
-  if (arrowDirection === ArrowDirections.RIGHT)
-    return { col: col + 1, row: row + 0 }
+  if (arrowDirection === ArrowDirections.LEFT) return { col: col - 1, row }
+  if (arrowDirection === ArrowDirections.RIGHT) return { col: col + 1, row }
   if (arrowDirection === ArrowDirections.DIAGONAL_LEFT) {
-    if (direction === Direction.UP) return { col: col - 1, row: row - 1 }
-    if (direction === Direction.DOWN) return { col: col - 1, row: row + 1 }
+    if (direction === Direction.UP) return { col: col - 1, row: row + 1 }
+    if (direction === Direction.DOWN) return { col: col - 1, row: row - 1 }
   }
   if (arrowDirection === ArrowDirections.DIAGONAL_RIGHT) {
-    if (direction === Direction.UP) return { col: col + 1, row: row - 1 }
-    if (direction === Direction.DOWN) return { col: col + 1, row: row + 1 }
+    if (direction === Direction.UP) return { col: col + 1, row: row + 1 }
+    if (direction === Direction.DOWN) return { col: col + 1, row: row - 1 }
   }
   if (arrowDirection === ArrowDirections.CENTER) {
-    if (direction === Direction.UP) return { col: col + 0, row: row - 1 }
-    if (direction === Direction.DOWN) return { col: col + 0, row: row + 1 }
+    if (direction === Direction.UP) return { col, row: row + 1 }
+    if (direction === Direction.DOWN) return { col, row: row - 1 }
   }
   return { col: null, row: null }
 }
