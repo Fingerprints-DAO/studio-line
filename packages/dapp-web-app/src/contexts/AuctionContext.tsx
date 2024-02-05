@@ -16,7 +16,7 @@ import {
 } from 'services/web3/generated'
 import { AuctionConfig, AuctionData, AuctionState } from 'types/auction'
 
-const AuctionContext = createContext<
+export const AuctionContext = createContext<
   AuctionConfig &
     AuctionData & {
       auctionState: AuctionState
