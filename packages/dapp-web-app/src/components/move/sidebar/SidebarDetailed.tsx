@@ -29,6 +29,7 @@ import useMovePoint from 'hooks/useMovePoint'
 import { TxMessage } from 'components/txMessage'
 import { TransactionError } from 'types/transaction'
 import { useWaitForTransaction } from 'wagmi'
+import { useDisplayConfig } from 'hooks/useDisplayConfig'
 
 const TextLine = ({ children, title = '', ...props }: any) => (
   <Text fontSize={'md'} color={'gray.500'} mb={1} {...props}>

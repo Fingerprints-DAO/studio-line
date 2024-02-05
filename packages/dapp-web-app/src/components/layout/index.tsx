@@ -22,6 +22,7 @@ import { GiHamburgerMenu } from 'react-icons/gi'
 import Header from 'components/header'
 import Footer from 'components/footer'
 import { AuctionProvider } from 'contexts/AuctionContext'
+import { useDisplayConfig } from 'hooks/useDisplayConfig'
 
 export default function Layout({
   children,
@@ -39,30 +40,23 @@ export default function Layout({
     onOpen: navOnOpen,
     onClose: navOnClose,
   } = useDisclosure()
-  const [isLargerThan1280, isDisplayingInBrowser] = useMediaQuery(
-    ['(min-width: 1280px)', '(display-mode: browser)'],
-    {
-      ssr: true,
-      fallback: true, // return false on the server, and re-evaluate on the client side
-    },
-  )
+  const { isRegularScreen, isMediumScreen } = useDisplayConfig()
+
   const renderSidebars = () => (
     <>
-      {isLargerThan1280 && (
+      {isRegularScreen && (
         <VStack
           bg="white"
           px={4}
           alignItems="stretch"
           maxH={'100vh'}
           minW={'30vw'}
-          // w={'50vw'}
           pos={'relative'}
           flex={4}
         >
           <Header />
           <Flex
             height={'100%'}
-            // w={'100%'}
             overflow={'auto'}
             flexDir={'column'}
             justifyContent={'space-between'}
@@ -76,14 +70,13 @@ export default function Layout({
           </Flex>
         </VStack>
       )}
-      {!isLargerThan1280 && (
+      {isMediumScreen && (
         <>
           <VStack
             bg="white"
             px={4}
             alignItems="stretch"
             maxH={'100vh'}
-            // w={'10vw'}
             w={'44px'}
             pos={'relative'}
             flex={1}
@@ -148,9 +141,9 @@ export default function Layout({
           h={'95vh'}
           // flexShrink={0}
           // w={isLargerThan1280 ? '50vw' : '90vw'}
-          maxW={isLargerThan1280 ? 'none' : 'calc(100vw - 44px)'}
+          maxW={isRegularScreen ? 'none' : 'calc(100vw - 44px)'}
           justifyContent={'center'}
-          flex={isLargerThan1280 ? 6 : 9}
+          flex={isRegularScreen ? 6 : 9}
         >
           {children}
         </Flex>

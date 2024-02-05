@@ -1,11 +1,13 @@
-import React, { useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { Box, SimpleGrid } from '@chakra-ui/react'
 import MoveGridItem from './MoveGridItem'
 import useContainerSizes from 'hooks/useContainerSizes'
 import { useMoveContext } from 'contexts/MoveContext'
 import { GridItemsTotal, GridSize, GridSpace } from 'types/grid'
 
-const MoveGrid: React.FC = () => {
+type MoveGridProps = {}
+
+const MoveGrid: React.FC<MoveGridProps> = ({}) => {
   const { ref, height, width } = useContainerSizes()
   const {
     gridItemsState,

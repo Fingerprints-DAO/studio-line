@@ -18,7 +18,6 @@ import { SidebarDetailed } from '../sidebar/SidebarDetailed'
 import { useTokensContext } from 'contexts/TokensContext'
 
 export function SidebarNav() {
-  const { selectedItems } = useTokensContext()
   const {
     isOpen: sidebarIsOpen,
     onOpen: sidebarOnOpen,
