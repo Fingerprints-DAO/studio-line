@@ -24,7 +24,7 @@ const TextLine = ({ children, title = '', ...props }: any) => (
   </Text>
 )
 
-export function SidebarDetailed({ ...props }: any) {
+export function SidebarDetailed({ isDrawer = false, ...props }: any) {
   const {
     lastSelectedGridItem,
     resetGrid,
@@ -57,7 +57,7 @@ export function SidebarDetailed({ ...props }: any) {
           </Text>
         </>
       )}
-      {lastSelectedGridItem && (
+      {lastSelectedGridItem && !isDrawer && (
         <Button variant={'outline'} my={4} onClick={resetGrid}>
           Reset playground
         </Button>

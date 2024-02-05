@@ -30,7 +30,7 @@ const navLinks = [
   { href: '/about', label: 'about' },
 ]
 
-const Header = () => {
+const Header = ({ isDrawer = false }) => {
   const pathname = usePathname()
   const [nav, setNav] = useState(navLinks)
   const { data: canMove, isSuccess: isCanMoveSuccess } = useLineCanMove({
@@ -57,18 +57,21 @@ const Header = () => {
       pb={4}
       position="relative"
       zIndex={1}
-      justifyContent={'right'}
+      justifyContent={isDrawer ? 'center' : 'right'}
+      my={isDrawer ? 8 : 0}
       pos={'absolute'}
       bgColor={'white'}
       right={4}
       left={0}
     >
-      <GridItem colSpan={{ base: 2, sm: 4, md: 10 }}>
+      <GridItem colSpan={isDrawer ? 1 : 10}>
         <Flex
           as="nav"
           display="flex"
+          flexDir={isDrawer ? 'column' : 'row'}
           alignItems="center"
           justifyContent="flex-start"
+          gap={isDrawer ? 6 : 0}
           h="full"
         >
           {nav.map((item, index) => {
@@ -95,7 +98,7 @@ const Header = () => {
               </Box>
             )
           })}
-          <Wallet ml={6} />
+          <Wallet ml={6} isDrawer={isDrawer} />
         </Flex>
       </GridItem>
     </Grid>

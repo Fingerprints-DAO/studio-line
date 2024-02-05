@@ -4,22 +4,26 @@ import { BsTwitter } from 'react-icons/bs'
 import { SiOpensea } from 'react-icons/si'
 import { Link } from '@chakra-ui/react'
 
-const Footer = () => {
+const Footer = ({ isDrawer = false }) => {
   return (
-    <Box as="footer" pb={0} pt={8}>
+    <Box
+      as="footer"
+      pb={0}
+      pt={isDrawer ? 0 : 8}
+      w={isDrawer ? '100%' : 'auto'}
+    >
       <Flex flexDir={'column'} mx="auto">
-        <Flex flexDir={['row']} justifyContent={['space-between']}>
-          <Box>
+        <Flex
+          flexDir={isDrawer ? 'column-reverse' : 'row'}
+          justifyContent={isDrawer ? 'center' : 'space-between'}
+          alignItems={isDrawer ? 'center' : 'stretch'}
+          gap={isDrawer ? 2 : 0}
+        >
+          <Box textAlign={isDrawer ? 'center' : 'left'}>
             <Text fontWeight={'bold'} fontSize={'md'}>
               By Figure31 & Fingerprints DAO
             </Text>{' '}
-            <Text
-              align={['center', 'center', 'left']}
-              fontSize="xs"
-              flex={1}
-              mb={[2, 0]}
-              mt={2}
-            >
+            <Text fontSize="xs" flex={1} mb={[2, 0]} mt={2}>
               Developed by{' '}
               <Text
                 as="a"
