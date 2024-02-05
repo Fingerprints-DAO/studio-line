@@ -42,28 +42,13 @@ export default function Layout({
     onClose: sidebarOnClose,
   } = useDisclosure()
   const btnRef = useRef()
-  const [gridProps, setGridProps] = React.useState({})
   const [isLargerThan1280, isDisplayingInBrowser] = useMediaQuery(
     ['(min-width: 1280px)', '(display-mode: browser)'],
     {
       ssr: true,
-      fallback: false, // return false on the server, and re-evaluate on the client side
+      fallback: true, // return false on the server, and re-evaluate on the client side
     },
   )
-
-  useEffect(() => {
-    if (!isLargerThan1280) {
-      setGridProps({
-        w: '90vw',
-        justifyContent: 'center',
-      })
-    } else {
-      setGridProps({
-        w: '50vw',
-        justifyContent: 'right',
-      })
-    }
-  }, [isLargerThan1280])
 
   return (
     <Container maxW={'8xl'}>
@@ -73,8 +58,11 @@ export default function Layout({
           mt={'1vh'}
           bgColor={'white'}
           h={'95vh'}
-          flexShrink={0}
-          {...gridProps}
+          // flexShrink={0}
+          // w={isLargerThan1280 ? '50vw' : '90vw'}
+          maxW={isLargerThan1280 ? 'none' : 'calc(100vw - 44px)'}
+          justifyContent={'center'}
+          flex={isLargerThan1280 ? 6 : 9}
         >
           {children}
         </Flex>
@@ -85,8 +73,9 @@ export default function Layout({
             alignItems="stretch"
             maxH={'100vh'}
             minW={'30vw'}
-            w={'50vw'}
+            // w={'50vw'}
             pos={'relative'}
+            flex={4}
           >
             <Header />
             <Flex
@@ -111,9 +100,10 @@ export default function Layout({
             px={4}
             alignItems="stretch"
             maxH={'100vh'}
-            w={'10vw'}
-            minW={'44px'}
+            // w={'10vw'}
+            w={'44px'}
             pos={'relative'}
+            flex={1}
           >
             <Flex
               height={'100%'}
