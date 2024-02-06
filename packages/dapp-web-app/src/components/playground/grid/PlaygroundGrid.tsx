@@ -4,32 +4,16 @@ import PlaygroundGridItem from './PlaygroundGridItem'
 import useContainerSizes from 'hooks/useContainerSizes'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 import { GridItemsTotal, GridSize, GridSpace } from 'types/grid'
+import useGridSizes from 'hooks/useGridSizes'
 
 const PlaygroundGrid: React.FC = () => {
-  const { ref, height, width } = useContainerSizes()
+  const { ref, height, itemHeight, itemWidth, gridSpaceX } = useGridSizes()
   const {
     gridItemsState,
     toggleGridItem,
     highlightGridItem,
     lastSelectedGridItem,
   } = usePlaygroundContext()
-  // console.log(height, width)
-
-  const { itemHeight, itemWidth, gridSpaceX } = useMemo(() => {
-    const totalSpacing = GridSize * GridSpace
-    const availableHeight =
-      height < width ? height - totalSpacing : width - totalSpacing
-    const calculatedItemHeight = availableHeight / GridSize
-    const calculatedItemWidth = calculatedItemHeight / (3 / 2)
-    const calculatedGridSpaceX =
-      (width - Math.round(calculatedItemWidth) * (GridSize - 1)) /
-      (GridSize - 1)
-    return {
-      itemHeight: calculatedItemHeight,
-      itemWidth: calculatedItemWidth,
-      gridSpaceX: calculatedGridSpaceX,
-    }
-  }, [height, width])
 
   const gridItems = useMemo(() => {
     const items = []

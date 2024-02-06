@@ -4,11 +4,12 @@ import MoveGridItem from './MoveGridItem'
 import useContainerSizes from 'hooks/useContainerSizes'
 import { useMoveContext } from 'contexts/MoveContext'
 import { GridItemsTotal, GridSize, GridSpace } from 'types/grid'
+import useGridSizes from 'hooks/useGridSizes'
 
 type MoveGridProps = {}
 
 const MoveGrid: React.FC<MoveGridProps> = ({}) => {
-  const { ref, height, width } = useContainerSizes()
+  const { ref, height, itemHeight, itemWidth, gridSpaceX } = useGridSizes()
   const {
     gridItemsState,
     toggleSelectedItem,
@@ -16,28 +17,6 @@ const MoveGrid: React.FC<MoveGridProps> = ({}) => {
     myItems,
     selectedGridItem,
   } = useMoveContext()
-  const gridSquareSize = useMemo(() => {
-    // return the smallest size between width and height
-    if (width < height) {
-      return width
-    }
-    return height
-  }, [height, width])
-
-  const { itemHeight, itemWidth, gridSpaceX } = useMemo(() => {
-    const totalSpacing = GridSize * GridSpace
-    const availableHeight = gridSquareSize - totalSpacing
-    const calculatedItemHeight = availableHeight / GridSize
-    const calculatedItemWidth = calculatedItemHeight / (3 / 2)
-    const calculatedGridSpaceX =
-      (gridSquareSize - Math.round(calculatedItemWidth) * (GridSize - 1)) /
-      (GridSize - 1)
-    return {
-      itemHeight: calculatedItemHeight,
-      itemWidth: calculatedItemWidth,
-      gridSpaceX: calculatedGridSpaceX,
-    }
-  }, [gridSquareSize])
 
   const gridItems = useMemo(() => {
     const items = []

@@ -198,18 +198,6 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
                 transform={'translate(-50%, -50%)'}
                 zIndex={4}
               />
-              {/* central point: small circle box in the middle of the grid item */}
-              <Box
-                pos={'absolute'}
-                top={'50%'}
-                left={'50%'}
-                w={'7px'}
-                h={'7px'}
-                borderRadius={'full'}
-                transform={'translate(-50%, -50%)'}
-                bgColor={bgColor}
-                zIndex={3}
-              />
             </Box>
           </Tooltip>
           <Box
@@ -219,6 +207,8 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
             left={'50%'}
             top={'50%'}
             transform={`translate(-50%, -50%)`}
+            ml={'-0.5px'}
+            mb={'-0.5px'}
             zIndex={1}
           >
             <Arrow
@@ -228,6 +218,7 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
               isAvailable={isAvailable}
               disableArrows={disableArrows}
               hideArrows={hideArrows}
+              displayCircle
               w={`${lineWidth * 2 - 8}px`}
               h={`${lineHeight * 2 - 8}px`}
             />

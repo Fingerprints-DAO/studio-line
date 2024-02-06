@@ -42,10 +42,11 @@ export function SidebarNav() {
         <IconButton
           variant="outline"
           aria-label="Open mint details"
-          icon={<BsCart3 />}
+          icon={<BsCart3 size={'12px'} />}
           onClick={sidebarOnOpen}
-          w="44px"
-          h="44px"
+          minW={'auto'}
+          w={{ base: '30px', md: '44px' }}
+          h={{ base: '30px', md: '44px' }}
         />
       </Tooltip>
       <Drawer
