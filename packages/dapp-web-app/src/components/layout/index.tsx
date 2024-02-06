@@ -1,22 +1,18 @@
 'use client'
 
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 import {
-  Button,
   Container,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
   Flex,
   IconButton,
-  Input,
   VStack,
   useDisclosure,
-  useMediaQuery,
 } from '@chakra-ui/react'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import Header from 'components/header'
