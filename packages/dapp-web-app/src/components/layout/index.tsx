@@ -1,24 +1,12 @@
 'use client'
 
 import React from 'react'
-import {
-  Container,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerFooter,
-  DrawerOverlay,
-  Flex,
-  IconButton,
-  VStack,
-  useDisclosure,
-} from '@chakra-ui/react'
-import { GiHamburgerMenu } from 'react-icons/gi'
+import { Container, Flex, VStack } from '@chakra-ui/react'
 import Header from 'components/header'
 import Footer from 'components/footer'
 import { AuctionProvider } from 'contexts/AuctionContext'
 import { useDisplayConfig } from 'hooks/useDisplayConfig'
+import SidebarIcons from 'components/sidebarIcons'
 
 export default function Layout({
   children,
@@ -31,11 +19,6 @@ export default function Layout({
   sidebarIcons?: React.ReactNode
   sidebarProvider?: typeof AuctionProvider
 }) {
-  const {
-    isOpen: navIsOpen,
-    onOpen: navOnOpen,
-    onClose: navOnClose,
-  } = useDisclosure()
   const { isRegularScreen, isMediumScreen } = useDisplayConfig()
 
   const renderSidebars = () => (
@@ -66,59 +49,7 @@ export default function Layout({
           </Flex>
         </VStack>
       )}
-      {isMediumScreen && (
-        <>
-          <VStack
-            bg="white"
-            // px={4}
-            // alignItems="stretch"
-            maxH={'100%'}
-            minW={{ base: '30px', md: '44px' }}
-            pos={'relative'}
-            flex={0}
-            alignItems={'flex-end'}
-          >
-            <Flex
-              height={'100%'}
-              overflow={'auto'}
-              flexDir={'column'}
-              mt={'16px'}
-              w={'100%'}
-              gap={4}
-            >
-              <IconButton
-                variant="outline"
-                aria-label="Open Navbar"
-                icon={<GiHamburgerMenu size={'12px'} />}
-                onClick={navOnOpen}
-                minW={'auto'}
-                w={{ base: '30px', md: '44px' }}
-                h={{ base: '30px', md: '44px' }}
-              />
-              {sidebarIcons}
-            </Flex>
-          </VStack>
-          {/* NAVBAR */}
-          <Drawer
-            isOpen={navIsOpen}
-            placement="right"
-            onClose={navOnClose}
-            size={'md'}
-          >
-            <DrawerOverlay />
-            <DrawerContent>
-              <DrawerCloseButton rounded={'0'} textColor={'black'} />
-              <DrawerBody>
-                <Header isDrawer />
-              </DrawerBody>
-
-              <DrawerFooter as={'div'}>
-                <Footer isDrawer />
-              </DrawerFooter>
-            </DrawerContent>
-          </Drawer>
-        </>
-      )}
+      {isMediumScreen && <SidebarIcons additionalNav={sidebarIcons} />}
     </>
   )
 

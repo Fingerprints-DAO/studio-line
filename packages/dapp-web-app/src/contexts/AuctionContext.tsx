@@ -9,6 +9,7 @@ import React, {
 import useAuctionGetConfig from 'services/web3/auction/use-auction-get-config'
 import useAuctionData from 'services/web3/auction/use-auction-get-data'
 import {
+  useLineCanMove,
   useLineConfig,
   useLineCurrentTokenId,
   useLineGetCurrentPrice,
@@ -67,6 +68,7 @@ export const AuctionProvider = ({
   children: React.ReactNode
 }) => {
   const { data: config } = useLineConfig()
+  const { data: canMove } = useLineCanMove()
   const { data: price = 0n } = useLineGetCurrentPrice({ watch: true })
   const { data: currentTokenId = 1n } = useLineCurrentTokenId({
     watch: true,
@@ -83,6 +85,11 @@ export const AuctionProvider = ({
 
   useEffect(() => {
     const checkAndUpdateState = () => {
+      if (canMove) {
+        setAuctionState(AuctionState.ENDED)
+        return
+      }
+
       const now = dayjs().unix()
       const ONE_MINUTE = 60 // in seconds
 
@@ -107,10 +114,8 @@ export const AuctionProvider = ({
     intervalRef.current = setInterval(checkAndUpdateState, 30000)
     checkAndUpdateState()
 
-    checkAndUpdateState()
-
     return () => clearInterval(intervalRef.current!)
-  }, [startTime, endTime])
+  }, [startTime, endTime, canMove])
 
   return (
     <AuctionContext.Provider

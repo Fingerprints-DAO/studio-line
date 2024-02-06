@@ -4,9 +4,13 @@ import React from 'react'
 import { Box, Container, Flex, Text, VStack } from '@chakra-ui/react'
 import Header from 'components/header'
 import Footer from 'components/footer'
+import { useDisplayConfig } from 'hooks/useDisplayConfig'
 import questions from './_questions'
+import SidebarIcons from 'components/sidebarIcons'
 
 export default function About() {
+  const { isRegularScreen, isMediumScreen } = useDisplayConfig()
+
   return (
     <Container maxW={'6xl'}>
       <Flex pos={'relative'} justifyContent={'center'}>
@@ -18,8 +22,13 @@ export default function About() {
           w={'100vw'}
           pos={'relative'}
         >
-          <Header />
-          <Box as={'main'} mt={'92px'} textColor={'gray.500'}>
+          {isRegularScreen && <Header />}
+          {isMediumScreen && <SidebarIcons alignItems={'flex-end'} />}
+          <Box
+            as={'main'}
+            mt={isRegularScreen ? '92px' : '0'}
+            textColor={'gray.500'}
+          >
             <Text as={'h1'} fontSize={'3xl'} textColor={'gray.700'} mb={10}>
               About Line
             </Text>

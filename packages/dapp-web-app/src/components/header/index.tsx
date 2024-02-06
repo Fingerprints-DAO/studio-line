@@ -59,7 +59,7 @@ const Header = ({ isDrawer = false }) => {
       zIndex={1}
       justifyContent={isDrawer ? 'center' : 'right'}
       my={isDrawer ? 8 : 0}
-      pos={'absolute'}
+      pos={isDrawer ? 'static' : 'absolute'}
       bgColor={'white'}
       right={4}
       left={0}

@@ -11,7 +11,11 @@ import { SidebarNav } from './sidebarNav'
 export default function Playground() {
   return (
     <PlaygroundProvider>
-      <Layout sidebar={<SidebarDetailed />} sidebarIcons={<SidebarNav />}>
+      <Layout
+        sidebar={<SidebarDetailed />}
+        sidebarIcons={<SidebarNav />}
+        sidebarProvider={AuctionProvider}
+      >
         <PlaygroundGrid />
       </Layout>
     </PlaygroundProvider>
