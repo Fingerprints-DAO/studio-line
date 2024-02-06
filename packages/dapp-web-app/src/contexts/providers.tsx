@@ -53,7 +53,7 @@ function Providers({ children }: { children: React.ReactNode }) {
           </ConnectKitProvider>
         </WagmiConfig>
         {isVisible && isMediumScreen && (
-          <Box position={'absolute'} bottom={0} left={0} right={0}>
+          <Box position={'fixed'} bottom={0} left={0} right={0}>
             <Alert status="warning" bgColor={'gray.300'}>
               <TbScreenShareOff size={40} color="gray.700" />
               <AlertDescription fontSize={'md'} ml={4} textColor={'gray.700'}>
