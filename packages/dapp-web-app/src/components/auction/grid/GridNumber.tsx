@@ -10,7 +10,7 @@ const GridNumber = ({ number = 0, isColumn = false, ...props }) => (
     justifyContent={'center'}
     {...props}
   >
-    <Text fontSize={'10px'}>{number}</Text>
+    <Text fontSize={{ base: '6px', md: '10px' }}>{number}</Text>
   </Flex>
 )
 

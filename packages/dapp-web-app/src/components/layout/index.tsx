@@ -144,7 +144,11 @@ export default function Layout({
           mt={'1vh'}
           bgColor={'white'}
           h={'95vh'}
-          maxW={isRegularScreen ? 'none' : 'calc(100vw - 100px)'}
+          maxW={
+            isRegularScreen
+              ? 'none'
+              : { base: 'calc(100vw - 80px)', md: 'calc(100vw - 100px)' }
+          }
           justifyContent={'center'}
           flex={isRegularScreen ? 6 : 9}
         >
