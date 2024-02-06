@@ -45,10 +45,11 @@ export function SidebarNav({ ...props }: any) {
         <IconButton
           variant="outline"
           aria-label="Open preview"
-          icon={<IoEyeOutline />}
+          icon={<IoEyeOutline size={'12px'} />}
           onClick={sidebarOnOpen}
-          w="44px"
-          h="44px"
+          minW={'auto'}
+          w={{ base: '30px', md: '44px' }}
+          h={{ base: '30px', md: '44px' }}
           isDisabled={!lastSelectedGridItem}
         />
       </Tooltip>
@@ -68,10 +69,11 @@ export function SidebarNav({ ...props }: any) {
         <IconButton
           variant="outline"
           aria-label="Reset playground"
-          icon={<GrPowerCycle />}
+          icon={<GrPowerCycle size={'12px'} />}
           onClick={resetGrid}
-          w="44px"
-          h="44px"
+          minW={'auto'}
+          w={{ base: '30px', md: '44px' }}
+          h={{ base: '30px', md: '44px' }}
           isDisabled={!lastSelectedGridItem}
         />
       </Tooltip>

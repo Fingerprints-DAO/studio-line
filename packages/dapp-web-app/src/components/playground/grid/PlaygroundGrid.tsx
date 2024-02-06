@@ -13,10 +13,12 @@ const PlaygroundGrid: React.FC = () => {
     highlightGridItem,
     lastSelectedGridItem,
   } = usePlaygroundContext()
+  // console.log(height, width)
 
   const { itemHeight, itemWidth, gridSpaceX } = useMemo(() => {
     const totalSpacing = GridSize * GridSpace
-    const availableHeight = height - totalSpacing
+    const availableHeight =
+      height < width ? height - totalSpacing : width - totalSpacing
     const calculatedItemHeight = availableHeight / GridSize
     const calculatedItemWidth = calculatedItemHeight / (3 / 2)
     const calculatedGridSpaceX =

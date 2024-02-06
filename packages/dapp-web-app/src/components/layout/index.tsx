@@ -74,12 +74,13 @@ export default function Layout({
         <>
           <VStack
             bg="white"
-            px={4}
-            alignItems="stretch"
-            maxH={'100vh'}
-            w={'44px'}
+            // px={4}
+            // alignItems="stretch"
+            maxH={'100%'}
+            minW={{ base: '30px', md: '44px' }}
             pos={'relative'}
-            flex={1}
+            flex={0}
+            alignItems={'flex-end'}
           >
             <Flex
               height={'100%'}
@@ -92,10 +93,11 @@ export default function Layout({
               <IconButton
                 variant="outline"
                 aria-label="Open Navbar"
-                icon={<GiHamburgerMenu />}
+                icon={<GiHamburgerMenu size={'12px'} />}
                 onClick={navOnOpen}
-                w="44px"
-                h="44px"
+                minW={'auto'}
+                w={{ base: '30px', md: '44px' }}
+                h={{ base: '30px', md: '44px' }}
               />
               {sidebarIcons}
             </Flex>
@@ -133,15 +135,16 @@ export default function Layout({
 
   return (
     <Container maxW={'8xl'}>
-      <Flex pos={'relative'} justifyContent={'center'}>
+      <Flex
+        pos={'relative'}
+        justifyContent={{ base: 'space-between', md: 'center' }}
+      >
         <Flex
           p={2}
           mt={'1vh'}
           bgColor={'white'}
           h={'95vh'}
-          // flexShrink={0}
-          // w={isLargerThan1280 ? '50vw' : '90vw'}
-          maxW={isRegularScreen ? 'none' : 'calc(100vw - 44px)'}
+          maxW={isRegularScreen ? 'none' : 'calc(100vw - 100px)'}
           justifyContent={'center'}
           flex={isRegularScreen ? 6 : 9}
         >
