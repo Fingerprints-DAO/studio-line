@@ -1,11 +1,11 @@
 import React, { memo, useMemo, useState } from 'react'
 import { Box, Flex, Tooltip, Image as ChackraImage } from '@chakra-ui/react'
 import { GridItemProperties } from 'contexts/MoveContext'
-import GridNumber from './GridNumber'
 import { Direction, GridSize } from 'types/grid'
 import { Arrow } from 'components/arrow/GridArrow'
 import { useHexColor } from 'components/arrow/utils'
 import { ArrowDirections } from 'types/movements'
+import GridNumber from 'components/gridNumber'
 
 interface GridItemProps extends GridItemProperties {
   width: number
