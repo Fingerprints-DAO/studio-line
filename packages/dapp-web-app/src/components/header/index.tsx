@@ -1,5 +1,3 @@
-'use client'
-
 import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react'
 import Wallet from 'components/wallet'
 import Link from 'next/link'

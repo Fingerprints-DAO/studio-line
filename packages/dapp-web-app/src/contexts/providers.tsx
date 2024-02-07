@@ -4,12 +4,10 @@ import { ConnectKitProvider } from 'connectkit'
 import {
   Alert,
   AlertDescription,
-  AlertIcon,
   Box,
   ChakraProvider,
   CloseButton,
   Fade,
-  Progress,
   useDisclosure,
 } from '@chakra-ui/react'
 import { CacheProvider } from '@chakra-ui/next-js'
@@ -19,7 +17,6 @@ import { WagmiConfig } from 'wagmi'
 
 import { config } from 'settings/wagmi'
 import theme from 'settings/theme'
-import { useEffect, useState } from 'react'
 import { TbScreenShareOff } from 'react-icons/tb'
 import { useDisplayConfig } from 'hooks/useDisplayConfig'
 
@@ -28,10 +25,6 @@ dayjs.extend(duration)
 function Providers({ children }: { children: React.ReactNode }) {
   const { isMediumScreen } = useDisplayConfig()
   const { isOpen: isVisible, onClose } = useDisclosure({ defaultIsOpen: true })
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   return (
     <CacheProvider>
@@ -45,11 +38,8 @@ function Providers({ children }: { children: React.ReactNode }) {
       </head> */}
       <ChakraProvider theme={theme}>
         <WagmiConfig config={config}>
-          {!mounted && (
-            <Progress isIndeterminate colorScheme="gray" size={'md'} />
-          )}
           <ConnectKitProvider theme={'minimal'} mode="light">
-            <Fade in={mounted} unmountOnExit>
+            <Fade in unmountOnExit>
               {children}
             </Fade>
           </ConnectKitProvider>
