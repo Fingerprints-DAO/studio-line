@@ -1,18 +1,6 @@
 'use client'
 
-import {
-  Box,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerFooter,
-  Flex,
-  Grid,
-  GridItem,
-  Text,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react'
 import Wallet from 'components/wallet'
 import Link from 'next/link'
 // import useMediaQuery from 'hooks/use-media-query'
@@ -36,8 +24,6 @@ const Header = ({ isDrawer = false }) => {
   const { data: canMove, isSuccess: isCanMoveSuccess } = useLineCanMove({
     watch: true,
   })
-  // const { isOpen, onOpen, onClose } = useDisclosure()
-  // const [isMobile] = useMediaQuery('(max-width: 767px)')
 
   useEffect(() => {
     if (!isCanMoveSuccess) return

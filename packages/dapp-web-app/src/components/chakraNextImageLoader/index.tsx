@@ -7,7 +7,7 @@ export interface ChakraNextImageLoaderProps {
   src: string
   alt: string
   width: number
-  height: number
+  height?: number
   layout?: 'fixed' | 'intrinsic' | 'responsive' | undefined // Optional, if you want to override the layout prop
   // Add any additional props you want to pass to either the Skeleton or Image components
 }

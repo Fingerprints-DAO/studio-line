@@ -8,6 +8,8 @@ import {
   Box,
   ChakraProvider,
   CloseButton,
+  Fade,
+  Progress,
   useDisclosure,
 } from '@chakra-ui/react'
 import { CacheProvider } from '@chakra-ui/next-js'
@@ -25,11 +27,7 @@ dayjs.extend(duration)
 
 function Providers({ children }: { children: React.ReactNode }) {
   const { isMediumScreen } = useDisplayConfig()
-  const {
-    isOpen: isVisible,
-    onClose,
-    onOpen,
-  } = useDisclosure({ defaultIsOpen: true })
+  const { isOpen: isVisible, onClose } = useDisclosure({ defaultIsOpen: true })
   const [mounted, setMounted] = useState(false)
   useEffect(() => {
     setMounted(true)
@@ -47,9 +45,13 @@ function Providers({ children }: { children: React.ReactNode }) {
       </head> */}
       <ChakraProvider theme={theme}>
         <WagmiConfig config={config}>
-          {!mounted && <p>Loading</p>}
+          {!mounted && (
+            <Progress isIndeterminate colorScheme="gray" size={'md'} />
+          )}
           <ConnectKitProvider theme={'minimal'} mode="light">
-            {mounted && children}
+            <Fade in={mounted} unmountOnExit>
+              {children}
+            </Fade>
           </ConnectKitProvider>
         </WagmiConfig>
         {isVisible && isMediumScreen && (

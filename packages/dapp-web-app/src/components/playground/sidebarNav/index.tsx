@@ -15,11 +15,10 @@ import {
 } from '@chakra-ui/react'
 import { IoEyeOutline } from 'react-icons/io5'
 import { GrPowerCycle } from 'react-icons/gr'
-import Footer from 'components/footer'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 import { SidebarDetailed } from '../sidebar/SidebarDetailed'
 
-export function SidebarNav({ ...props }: any) {
+export function SidebarNav() {
   const { lastSelectedGridItem, resetGrid } = usePlaygroundContext()
   const {
     isOpen: sidebarIsOpen,

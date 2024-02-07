@@ -4,6 +4,7 @@ import { GridItemProperties } from 'contexts/PlaygroundContext'
 import Image from 'next/image'
 import { Direction, GridSize } from 'types/grid'
 import GridNumber from 'components/gridNumber'
+import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 
 interface GridItemProps extends GridItemProperties {
   width: number
@@ -60,7 +61,6 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   isHighlighted,
   toggleGridItem,
   onlyHighlightedClick,
-  // id,
 }) => {
   const [isFirstRow, isLastRow, isFirstCol, isLastCol] = [
     row === GridSize - 1,
@@ -180,10 +180,15 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
             <Flex
               flexDir={'column'}
               alignItems={'center'}
-              minH={'160px'}
-              minW={'80px'}
+              minW={'100px'}
+              minH={'150px'}
             >
-              <ChackraImage src={image} h={'160px'} m={0} />
+              <ChakraNextImageLoader
+                src={image}
+                width={100}
+                height={150}
+                alt="Token image"
+              />
             </Flex>
           }
           placement="auto"
@@ -195,9 +200,7 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
             h={'100%'}
             zIndex={isBlocked || isOpened ? 0 : 1}
             fontSize={'xx-small'}
-          >
-            {/* {id} */}
-          </Box>
+          />
         </Tooltip>
       </Box>
     </Box>

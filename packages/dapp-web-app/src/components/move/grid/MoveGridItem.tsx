@@ -6,6 +6,7 @@ import { Arrow } from 'components/arrow/GridArrow'
 import { useHexColor } from 'components/arrow/utils'
 import { ArrowDirections } from 'types/movements'
 import GridNumber from 'components/gridNumber'
+import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 
 interface GridItemProps extends GridItemProperties {
   width: number
@@ -171,10 +172,15 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
               <Flex
                 flexDir={'column'}
                 alignItems={'center'}
-                minH={'160px'}
-                minW={'80px'}
+                minW={'100px'}
+                minH={'150px'}
               >
-                <ChackraImage src={image} h={'160px'} m={0} />
+                <ChakraNextImageLoader
+                  src={image}
+                  width={100}
+                  height={150}
+                  alt="Token image"
+                />
               </Flex>
             }
             placement="auto"

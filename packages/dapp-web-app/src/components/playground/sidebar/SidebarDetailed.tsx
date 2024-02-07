@@ -7,6 +7,7 @@ import {
   Link,
   Text,
   Image as ChackraImage,
+  Fade,
 } from '@chakra-ui/react'
 import { AuctionBanner } from 'components/auctionBanner'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
@@ -57,94 +58,98 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
           </Text>
         </>
       )}
-      {lastSelectedGridItem && !isDrawer && (
-        <Button variant={'outline'} my={4} onClick={resetGrid}>
-          Reset playground
-        </Button>
-      )}
-      {lastSelectedGridItem && (
-        <Box as="section">
-          <Flex as="header" alignItems={'center'}>
-            <Text
-              fontWeight={'bold'}
-              my={4}
-              textColor={'gray.900'}
-              fontSize={'2xl'}
-              textTransform={'uppercase'}
-            >
-              LINE #{itemId}
-            </Text>
-            <Text fontSize={'md'} textColor={'gray.500'} ml={2}>
-              ({lastSelectedGridItem.index.replace('-', ',')})
-            </Text>
-          </Flex>
-          <Flex justifyContent={'flex-start'}>
-            <Box maxW={'55%'}>
-              <Image
-                src={lastSelectedGridItem.image}
-                alt={`Token ${lastSelectedGridItem.index}`}
-                width={400}
-                height={200}
-                style={{ maxWidth: '100%' }}
-              />
-              {highlightItems.length > 0 && (
-                <Box
-                  display={'flex'}
-                  justifyContent={'space-between'}
-                  mt={2}
-                  flexWrap={highlightItems.length > 5 ? 'wrap' : 'nowrap'}
-                >
-                  {highlightItems.map((item) => {
-                    return (
-                      <Box
-                        key={item.index}
-                        textAlign={'center'}
-                        w={
-                          highlightItems.length > 5
-                            ? '23%'
-                            : `${Math.floor(100 / highlightItems.length) - 1}%`
-                        }
-                      >
-                        <Image
-                          src={item.image}
-                          alt={`Token ${item.index}`}
-                          width={78}
-                          height={20}
-                          style={{ width: '100%' }}
-                        />
-                        <Text fontSize={'xs'} mt={1}>
-                          ({item.index.replace('-', ',')})
-                        </Text>
-                      </Box>
-                    )
-                  })}
-                </Box>
-              )}
-            </Box>
-            <Box ml={8} flexShrink={0}>
-              <TextLine title={'Origin point'}>
-                {originPoint.replace('-', ',')}
-              </TextLine>
-              <TextLine title={'Image point'}>
-                {lastSelectedGridItem.index.replace('-', ',')}
-              </TextLine>
-              <TextLine title={'Type'}>
-                {lastSelectedGridItem.direction}
-              </TextLine>
-              <TextLine title={'Limit'}>
-                {isFirstOrLastLine ? 'Yes' : 'No'}
-              </TextLine>
-              <TextLine title={'Starting point'}>
-                {lastSelectedGridItem.index.replace('-', ',')}
-              </TextLine>
-              <TextLine title={'Movements'}>{movements}</TextLine>
-              <Link href={lastSelectedGridItem.image} isExternal>
-                Preview in new tab
-              </Link>
-            </Box>
-          </Flex>
-        </Box>
-      )}
+      <Fade in={!!lastSelectedGridItem}>
+        {lastSelectedGridItem && !isDrawer && (
+          <Button variant={'outline'} my={4} onClick={resetGrid}>
+            Reset playground
+          </Button>
+        )}
+        {lastSelectedGridItem && (
+          <Box as="section">
+            <Flex as="header" alignItems={'center'}>
+              <Text
+                fontWeight={'bold'}
+                my={4}
+                textColor={'gray.900'}
+                fontSize={'2xl'}
+                textTransform={'uppercase'}
+              >
+                LINE #{itemId}
+              </Text>
+              <Text fontSize={'md'} textColor={'gray.500'} ml={2}>
+                ({lastSelectedGridItem.index.replace('-', ',')})
+              </Text>
+            </Flex>
+            <Flex justifyContent={'flex-start'}>
+              <Box maxW={'55%'}>
+                <Image
+                  src={lastSelectedGridItem.image}
+                  alt={`Token ${lastSelectedGridItem.index}`}
+                  width={400}
+                  height={200}
+                  style={{ maxWidth: '100%' }}
+                />
+                {highlightItems.length > 0 && (
+                  <Box
+                    display={'flex'}
+                    justifyContent={'space-between'}
+                    mt={2}
+                    flexWrap={highlightItems.length > 5 ? 'wrap' : 'nowrap'}
+                  >
+                    {highlightItems.map((item) => {
+                      return (
+                        <Box
+                          key={item.index}
+                          textAlign={'center'}
+                          w={
+                            highlightItems.length > 5
+                              ? '23%'
+                              : `${
+                                  Math.floor(100 / highlightItems.length) - 1
+                                }%`
+                          }
+                        >
+                          <Image
+                            src={item.image}
+                            alt={`Token ${item.index}`}
+                            width={78}
+                            height={20}
+                            style={{ width: '100%' }}
+                          />
+                          <Text fontSize={'xs'} mt={1}>
+                            ({item.index.replace('-', ',')})
+                          </Text>
+                        </Box>
+                      )
+                    })}
+                  </Box>
+                )}
+              </Box>
+              <Box ml={8} flexShrink={0}>
+                <TextLine title={'Origin point'}>
+                  {originPoint.replace('-', ',')}
+                </TextLine>
+                <TextLine title={'Image point'}>
+                  {lastSelectedGridItem.index.replace('-', ',')}
+                </TextLine>
+                <TextLine title={'Type'}>
+                  {lastSelectedGridItem.direction}
+                </TextLine>
+                <TextLine title={'Limit'}>
+                  {isFirstOrLastLine ? 'Yes' : 'No'}
+                </TextLine>
+                <TextLine title={'Starting point'}>
+                  {lastSelectedGridItem.index.replace('-', ',')}
+                </TextLine>
+                <TextLine title={'Movements'}>{movements}</TextLine>
+                <Link href={lastSelectedGridItem.image} isExternal>
+                  Preview in new tab
+                </Link>
+              </Box>
+            </Flex>
+          </Box>
+        )}
+      </Fade>
     </Box>
   )
 }

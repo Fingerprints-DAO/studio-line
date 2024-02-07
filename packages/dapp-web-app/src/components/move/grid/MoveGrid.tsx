@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useRef } from 'react'
-import { Box, SimpleGrid } from '@chakra-ui/react'
+import React, { useEffect, useMemo, useState } from 'react'
+import { Box, Fade, SimpleGrid, Skeleton } from '@chakra-ui/react'
 import MoveGridItem from './MoveGridItem'
-import useContainerSizes from 'hooks/useContainerSizes'
 import { useMoveContext } from 'contexts/MoveContext'
 import { GridItemsTotal, GridSize, GridSpace } from 'types/grid'
 import useGridSizes from 'hooks/useGridSizes'
@@ -10,6 +9,7 @@ type MoveGridProps = {}
 
 const MoveGrid: React.FC<MoveGridProps> = ({}) => {
   const { ref, height, itemHeight, itemWidth, gridSpaceX } = useGridSizes()
+  const [showGrid, setShowGrid] = useState(false)
   const {
     gridItemsState,
     toggleSelectedItem,
@@ -61,20 +61,41 @@ const MoveGrid: React.FC<MoveGridProps> = ({}) => {
     gridItemsState,
   ])
 
+  useEffect(() => {
+    setTimeout(() => {
+      setShowGrid(true)
+    }, 1000)
+  }, [])
+
   return (
     <Box
       ref={ref}
       height={'100%'}
       w={height > 0 ? height : 'auto'}
       minW={ref.current ? 'none' : '50vw'}
+      pos={'relative'}
     >
-      <SimpleGrid
-        columns={GridSize}
-        spacingY={`${GridSpace}px`}
-        spacingX={`${gridSpaceX}px`}
+      <Box
+        hidden={showGrid}
+        pos={'absolute'}
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+        // bgColor={'whiteAlpha.800'}
+        zIndex={5}
       >
-        {gridItems}
-      </SimpleGrid>
+        <Skeleton h={'100%'} w={'100%'} />
+      </Box>
+      <Fade in={showGrid}>
+        <SimpleGrid
+          columns={GridSize}
+          spacingY={`${GridSpace}px`}
+          spacingX={`${gridSpaceX}px`}
+        >
+          {gridItems}
+        </SimpleGrid>
+      </Fade>
     </Box>
   )
 }

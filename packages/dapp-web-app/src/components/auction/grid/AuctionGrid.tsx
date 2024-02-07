@@ -1,13 +1,12 @@
-import React, { useMemo, useRef } from 'react'
-import { Box, SimpleGrid } from '@chakra-ui/react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { Box, Fade, SimpleGrid, Skeleton } from '@chakra-ui/react'
 import AuctionGridItem from './AuctionGridItem'
 import { useTokensContext } from 'contexts/TokensContext'
 import { GridItemsTotal, GridSize, GridSpace } from 'types/grid'
 import useGridSizes from 'hooks/useGridSizes'
 
 const AuctionGrid: React.FC = () => {
-  const { ref, height, itemHeight, itemWidth, gridSpaceX, gridSquareSize } =
-    useGridSizes()
+  const { ref, height, itemHeight, itemWidth, gridSpaceX } = useGridSizes()
   const {
     gridItemsState,
     toggleSelectedItem,
@@ -15,6 +14,7 @@ const AuctionGrid: React.FC = () => {
     availableItems,
     selectedItems,
   } = useTokensContext()
+  const [showGrid, setShowGrid] = useState(false)
 
   const gridItems = useMemo(() => {
     const items = []
@@ -57,20 +57,41 @@ const AuctionGrid: React.FC = () => {
     gridItemsState,
   ])
 
+  useEffect(() => {
+    setTimeout(() => {
+      setShowGrid(true)
+    }, 1000)
+  }, [])
+
   return (
     <Box
       ref={ref}
       height={'100%'}
       w={height > 0 ? height : 'auto'}
       minW={ref.current ? 'none' : '50vw'}
+      pos={'relative'}
     >
-      <SimpleGrid
-        columns={GridSize}
-        spacingY={`${GridSpace}px`}
-        spacingX={`${gridSpaceX}px`}
+      <Box
+        hidden={showGrid}
+        pos={'absolute'}
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+        zIndex={5}
       >
-        {gridItems}
-      </SimpleGrid>
+        <Skeleton h={'100%'} w={'100%'} />
+      </Box>
+
+      <Fade in={showGrid}>
+        <SimpleGrid
+          columns={GridSize}
+          spacingY={`${GridSpace}px`}
+          spacingX={`${gridSpaceX}px`}
+        >
+          {gridItems}
+        </SimpleGrid>
+      </Fade>
     </Box>
   )
 }
