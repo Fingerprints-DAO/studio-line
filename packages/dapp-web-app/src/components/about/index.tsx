@@ -1,15 +1,53 @@
 'use client'
 
-import React from 'react'
-import { Box, Container, Flex, Text, VStack } from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react'
+import {
+  Alert,
+  AlertIcon,
+  Box,
+  Collapse,
+  Container,
+  Fade,
+  Flex,
+  Slide,
+  SlideFade,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 import Header from 'components/header'
 import Footer from 'components/footer'
 import { useDisplayConfig } from 'hooks/useDisplayConfig'
 import questions from './_questions'
 import SidebarIcons from 'components/sidebarIcons'
+import { useAccount } from 'wagmi'
+import { fetcher } from 'utils/fetcher'
+import { GetDiscountResponse } from 'pages/api/getDiscount'
 
 export default function About() {
   const { isRegularScreen, isMediumScreen } = useDisplayConfig()
+  const [discountValue, setDiscountValue] = useState<number | null>(null)
+  const { address } = useAccount()
+
+  useEffect(() => {
+    const checkDiscount = async (address: string) => {
+      try {
+        const response = await fetcher<GetDiscountResponse>(
+          '/api/getDiscount',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ address }),
+          },
+        )
+        setDiscountValue(response.discountPercentage)
+      } catch (error) {
+        console.error('Error checking discounts:', error)
+        setDiscountValue(null)
+      }
+    }
+
+    if (address) checkDiscount(address)
+  }, [address])
 
   return (
     <Container maxW={'6xl'}>
@@ -29,6 +67,18 @@ export default function About() {
             mt={isRegularScreen ? '92px' : '0'}
             textColor={'gray.500'}
           >
+            <Collapse
+              in={discountValue !== null && discountValue > 0}
+              animateOpacity
+              unmountOnExit
+            >
+              <Box pb={10}>
+                <Alert status="success" bgColor={'gray.200'}>
+                  <AlertIcon color={'gray.500'} />
+                  {`You are eligible for a ${discountValue}% discount on Mint.`}
+                </Alert>
+              </Box>
+            </Collapse>
             <Text as={'h1'} fontSize={'3xl'} textColor={'gray.700'} mb={10}>
               About Line
             </Text>
