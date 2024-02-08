@@ -1,10 +1,33 @@
 import { Box, Container, Flex, Icon, Text } from '@chakra-ui/react'
-import { BsDiscord } from 'react-icons/bs'
+import { getContractsDataForChainOrThrow } from '@dapp/sdk'
+import { TextToltip } from 'components/textTooltip'
+import { useEffect, useState } from 'react'
+import { BsDiscord, BsTwitterX } from 'react-icons/bs'
 import { BsTwitter } from 'react-icons/bs'
 import { SiOpensea } from 'react-icons/si'
-import { Link } from '@chakra-ui/react'
+import { SiEthereum } from 'react-icons/si'
+import { getExternalEtherscanUrl } from 'utils/getLink'
+import { Address, useNetwork } from 'wagmi'
 
 const Footer = ({ isDrawer = false }) => {
+  const { chain } = useNetwork()
+  const [contractAddress, setContractAddress] = useState<Address | undefined>()
+
+  useEffect(() => {
+    const fetchContractsData = async () => {
+      if (chain?.id) {
+        try {
+          const data = await getContractsDataForChainOrThrow(chain.id)
+          setContractAddress(data.LineABI.address as Address)
+        } catch (error) {
+          console.error('Failed to fetch contracts data:', error)
+        }
+      }
+    }
+
+    fetchContractsData()
+  }, [chain?.id])
+
   return (
     <Box
       as="footer"
@@ -21,7 +44,24 @@ const Footer = ({ isDrawer = false }) => {
         >
           <Box textAlign={isDrawer ? 'center' : 'left'}>
             <Text fontWeight={'bold'} fontSize={'md'}>
-              By Figure31 & Fingerprints DAO
+              By{' '}
+              <Box
+                as="a"
+                href="https://www.figure31.com/"
+                target="_blank"
+                _hover={{ textDecor: 'underline' }}
+              >
+                Figure31
+              </Box>
+              {' & '}
+              <Box
+                as="a"
+                href="https://fingerprintsdao.xyz/"
+                target="_blank"
+                _hover={{ textDecor: 'underline' }}
+              >
+                Fingerprints DAO
+              </Box>
             </Text>{' '}
             <Text fontSize="xs" flex={1} mb={[2, 0]} mt={2}>
               Developed by{' '}
@@ -31,9 +71,7 @@ const Footer = ({ isDrawer = false }) => {
                 title="arod.studio"
                 href="https://arod.studio"
                 target="_blank"
-                style={{ textDecoration: 'none' }}
-                transition="opacity 0.2s"
-                _hover={{ opacity: 0.8 }}
+                _hover={{ textDecor: 'underline' }}
               >
                 arod.studio
               </Text>
@@ -41,48 +79,75 @@ const Footer = ({ isDrawer = false }) => {
           </Box>
 
           <Flex flex={1} justifyContent={'flex-end'} alignItems={'center'}>
-            <Box
-              as="a"
-              href="https://twitter.com/FingerprintsDAO"
-              title="Twitter"
-              target="_blank"
-              p={2}
-              color="gray.300"
-              _hover={{ color: 'gray.200' }}
-              transition="ease"
-              transitionProperty="color"
-              transitionDuration="0.2s"
+            {contractAddress && (
+              <TextToltip label="Check out on Etherscan!" placement="top">
+                <Box
+                  as="a"
+                  href={getExternalEtherscanUrl(contractAddress)}
+                  title="OpenSea"
+                  target="_blank"
+                  p={2}
+                  color="gray.300"
+                  _hover={{ color: 'gray.200' }}
+                  transition="ease"
+                  transitionProperty="color"
+                  transitionDuration="0.2s"
+                >
+                  <Icon as={SiEthereum} w={6} h={6} display="block" />
+                </Box>
+              </TextToltip>
+            )}
+            <TextToltip
+              label="Check out the collection on Opensea!"
+              placement="top"
             >
-              <Icon as={BsTwitter} w={6} h={6} display="block" />
-            </Box>
-            <Box
-              as="a"
-              href="https://discord.gg/aePw7mqz6U"
-              title="Discord"
-              target="_blank"
-              p={2}
-              color="gray.300"
-              _hover={{ color: 'gray.200' }}
-              transition="ease"
-              transitionProperty="color"
-              transitionDuration="0.2s"
-            >
-              <Icon as={BsDiscord} w={6} h={6} display="block" />
-            </Box>
-            <Box
-              as="a"
-              href="https://opensea.io/collection/maschine"
-              title="OpenSea"
-              target="_blank"
-              p={2}
-              color="gray.300"
-              _hover={{ color: 'gray.200' }}
-              transition="ease"
-              transitionProperty="color"
-              transitionDuration="0.2s"
-            >
-              <Icon as={SiOpensea} w={6} h={6} display="block" />
-            </Box>
+              <Box
+                as="a"
+                href="https://opensea.io/collection/line"
+                title="OpenSea"
+                target="_blank"
+                p={2}
+                color="gray.300"
+                _hover={{ color: 'gray.200' }}
+                transition="ease"
+                transitionProperty="color"
+                transitionDuration="0.2s"
+              >
+                <Icon as={SiOpensea} w={6} h={6} display="block" />
+              </Box>
+            </TextToltip>
+            <TextToltip label="Join us on Discord!" placement="top">
+              <Box
+                as="a"
+                href={'#'}
+                title="Discord"
+                target="_blank"
+                p={2}
+                color="gray.300"
+                _hover={{ color: 'gray.200' }}
+                transition="ease"
+                transitionProperty="color"
+                transitionDuration="0.2s"
+              >
+                <Icon as={BsDiscord} w={6} h={6} display="block" />
+              </Box>
+            </TextToltip>
+            <TextToltip label="Check out on X!" placement="top">
+              <Box
+                as="a"
+                href="https://twitter.com/FingerprintsDAO"
+                title="Twitter"
+                target="_blank"
+                p={2}
+                color="gray.300"
+                _hover={{ color: 'gray.200' }}
+                transition="ease"
+                transitionProperty="color"
+                transitionDuration="0.2s"
+              >
+                <Icon as={BsTwitterX} w={6} h={6} display="block" />
+              </Box>
+            </TextToltip>
           </Flex>
         </Flex>
       </Flex>
