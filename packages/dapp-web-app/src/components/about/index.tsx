@@ -7,10 +7,7 @@ import {
   Box,
   Collapse,
   Container,
-  Fade,
   Flex,
-  Slide,
-  SlideFade,
   Text,
   VStack,
 } from '@chakra-ui/react'

@@ -15,7 +15,6 @@ import {
 } from '@chakra-ui/react'
 import { BsCart3 } from 'react-icons/bs'
 import { SidebarDetailed } from '../sidebar/SidebarDetailed'
-import { useTokensContext } from 'contexts/TokensContext'
 
 export function SidebarNav() {
   const {

@@ -71,13 +71,18 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   const widthPx = `${width}px`
   const heightPx = `${height}px`
 
+  const disableClick =
+    isFirstCol ||
+    isLastCol ||
+    isBlocked ||
+    (onlyHighlightedClick && !isHighlighted) ||
+    (isHighlighted && (isLastRow || isFirstRow))
+  const isBorder = isFirstRow || isFirstCol || isLastRow || isLastCol
+  const isOdd = col % 2 === 0
+
   const handleClick = () => {
     toggleGridItem(index)
   }
-
-  const disableClick = isBlocked || (onlyHighlightedClick && !isHighlighted)
-  const isBorder = isFirstRow || isFirstCol || isLastRow || isLastCol
-  const isOdd = col % 2 === 0
 
   const bgColor = useMemo(() => {
     if (isHighlighted) {

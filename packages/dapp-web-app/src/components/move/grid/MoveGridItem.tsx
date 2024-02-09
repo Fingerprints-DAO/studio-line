@@ -7,6 +7,8 @@ import { useHexColor } from 'components/arrow/utils'
 import { ArrowDirections } from 'types/movements'
 import GridNumber from 'components/gridNumber'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
+import { getArrowsAvailability } from 'utils/getArrowsAvailability'
+import { ArrowAll } from 'components/arrow/GridArrowAll'
 
 interface GridItemProps extends GridItemProperties {
   width: number
@@ -16,7 +18,9 @@ interface GridItemProps extends GridItemProperties {
   isMinted: boolean
   isAvailable: boolean
   isSelected: boolean
+  isSelectable: boolean
   mintedItems: (string | undefined)[]
+  isFixedSelected: boolean
   toggleGridItem: (index: string) => void
 }
 
@@ -63,7 +67,10 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
   isMinted,
   isAvailable,
   isSelected,
+  isSelectable,
+  isFixedSelected,
   mintedItems,
+  isLocked,
 }) => {
   const [isFirstRow, isLastRow, isFirstCol, isLastCol] = [
     row === GridSize - 1,
@@ -74,51 +81,28 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
   const widthPx = `${width}px`
   const heightPx = `${height}px`
 
-  const disableClick = !isMinted
-  const renderPoint = isMinted || isAvailable
+  const disableClick = isSelectable ? isMinted : !isMinted
+  const renderArrows = isMinted || isAvailable || isSelectable
+  const renderPoint =
+    (!isSelected &&
+      !isMinted &&
+      !isAvailable &&
+      !isFirstCol &&
+      !isLastCol &&
+      !isFirstRow &&
+      !isLastRow) ||
+    isFixedSelected
+  const isStar = isFixedSelected || isLocked
 
-  const bgColor = useHexColor({
-    isAvailable,
-    isSelected,
+  const { disableArrows } = getArrowsAvailability({
+    index,
     direction,
+    mintedPositions: mintedItems,
   })
 
   const handleClick = () => {
     toggleGridItem(index)
   }
-  const hideArrows = useMemo(() => {
-    if (isLastCol) {
-      return [ArrowDirections.RIGHT, ArrowDirections.DIAGONAL_RIGHT]
-    }
-    if (isFirstCol) {
-      return [ArrowDirections.LEFT, ArrowDirections.DIAGONAL_LEFT]
-    }
-  }, [isFirstCol, isLastCol])
-
-  const disableArrows = useMemo(() => {
-    const unavailableDirections = [] as ArrowDirections[]
-    const nextRow = direction !== Direction.UP ? row - 1 : row + 1
-    const [leftPos, diagonalLeftPos, centerPos, diagonalRightPos, rightPos] = [
-      `${row}-${col - 1}`,
-      `${nextRow}-${col - 1}`,
-      `${nextRow}-${col}`,
-      `${nextRow}-${col + 1}`,
-      `${row}-${col + 1}`,
-    ]
-
-    if (mintedItems.includes(leftPos))
-      unavailableDirections.push(ArrowDirections.LEFT)
-    if (mintedItems.includes(diagonalLeftPos))
-      unavailableDirections.push(ArrowDirections.DIAGONAL_LEFT)
-    if (mintedItems.includes(centerPos))
-      unavailableDirections.push(ArrowDirections.CENTER)
-    if (mintedItems.includes(diagonalRightPos))
-      unavailableDirections.push(ArrowDirections.DIAGONAL_RIGHT)
-    if (mintedItems.includes(rightPos))
-      unavailableDirections.push(ArrowDirections.RIGHT)
-
-    return unavailableDirections
-  }, [col, direction, mintedItems, row])
 
   const arrowsProps = {
     w: `100%`,
@@ -157,7 +141,7 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
       {isLastRow && <GridNumber number={col} w={widthPx} h={heightPx} />}
       {/* GRID NUMBERS END */}
 
-      {renderPoint && (
+      {renderArrows && (
         <>
           <Tooltip
             hasArrow
@@ -198,10 +182,15 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
                 pos={'absolute'}
                 top={'50%'}
                 left={'50%'}
-                w={'20px'}
-                h={'20px'}
+                w={'10px'}
+                h={'10px'}
                 borderRadius={'full'}
                 transform={'translate(-50%, -50%)'}
+                bgColor={renderPoint && !isFixedSelected ? 'white' : ''}
+                borderWidth={renderPoint && !isFixedSelected ? '2px' : ''}
+                borderColor={
+                  renderPoint && !isFixedSelected ? 'purple.500' : ''
+                }
                 zIndex={4}
               />
             </Box>
@@ -213,21 +202,30 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
             left={'50%'}
             top={'50%'}
             transform={`translate(-50%, -50%)`}
-            ml={'-0.5px'}
-            mb={'-0.5px'}
+            ml={isStar ? '' : '-0.5px'}
+            mb={isStar ? '' : '-0.5px'}
             zIndex={1}
           >
-            <Arrow
-              {...arrowsProps}
-              direction={direction}
-              isSelected={isSelected}
-              isAvailable={isAvailable}
-              disableArrows={disableArrows}
-              hideArrows={hideArrows}
-              displayCircle
-              w={`${lineWidth * 2 - 8}px`}
-              h={`${lineHeight * 2 - 8}px`}
-            />
+            {isStar && (
+              <ArrowAll
+                {...arrowsProps}
+                opacity={isLocked && !isSelected ? 0.5 : 1}
+                isOwner={isAvailable}
+                isSelected={isFixedSelected}
+              />
+            )}
+            {!isStar && (
+              <Arrow
+                {...arrowsProps}
+                direction={direction}
+                isSelected={isSelected}
+                isAvailable={isAvailable}
+                disableArrows={disableArrows}
+                displayCircle
+                w={`${lineWidth * 2 - 8}px`}
+                h={`${lineHeight * 2 - 8}px`}
+              />
+            )}
           </Box>
         </>
       )}

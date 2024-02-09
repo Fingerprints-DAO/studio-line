@@ -16,6 +16,8 @@ const MoveGrid: React.FC<MoveGridProps> = ({}) => {
     mintedItems,
     myItems,
     selectedGridItem,
+    fixTokenState,
+    fixTokenSelected,
   } = useMoveContext()
 
   const gridItems = useMemo(() => {
@@ -45,19 +47,23 @@ const MoveGrid: React.FC<MoveGridProps> = ({}) => {
           isMinted={!!mintedItem}
           isAvailable={myItems.includes(id)}
           isSelected={selectedGridItem?.index === id}
+          isSelectable={fixTokenState}
+          isFixedSelected={fixTokenSelected === id}
           {...gridItemsState[id]}
         />,
       )
     }
     return items
   }, [
+    mintedItems,
     itemWidth,
     itemHeight,
     toggleSelectedItem,
     gridSpaceX,
-    mintedItems,
     myItems,
-    selectedGridItem,
+    selectedGridItem?.index,
+    fixTokenState,
+    fixTokenSelected,
     gridItemsState,
   ])
 
@@ -71,7 +77,7 @@ const MoveGrid: React.FC<MoveGridProps> = ({}) => {
     <Box
       ref={ref}
       height={'100%'}
-      w={height > 0 ? height : 'auto'}
+      w={!showGrid ? '100%' : height > 0 ? height : 'auto'}
       minW={ref.current ? 'none' : '50vw'}
       pos={'relative'}
     >

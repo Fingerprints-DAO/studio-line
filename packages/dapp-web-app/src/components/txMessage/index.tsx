@@ -1,4 +1,4 @@
-import { Box, Link, Text } from '@chakra-ui/react'
+import { Box, Collapse, Link, Text } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { TransactionError } from 'types/transaction'
 import { getExternalTxUrl } from 'utils/getLink'
@@ -68,18 +68,23 @@ export const TxMessage = ({
           {(error as TransactionError).shortMessage}
         </Text>
       )}
-      {txData.isSuccess && (
+
+      <Collapse in={!!txData.isSuccess} animateOpacity unmountOnExit>
         <Box bgColor={'green.500'} p={2} mt={2}>
           <Text fontSize={'md'} fontWeight={'bold'} color={'white'}>
             {successMessage}
           </Text>
         </Box>
-      )}
-      {(txData.isLoading || txData.isSuccess) && (
+      </Collapse>
+      <Collapse
+        in={!!txData.isLoading || !!txData.isSuccess}
+        animateOpacity
+        unmountOnExit
+      >
         <Link href={getExternalTxUrl(hash)} display={'block'} mt={2}>
           View your transaction on Etherscan
         </Link>
-      )}
+      </Collapse>
     </>
   )
 }

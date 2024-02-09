@@ -9,14 +9,16 @@ import {
   GridItemBaseProperties,
   GridSize,
   generateImage,
-  getDirection,
   handleDirectionFromContract,
 } from 'types/grid'
 import { ArrowDirections } from 'types/movements'
+import { getArrowsAvailability } from 'utils/getArrowsAvailability'
 import { useAccount } from 'wagmi'
 
 export interface GridItemProperties extends GridItemBaseProperties {
   id: number | null
+  isLocked: boolean
+  hasReachedEnd: boolean
 }
 
 export type GridItemState = {
@@ -30,6 +32,8 @@ export const gridItemDefaultState = {
   row: 0,
   col: 0,
   direction: Direction.UP,
+  isLocked: false,
+  hasReachedEnd: false,
 }
 
 const getRandomItems = (
@@ -51,7 +55,9 @@ const generateFullGridDefaultState = () => {
         index,
         row,
         col,
-        direction: getDirection(row),
+        direction: null,
+        isLocked: false,
+        hasReachedEnd: false,
         image: generateImage(row + 1 + col + 1),
       }
     }
@@ -68,9 +74,10 @@ const MoveContext = createContext<{
   toggleSelectedItem: (index: string) => void
   resetSelection: () => void
   refreshAfterMove: () => void
-  selectedGridItem?: {
-    direction: Direction
-  } & GridItemProperties
+  toggleFixMyToken: () => void
+  fixTokenState: boolean
+  fixTokenSelected: string | null
+  selectedGridItem?: GridItemProperties
 }>({
   gridItemsState: {},
   highlightGridItem: [],
@@ -80,6 +87,9 @@ const MoveContext = createContext<{
   toggleSelectedItem: () => {},
   resetSelection: () => {},
   refreshAfterMove: () => {},
+  toggleFixMyToken: () => {},
+  fixTokenState: false,
+  fixTokenSelected: null,
   selectedGridItem: undefined,
 })
 
@@ -88,6 +98,8 @@ export const useMoveContext = () => useContext(MoveContext)
 export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
   const [gridItemsState, setGridItemsState] = useState<GridItemState>({})
   const [myItems, setMyItems] = useState<(string | null)[]>([])
+  const [fixTokenState, setFixTokenState] = useState(false)
+  const [fixTokenSelected, setFixTokenSelected] = useState<string | null>(null)
   const [highlightGridItem, setHighlightGridItem] = useState<string[]>([])
   const [unavailableDirections, setUnavailableDirections] = useState<
     ArrowDirections[]
@@ -107,37 +119,30 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
     enabled: !!address,
     watch: true,
   })
-  const getTokens = useLineGetTokens()
+  const getTokens = useLineGetTokens({ watch: true })
 
   const toggleSelectedItem = (index: string) => {
+    const selected = gridItemsState[index]
+    if (fixTokenState) {
+      setFixTokenSelected(index)
+      return
+    }
     setSelectedGridItem({
-      ...gridItemsState[index],
+      ...selected,
       id: mintedItems.find((item) => item?.index === index)?.id ?? null,
     })
-    const [row, col] = index.split('-').map((n) => Number(n))
-    const nextRow =
-      gridItemsState[index].direction !== Direction.UP ? row - 1 : row + 1
-    const unavailableDirections = [] as ArrowDirections[]
-
-    const [leftPos, diagonalLeftPos, centerPos, diagonalRightPos, rightPos] = [
-      `${row}-${col - 1}`,
-      `${nextRow}-${col - 1}`,
-      `${nextRow}-${col}`,
-      `${nextRow}-${col + 1}`,
-      `${row}-${col + 1}`,
-    ]
-    const mintedIndexes = mintedItems.map((item) => item?.index)
-
-    if (mintedIndexes.includes(leftPos))
-      unavailableDirections.push(ArrowDirections.LEFT)
-    if (mintedIndexes.includes(diagonalLeftPos))
-      unavailableDirections.push(ArrowDirections.DIAGONAL_LEFT)
-    if (mintedIndexes.includes(centerPos))
-      unavailableDirections.push(ArrowDirections.CENTER)
-    if (mintedIndexes.includes(diagonalRightPos))
-      unavailableDirections.push(ArrowDirections.DIAGONAL_RIGHT)
-    if (mintedIndexes.includes(rightPos))
-      unavailableDirections.push(ArrowDirections.RIGHT)
+    const {
+      leftPos,
+      diagonalLeftPos,
+      centerPos,
+      diagonalRightPos,
+      rightPos,
+      disableArrows,
+    } = getArrowsAvailability({
+      index: selected.index,
+      direction: selected.direction,
+      mintedPositions: mintedItems?.map((item) => item?.index ?? '') ?? [],
+    })
 
     setHighlightGridItem([
       leftPos,
@@ -147,17 +152,26 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
       rightPos,
     ])
 
-    setUnavailableDirections(unavailableDirections)
+    setUnavailableDirections(disableArrows)
   }
   const resetSelection = () => {
     setSelectedGridItem(undefined)
     setHighlightGridItem([])
     setUnavailableDirections([])
+    setFixTokenState(false)
+    setFixTokenSelected(null)
   }
 
   const refreshAfterMove = () => {
     getGrid.refetch()
     ownedTokens.refetch()
+  }
+
+  const toggleFixMyToken = () => {
+    if (fixTokenState) {
+      setFixTokenSelected(null)
+    }
+    setFixTokenState(!fixTokenState)
   }
 
   useEffect(() => {
@@ -225,6 +239,8 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
             direction: handleDirectionFromContract(
               tokensDirection[item.index]?.direction,
             ),
+            isLocked: tokensDirection[item.index]?.isLocked,
+            hasReachedEnd: tokensDirection[item.index]?.hasReachedEnd,
           },
         }
       }, {})
@@ -246,6 +262,9 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
         unavailableDirections,
         resetSelection,
         refreshAfterMove,
+        toggleFixMyToken,
+        fixTokenState,
+        fixTokenSelected,
       }}
     >
       {children}

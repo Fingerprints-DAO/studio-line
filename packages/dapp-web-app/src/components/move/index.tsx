@@ -29,6 +29,8 @@ function MoveGridWithDrawer() {
     sidebarOnClose()
   }
 
+  const onFixMyTokenClick = () => {}
+
   useEffect(() => {
     if (selectedGridItem) {
       sidebarOnOpen()
@@ -51,7 +53,7 @@ function MoveGridWithDrawer() {
           <DrawerContent pt={14}>
             <DrawerCloseButton rounded={'0'} textColor={'black'} />
             <DrawerBody>
-              <SidebarDetailed />
+              <SidebarDetailed handleFixMyToken={onFixMyTokenClick} />
             </DrawerBody>
           </DrawerContent>
         </Drawer>

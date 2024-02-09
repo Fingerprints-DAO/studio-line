@@ -1,35 +1,24 @@
 'use client'
 
+import { useEffect, useMemo } from 'react'
 import { Box, Button, Flex, Link, SkeletonText, Text } from '@chakra-ui/react'
-import { SidebarArrow } from 'components/arrow/SidebarArrow'
 
 import { useMoveContext } from 'contexts/MoveContext'
 import Image from 'next/image'
-import { useEffect, useMemo, useState } from 'react'
 import {
-  useLineCanMove,
-  useLineMaxSupply,
+  useLineLockOriginPoint,
   useLineOwnerOf,
   useLineTokenUri,
-  useLineWrite,
 } from 'services/web3/generated'
 import { getExternalOpenseaUrl } from 'utils/getLink'
 import { shortenAddress } from 'utils/string'
 import { contractAddresses } from '@dapp/contracts'
 import { getChainId } from 'utils/chain'
-import ChakraNextImageLoader from 'components/chakraNextImageLoader'
-import { GridSize } from 'types/grid'
-import { ArrowDirections, movementContractMap } from 'types/movements'
-import { TRAITS } from 'types/nft'
-import {
-  getNextPoint,
-  getSpecificArrowMoveDirection,
-} from 'components/arrow/utils'
-import useMovePoint from 'hooks/useMovePoint'
+import { LeftContent } from './LeftContent'
+import { MoveSection } from './MoveSection'
+import { useWaitForTransaction } from 'wagmi'
 import { TxMessage } from 'components/txMessage'
 import { TransactionError } from 'types/transaction'
-import { useWaitForTransaction } from 'wagmi'
-import { useDisplayConfig } from 'hooks/useDisplayConfig'
 
 const TextLine = ({ children, title = '', ...props }: any) => (
   <Text fontSize={'md'} color={'gray.500'} mb={1} {...props}>
@@ -44,20 +33,12 @@ const TextLine = ({ children, title = '', ...props }: any) => (
 
 export function SidebarDetailed({ ...props }: any) {
   const {
-    gridItemsState,
     selectedGridItem,
-    highlightGridItem,
     myItems,
-    unavailableDirections,
+    toggleFixMyToken,
+    fixTokenState,
+    fixTokenSelected,
   } = useMoveContext()
-  const [arrowHover, setArrowHover] = useState<ArrowDirections | undefined>()
-  const [nextPoint, setNextPoint] = useState<{
-    col: number | null
-    row: number | null
-  }>({ col: null, row: null })
-  const [arrowSelected, setArrowSelected] = useState<
-    ArrowDirections | undefined
-  >()
   const tokenData = useLineTokenUri({
     args: [BigInt(selectedGridItem?.id ?? 0)],
     watch: true,
@@ -68,10 +49,10 @@ export function SidebarDetailed({ ...props }: any) {
     watch: true,
     enabled: !!selectedGridItem?.id,
   })
-  const { getMoveFunction, getCurrentMoveToCall } = useMovePoint()
+  const moveToPosition = useLineLockOriginPoint()
   const moveTx = useWaitForTransaction({
-    hash: getCurrentMoveToCall().data?.hash,
-    enabled: getCurrentMoveToCall().data?.hash !== undefined,
+    hash: moveToPosition.data?.hash,
+    enabled: moveToPosition.data?.hash !== undefined,
     staleTime: 1_000,
   })
 
@@ -87,76 +68,22 @@ export function SidebarDetailed({ ...props }: any) {
     return { attributes: [] }
   }, [tokenData?.data])
 
-  const tokenDirection = useMemo(() => {
-    if (!tokenJson) return ''
-    return (
-      tokenJson.attributes
-        .find((attr: any) => attr.trait_type === TRAITS.DIRECTION)
-        ?.value.toLowerCase() ?? ''
-    )
-  }, [tokenJson])
+  const lockOriginPoint = () => {
+    if (!fixTokenSelected || fixTokenSelected.length < 1) return
+    const [y, x] = fixTokenSelected?.split('-')
 
-  const handleArrowMouseOver = (direction?: ArrowDirections) => {
-    setArrowHover(direction)
-  }
-  const handleArrowOnClick = (direction: ArrowDirections) => {
-    if (!selectedGridItem) return
-    setArrowSelected(direction)
-    const { row, col } = getNextPoint(
-      Number(selectedGridItem.col),
-      Number(selectedGridItem.row),
-      tokenDirection,
-      direction,
-    )
-    setNextPoint({ row, col })
-  }
-  const handleMove = () => {
-    const pointDirection = getSpecificArrowMoveDirection(
-      tokenDirection,
-      arrowSelected!,
-    )
-
-    const moveFunction = getMoveFunction(pointDirection!)
-    moveFunction.write({
-      args: [BigInt(selectedGridItem?.id || 0)],
+    moveToPosition.write({
+      args: [BigInt(selectedGridItem?.id ?? 0), BigInt(x), BigInt(y)],
     })
   }
 
-  const highlightItems = useMemo(
-    () => [
-      selectedGridItem,
-      ...highlightGridItem
-        .map((item) => gridItemsState[item])
-        .filter((item) => item),
-    ],
-    [gridItemsState, highlightGridItem, selectedGridItem],
-  )
-
-  const hideArrows = useMemo(() => {
-    const [_, col] = selectedGridItem?.index?.split('-') ?? [0]
-    if (Number(col) === GridSize - 1) {
-      return [ArrowDirections.RIGHT, ArrowDirections.DIAGONAL_RIGHT]
-    }
-    if (Number(col) === 0) {
-      return [ArrowDirections.LEFT, ArrowDirections.DIAGONAL_LEFT]
-    }
-  }, [selectedGridItem?.index])
-
   useEffect(() => {
-    setArrowHover(undefined)
-    setArrowSelected(undefined)
-    setNextPoint({ col: null, row: null })
-    setArrowHover(undefined)
-    setArrowSelected(undefined)
-  }, [selectedGridItem])
-
-  useEffect(() => {
-    if (moveTx.isSuccess && !!arrowSelected) {
+    if (moveTx.isSuccess) {
       setTimeout(() => {
         window.location.reload()
       }, 500)
     }
-  }, [arrowSelected, moveTx.isSuccess])
+  }, [moveTx.isSuccess])
 
   return (
     <Box w={'100%'} {...props}>
@@ -175,136 +102,87 @@ export function SidebarDetailed({ ...props }: any) {
           <Box as="section" mt={4}>
             <Flex justifyContent={'flex-start'} flexShrink={2}>
               <Box maxW={'60%'}>
-                <Flex as="header" alignItems={'center'} mb={4}>
-                  <SkeletonText
-                    noOfLines={1}
-                    skeletonHeight="8"
-                    fontWeight={'bold'}
-                    textColor={'gray.900'}
-                    fontSize={'2xl'}
-                    textTransform={'uppercase'}
-                    isLoaded={!!tokenJson.name}
-                  >
-                    {tokenJson.name}
-                  </SkeletonText>
-                  <Text fontSize={'md'} textColor={'gray.500'} ml={2}>
-                    ({selectedGridItem.col},{selectedGridItem.row})
-                  </Text>
-                </Flex>
-                <ChakraNextImageLoader
-                  src={tokenJson.image}
-                  alt={tokenJson.name}
-                  width={400}
-                  height={600}
-                />
-                {highlightItems.length > 0 && (
-                  <Box
-                    display={'flex'}
-                    justifyContent={'space-between'}
-                    mt={2}
-                    flexWrap={highlightItems.length > 6 ? 'wrap' : 'nowrap'}
-                  >
-                    {highlightItems.map((item) => {
-                      return (
-                        <Box
-                          key={item!.index}
-                          textAlign={'center'}
-                          w={
-                            highlightItems.length > 6
-                              ? '23%'
-                              : `${
-                                  Math.floor(100 / highlightItems.length) - 1
-                                }%`
-                          }
-                        >
-                          <ChakraNextImageLoader
-                            src={item!.image}
-                            alt={`Token ${item!.index}`}
-                            width={60}
-                            height={180}
-                          />
-                          <Text fontSize={'11px'} mt={1}>
-                            ({item!.index.replace('-', ',')})
-                          </Text>
-                        </Box>
-                      )
-                    })}
-                  </Box>
-                )}
+                <LeftContent token={tokenJson} />
               </Box>
               <Box ml={8} mt={2} flexShrink={1}>
-                {myItems.includes(selectedGridItem.index) ? (
+                {!selectedGridItem.isLocked &&
+                myItems.includes(selectedGridItem.index) ? (
                   <>
-                    <Box pos={'relative'} w={'full'} h={'45px'}>
-                      <SidebarArrow
-                        displayCircle
-                        direction={selectedGridItem.direction}
-                        isAvailable
-                        handleOnClick={handleArrowOnClick}
-                        handleMouseOver={handleArrowMouseOver}
-                        selected={arrowSelected}
-                        hovered={arrowHover}
-                        disableArrows={unavailableDirections}
-                        hideArrows={hideArrows}
-                      />
-                    </Box>
-                    {!arrowSelected && (
-                      <Text fontSize={'xs'} fontWeight={'bold'} mt={1}>
-                        Select a direction <br />
-                        to move
-                      </Text>
+                    {!fixTokenState && <MoveSection token={tokenJson} />}
+                    {fixTokenState && (
+                      <>
+                        <Text fontSize={'sm'}>
+                          {fixTokenSelected
+                            ? 'Once you confirm, it will have 360º view and cannot be moved.'
+                            : 'Please, select a point in the grid. Your token will be placed and cannot be moved.'}
+                        </Text>
+                        {fixTokenSelected && (
+                          <Flex alignItems={'flex-end'} mt={1}>
+                            <Box>
+                              <Text fontSize={'xs'} fontWeight={'bold'}>
+                                From
+                              </Text>
+                              <Text fontSize={'xs'}>
+                                ({selectedGridItem.col},{selectedGridItem.row})
+                              </Text>
+                            </Box>
+
+                            <Box mx={1}>
+                              <Image
+                                src={'/move-to.svg'}
+                                width={16}
+                                height={16}
+                                alt={'Arrow to right'}
+                              />
+                            </Box>
+                            <Box>
+                              <Text fontSize={'xs'} fontWeight={'bold'}>
+                                To
+                              </Text>
+                              <Text fontSize={'xs'}>
+                                (
+                                {fixTokenSelected
+                                  ?.split('-')
+                                  .reverse()
+                                  .join(',')}
+                                )
+                              </Text>
+                            </Box>
+                          </Flex>
+                        )}
+                        <Button
+                          w={'full'}
+                          mt={4}
+                          mb={1}
+                          onClick={lockOriginPoint}
+                          isDisabled={
+                            !fixTokenSelected ||
+                            moveTx.isLoading ||
+                            moveToPosition.isLoading
+                          }
+                        >
+                          {moveToPosition.isLoading
+                            ? 'Waiting for approval...'
+                            : moveTx.isLoading
+                              ? 'Processing...'
+                              : 'Confirm'}
+                        </Button>
+                        <Button
+                          w={'full'}
+                          mt={4}
+                          mb={1}
+                          onClick={toggleFixMyToken}
+                          variant={'outline'}
+                        >
+                          Go Back
+                        </Button>
+                        <TxMessage
+                          hash={moveToPosition.data?.hash}
+                          error={moveTx.error as TransactionError}
+                          successMessage="Token moved successfully! Reloading the page..."
+                        />
+                      </>
                     )}
-                    {arrowSelected && (
-                      <Flex alignItems={'flex-end'} mt={1}>
-                        <Box>
-                          <Text fontSize={'xs'} fontWeight={'bold'}>
-                            From
-                          </Text>
-                          <Text fontSize={'xs'}>
-                            ({selectedGridItem.col},{selectedGridItem.row})
-                          </Text>
-                        </Box>
-                        <Box mx={1}>
-                          <Image
-                            src={'/move-to.svg'}
-                            width={16}
-                            height={16}
-                            alt={'Arrow to right'}
-                          />
-                        </Box>
-                        <Box>
-                          <Text fontSize={'xs'} fontWeight={'bold'}>
-                            To
-                          </Text>
-                          <Text fontSize={'xs'}>
-                            ({nextPoint.col},{nextPoint.row})
-                          </Text>
-                        </Box>
-                      </Flex>
-                    )}
-                    <Button
-                      variant={'solid'}
-                      w={'full'}
-                      mt={4}
-                      mb={1}
-                      onClick={handleMove}
-                      isDisabled={
-                        !arrowSelected ||
-                        getCurrentMoveToCall().isLoading ||
-                        moveTx.isLoading
-                      }
-                    >
-                      {getCurrentMoveToCall().isLoading
-                        ? 'Waiting for approval...'
-                        : moveTx.isLoading
-                          ? 'Processing...'
-                          : 'Move'}
-                    </Button>
-                    <TxMessage
-                      hash={getCurrentMoveToCall().data?.hash}
-                      error={getCurrentMoveToCall().error as TransactionError}
-                      successMessage="Token moved successfully! Reloading the page..."
-                    />
                   </>
                 ) : (
                   <Box w={'full'} h={'45px'} />

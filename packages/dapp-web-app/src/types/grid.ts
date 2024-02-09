@@ -23,7 +23,7 @@ export interface GridItemBaseProperties {
   index: string
   row: number
   col: number
-  direction: Direction
+  direction: Direction | null
 }
 
 export const generateImage = (index: number) =>
