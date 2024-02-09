@@ -55,7 +55,7 @@ const PlaygroundContext = createContext<{
   movements: number
   originPoint: string
   lastSelectedGridItem?: {
-    direction: Direction
+    direction: Direction | null
   } & GridItemProperties
 }>({
   gridItemsState: {},

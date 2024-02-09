@@ -9,7 +9,7 @@ import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 interface GridItemProps extends GridItemProperties {
   width: number
   height: number
-  moveDirection?: Direction
+  moveDirection?: Direction | null
   lineWidth: number
   lineHeight: number
   isHighlighted: boolean
