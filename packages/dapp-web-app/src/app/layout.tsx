@@ -3,8 +3,9 @@ import Providers from 'contexts/providers'
 import './../assets/styles/globals.css'
 
 export const metadata: Metadata = {
-  title: 'Line by Figure31',
-  description: 'Line by Figure31',
+  title: 'Explore LINE by Figure31',
+  description:
+    'LINE is a photographic series of 200 tokens placed within a synthetic landscape, made up of a grid with distinct coordinates. Every token has an origin point which defines a unique “field of view.”',
 }
 
 function RootLayout({ children }: { children: React.ReactNode }) {
