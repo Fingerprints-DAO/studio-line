@@ -154,7 +154,7 @@ export default function About() {
             </Text>
             <Text {...titleProps}>About Figure31</Text>
             <Text>
-              Loucas Braconnier, otherwise known as
+              Loucas Braconnier, otherwise known as{' '}
               <ChakraLink
                 as={Link}
                 href="https://twitter.com/figure31_"
