@@ -1,9 +1,9 @@
 import { FC, useState } from 'react'
 import Image, { ImageProps } from 'next/image'
-import { Box, Skeleton } from '@chakra-ui/react'
+import { Box, BoxProps, Skeleton } from '@chakra-ui/react'
 
 // Define props type
-export interface ChakraNextImageLoaderProps {
+export interface ChakraNextImageLoaderProps extends BoxProps {
   src: string
   alt: string
   width: number

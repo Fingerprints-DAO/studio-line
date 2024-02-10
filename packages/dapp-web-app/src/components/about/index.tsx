@@ -5,11 +5,15 @@ import {
   Alert,
   AlertIcon,
   Box,
+  Button,
   Collapse,
   Container,
   Flex,
   Text,
   VStack,
+  Link as ChakraLink,
+  TextProps,
+  BoxProps,
 } from '@chakra-ui/react'
 import Header from 'components/header'
 import Footer from 'components/footer'
@@ -19,7 +23,27 @@ import SidebarIcons from 'components/sidebarIcons'
 import { useAccount } from 'wagmi'
 import { fetcher } from 'utils/fetcher'
 import { GetDiscountResponse } from 'pages/api/getDiscount'
-import ChakraNextImageLoader from 'components/chakraNextImageLoader'
+import ChakraNextImageLoader, {
+  ChakraNextImageLoaderProps,
+} from 'components/chakraNextImageLoader'
+import Link from 'next/link'
+
+const textProps: TextProps = {
+  my: 4,
+}
+
+const titleProps: TextProps = {
+  mt: 10,
+  mb: 5,
+  as: 'h1',
+  fontSize: '3xl',
+  textColor: 'gray.700',
+}
+
+const imagesProps: BoxProps = {
+  // maxW: '6xl',
+  my: 5,
+}
 
 export default function About() {
   const { isRegularScreen, isMediumScreen } = useDisplayConfig()
@@ -55,17 +79,18 @@ export default function About() {
           px={4}
           alignItems="stretch"
           minH={'100vh'}
-          w={'100vw'}
+          w={'100%'}
           pos={'relative'}
         >
-          {isRegularScreen && <Header />}
-          {isMediumScreen && <SidebarIcons alignItems={'flex-end'} />}
+          {/* {isRegularScreen && <Header />}
+          {isMediumScreen && <SidebarIcons alignItems={'flex-end'} />} */}
           <Box
             as={'main'}
-            mt={isRegularScreen ? '92px' : '0'}
+            // mt={isRegularScreen ? '92px' : '0'}
+            // mt={10}
             textColor={'gray.500'}
           >
-            <Box maxW={'6xl'} mb={10}>
+            <Box {...imagesProps}>
               <ChakraNextImageLoader
                 src={'/about/header.jpg'}
                 width={3900}
@@ -86,20 +111,32 @@ export default function About() {
                 </Alert>
               </Box>
             </Collapse>
-            <Text as={'h1'} fontSize={'3xl'} textColor={'gray.700'} mb={10}>
-              About Line
+            <Text {...titleProps}>LINE by Figure31</Text>
+            <Text {...textProps}>
+              <b>Date:</b> Dutch auction on Wednesday, February 21 at 10 AM PT /
+              1 PM ET / 7 PM CET{' - '}
+              <ChakraLink
+                as={Link}
+                href={'https://www.addevent.com/event/VX20075579'}
+                isExternal
+              >
+                add to calendar
+              </ChakraLink>
+              <br />
+              <b>Starting/Resting price:</b> 1.0 ETH → 0.15 ETH <br />
+              <b>Supply:</b> 200 tokens
             </Text>
-            <Text>
+            <Text {...textProps}>
               LINE is a photographic series of 200 tokens placed within a
               synthetic landscape. Using photographic and post-production
-              techniques similar to Figure&apos;s SALT, the images in LINE are
+              techniques similar to Figure31&apos;s SALT, the images in LINE are
               captured using a digital camera combined with ultra-telephoto
               lenses. All photographs are taken in remote empty landscapes at
               sundown or night. There is no artificial light, only indirect
               natural light hitting the camera sensor. Photographs are arranged
               as panoramas to recreate a unified landscape.
             </Text>
-            <Text my={5}>
+            <Text {...textProps}>
               The landscape is made up of a grid with distinct coordinates.
               Every token has an origin point which defines a unique “field of
               view.” The origin point determines a token&apos;s dynamism — and
@@ -107,35 +144,37 @@ export default function About() {
               coordinates through the project&apos;s website or the smart
               contract.
             </Text>
-            <Text>
+            <Text {...textProps}>
               Tokens act like camera lenses, where location also influences
               perception. Each token&apos;s position on the grid defines what
               image it perceives. The metadata of a token is dynamic; images and
               attributes travel back and forth between the different points
-              within the reach of its field of view. Images cycle daily.
+              within the reach of its field of view. Most tokens will have a
+              180-degree view, and only 20 “star” tokens will have a 360-degree
+              view. Images cycle daily.
             </Text>
-            <Text
-              as={'h1'}
-              fontSize={'3xl'}
-              textColor={'gray.700'}
-              mt={16}
-              mb={8}
-            >
-              About Figure31
-            </Text>
+            <Text {...titleProps}>About Figure31</Text>
             <Text>
-              Loucas Braconnier, otherwise known as Figure31 or just Figure, is
-              a visual artist working out of Montreal, Canada. He studied Visual
-              and Media Arts at L&apos;Université du Québec à Montréal. In 2023,
-              his work was exhibited in Singapore for Proof of Concept, in Tokyo
-              for Proof of X, and more recently in New Orleans for Material. His
-              work explores the specificity of the blockchain as a dynamic
-              medium and the conceptual implications of collecting such artworks
-              while repurposing photographic techniques to highlight how
-              technology can influence alternative modes of perception.
+              Loucas Braconnier, otherwise known as
+              <ChakraLink
+                as={Link}
+                href="https://twitter.com/figure31_"
+                isExternal
+              >
+                Figure31
+              </ChakraLink>{' '}
+              or just Figure, is a visual artist working out of Montreal,
+              Canada. He studied Visual and Media Arts at L&apos;Université du
+              Québec à Montréal. In 2023, his work was exhibited in Singapore
+              for Proof of Concept, in Tokyo for Proof of X, and more recently
+              in New Orleans for Material. His work explores the specificity of
+              the blockchain as a dynamic medium and the conceptual implications
+              of collecting such artworks while repurposing photographic
+              techniques to highlight how technology can influence alternative
+              modes of perception.
             </Text>
           </Box>
-          <Box maxW={'6xl'} mt={12} mb={5}>
+          <Box {...imagesProps}>
             <ChakraNextImageLoader
               src={'/about/faq.jpg'}
               width={3900}
@@ -143,13 +182,11 @@ export default function About() {
               alt="FAQ image"
             />
           </Box>
-          <Box as={'section'} mt={10}>
-            <Text as={'h1'} fontSize={'3xl'} textColor={'gray.700'} mb={10}>
-              Frequently asked questions
-            </Text>
+          <Box as={'section'}>
+            <Text {...titleProps}>Frequently asked questions</Text>
             <Box>
               {questions.map((item, index) => {
-                const isLastChild = questions.length - 1 === index
+                const isLastChild = false // questions.length - 1 === index
 
                 return (
                   <Box
@@ -178,14 +215,14 @@ export default function About() {
                 as={'h2'}
                 fontSize={'2xl'}
                 textColor={'gray.700'}
-                fontWeight={'bold'}
-                mt={16}
-                mb={10}
+                // fontWeight={'bold'}
+                mt={10}
+                mb={5}
               >
                 How the auction works
               </Text>
               {auctionQuestions.map((item, index) => {
-                const isLastChild = auctionQuestions.length - 1 === index
+                const isLastChild = false //auctionQuestions.length - 1 === index
 
                 return (
                   <Box
@@ -213,7 +250,7 @@ export default function About() {
             </Box>
           </Box>
 
-          <Box maxW={'6xl'} mt={8}>
+          <Box {...imagesProps}>
             <ChakraNextImageLoader
               src={'/about/footer.jpg'}
               width={3900}

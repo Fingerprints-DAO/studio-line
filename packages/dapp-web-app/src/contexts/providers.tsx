@@ -24,7 +24,8 @@ dayjs.extend(duration)
 
 function Providers({ children }: { children: React.ReactNode }) {
   const { isMediumScreen } = useDisplayConfig()
-  const { isOpen: isVisible, onClose } = useDisclosure({ defaultIsOpen: true })
+  // TODO: make it true to version 2
+  const { isOpen: isVisible, onClose } = useDisclosure({ defaultIsOpen: false })
 
   return (
     <CacheProvider>
