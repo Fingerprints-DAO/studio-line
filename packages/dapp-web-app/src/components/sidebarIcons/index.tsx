@@ -74,7 +74,7 @@ export default function SidebarIcons({
           <DrawerCloseButton rounded={'0'} textColor={'black'} />
           <DrawerBody>
             <Header isDrawer />
-            <AuctionBanner displayMintNow />
+            {/* <AuctionBanner displayMintNow /> */}
           </DrawerBody>
 
           <DrawerFooter as={'div'}>
