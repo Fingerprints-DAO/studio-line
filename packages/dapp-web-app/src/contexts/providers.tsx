@@ -28,14 +28,6 @@ function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <CacheProvider>
-      {/* <head>
-        <meta
-          name="viewport"
-          content={`width=device-width, initial-scale=${
-            isBrowser ? 1.0 : 0.5
-          }, minimum-scale=0.5, maximum-scale=1.0`}
-        />
-      </head> */}
       <ChakraProvider theme={theme}>
         <WagmiConfig config={config}>
           <ConnectKitProvider theme={'minimal'} mode="light">

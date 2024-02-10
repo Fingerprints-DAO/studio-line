@@ -71,6 +71,7 @@ export default function About() {
                 width={3900}
                 height={1966}
                 alt="Header image"
+                imageProps={{ priority: true }}
               />
             </Box>
             <Collapse

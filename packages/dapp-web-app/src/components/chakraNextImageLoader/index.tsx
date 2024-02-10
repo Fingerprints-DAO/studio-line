@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import Image from 'next/image'
+import Image, { ImageProps } from 'next/image'
 import { Box, Skeleton } from '@chakra-ui/react'
 
 // Define props type
@@ -8,8 +8,7 @@ export interface ChakraNextImageLoaderProps {
   alt: string
   width: number
   height?: number
-  layout?: 'fixed' | 'intrinsic' | 'responsive' | undefined // Optional, if you want to override the layout prop
-  // Add any additional props you want to pass to either the Skeleton or Image components
+  imageProps?: Partial<ImageProps>
 }
 
 export const ChakraNextImageLoader: FC<ChakraNextImageLoaderProps> = ({
@@ -17,6 +16,7 @@ export const ChakraNextImageLoader: FC<ChakraNextImageLoaderProps> = ({
   alt,
   width,
   height,
+  imageProps,
   ...rest
 }) => {
   const [isLoading, setLoading] = useState(true)
@@ -49,6 +49,7 @@ export const ChakraNextImageLoader: FC<ChakraNextImageLoaderProps> = ({
         style={{
           width: '100%',
         }}
+        {...imageProps}
       />
     </Box>
   )

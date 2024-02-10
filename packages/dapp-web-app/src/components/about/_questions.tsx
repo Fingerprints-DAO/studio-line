@@ -3,11 +3,9 @@ export const questions = [
     question: 'When is the auction?',
     answer: (
       <>
-        The 60-minute Dutch auction for LINE begins on Wednesday, February 21st
-        at 10AM PT / 1PM ET / 7PM CET. <br />
-        <br />
+        The 60-minute Dutch auction for LINE begins on{' '}
+        <b>Wednesday, February 21st at 10AM PT / 1PM ET / 7PM CET</b>.<br />
         The auction will take place on this website.
-        <br />
         <br />
         If works are still available at the end of the Dutch auction, minting
         will be open for 48 hours at the resting price.

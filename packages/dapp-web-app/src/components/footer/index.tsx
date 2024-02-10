@@ -79,7 +79,7 @@ const Footer = ({ isDrawer = false }) => {
           </Box>
 
           <Flex flex={1} justifyContent={'flex-end'} alignItems={'center'}>
-            {contractAddress && (
+            {/* {contractAddress && (
               <TextToltip label="Check out on Etherscan!" placement="top">
                 <Box
                   as="a"
@@ -115,11 +115,13 @@ const Footer = ({ isDrawer = false }) => {
               >
                 <Icon as={SiOpensea} w={6} h={6} display="block" />
               </Box>
-            </TextToltip>
+            </TextToltip> */}
             <TextToltip label="Join us on Discord!" placement="top">
               <Box
                 as="a"
-                href={'#'}
+                href={
+                  'https://discord.com/invite/Mg7wx36upM?utm_content=bufferbaa79&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer'
+                }
                 title="Discord"
                 target="_blank"
                 p={2}
