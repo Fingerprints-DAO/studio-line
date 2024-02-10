@@ -10,29 +10,34 @@ import { useLineCanMove } from 'services/web3/generated'
 // import { isAfterStage, PageState } from 'utils/currentStage'
 
 // let nav = isAfterStage(PageState.Released) ? [{ href: '/auction', label: 'auction' }] : []
+// const navLinks = [
+//   { href: '/', label: 'playground', isDisabled: true },
+//   { href: '/move', label: '', isDisabled: true },
+//   { href: '/about', label: 'about', isDisabled: false },
+// ]
 const navLinks = [
-  { href: '/', label: 'playground' },
-  { href: '/move', label: '' },
-  { href: '/about', label: 'about' },
+  // { href: '/about', label: 'playground', isDisabled: true },
+  { href: '/about', label: 'about', isDisabled: false },
+  { href: '/about', label: 'auction', isDisabled: true },
 ]
 
 const Header = ({ isDrawer = false }) => {
   const pathname = usePathname()
   const [nav, setNav] = useState(navLinks)
-  const { data: canMove, isSuccess: isCanMoveSuccess } = useLineCanMove({
-    watch: true,
-  })
+  // const { data: canMove, isSuccess: isCanMoveSuccess } = useLineCanMove({
+  //   watch: true,
+  // })
 
-  useEffect(() => {
-    if (!isCanMoveSuccess) return
-    const newNav = [...navLinks]
-    if (!canMove) {
-      newNav[1] = { href: '/auction', label: 'auction' }
-    } else {
-      newNav[1].label = 'tokens'
-    }
-    setNav(newNav)
-  }, [canMove, isCanMoveSuccess])
+  // useEffect(() => {
+  //   if (!isCanMoveSuccess) return
+  //   const newNav = [...navLinks]
+  //   if (!canMove) {
+  //     newNav[1] = { href: '/auction', label: 'auction', isDisabled: true }
+  //   } else {
+  //     newNav[1].label = 'tokens'
+  //   }
+  //   setNav(newNav)
+  // }, [canMove, isCanMoveSuccess])
 
   return (
     <Grid
@@ -59,7 +64,7 @@ const Header = ({ isDrawer = false }) => {
           h="full"
         >
           {nav.map((item, index) => {
-            const isActive = pathname === item.href
+            const isActive = !item.isDisabled && pathname === item.href
             if (item.label === '') return
 
             return (
@@ -70,8 +75,17 @@ const Header = ({ isDrawer = false }) => {
                 title={item.label}
                 mr={0}
                 ml={6}
-                _hover={{ color: 'cyan.500' }}
-                color={isActive ? 'cyan.500' : 'gray.900'}
+                _hover={{
+                  color: item.isDisabled ? 'gray.400' : 'cyan.500',
+                  cursor: item.isDisabled ? 'not-allowed' : 'pointer',
+                }}
+                color={
+                  item.isDisabled
+                    ? 'gray.400'
+                    : isActive
+                      ? 'cyan.500'
+                      : 'gray.900'
+                }
                 transition="ease"
                 transitionProperty="color"
                 transitionDuration="0.2s"
@@ -82,7 +96,7 @@ const Header = ({ isDrawer = false }) => {
               </Box>
             )
           })}
-          <Wallet ml={6} isDrawer={isDrawer} />
+          {/* <Wallet ml={6} isDrawer={isDrawer} /> */}
         </Flex>
       </GridItem>
     </Grid>

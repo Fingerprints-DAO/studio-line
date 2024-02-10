@@ -23,9 +23,7 @@ import SidebarIcons from 'components/sidebarIcons'
 import { useAccount } from 'wagmi'
 import { fetcher } from 'utils/fetcher'
 import { GetDiscountResponse } from 'pages/api/getDiscount'
-import ChakraNextImageLoader, {
-  ChakraNextImageLoaderProps,
-} from 'components/chakraNextImageLoader'
+import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 import Link from 'next/link'
 
 const textProps: TextProps = {
@@ -82,10 +80,11 @@ export default function About() {
           w={'100%'}
           pos={'relative'}
         >
-          {/* {isRegularScreen && <Header />}
-          {isMediumScreen && <SidebarIcons alignItems={'flex-end'} />} */}
+          {isRegularScreen && <Header />}
+          {isMediumScreen && <SidebarIcons alignItems={'flex-end'} />}
           <Box
             as={'main'}
+            mt={isRegularScreen ? '62px' : '0'}
             // mt={isRegularScreen ? '92px' : '0'}
             // mt={10}
             textColor={'gray.500'}

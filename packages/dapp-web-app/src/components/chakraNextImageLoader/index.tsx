@@ -23,6 +23,8 @@ export const ChakraNextImageLoader: FC<ChakraNextImageLoaderProps> = ({
 
   return (
     <Box
+      as={'span'}
+      display={'block'}
       position="relative"
       width={width}
       height={'auto'}
@@ -32,6 +34,8 @@ export const ChakraNextImageLoader: FC<ChakraNextImageLoaderProps> = ({
     >
       {isLoading && (
         <Skeleton
+          as={'span'}
+          display={'block'}
           left={0}
           top={0}
           bottom={0}
