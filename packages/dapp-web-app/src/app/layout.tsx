@@ -26,6 +26,13 @@ export const metadata: Metadata = {
     type: 'website',
     url: getBaseURL(),
   },
+  other: {
+    'fc:frame': 'vNext',
+    'fc:frame:image': getBaseURL() + '/opengraph-image.jpg',
+    'fc:frame:button:1': 'Mint',
+    'fc:frame:button:1:action': 'link',
+    'fc:frame:button:1:target': getBaseURL() + '/mint',
+  },
 }
 
 function RootLayout({ children }: { children: React.ReactNode }) {
