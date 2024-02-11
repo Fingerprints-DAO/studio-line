@@ -22,7 +22,7 @@ import { questions, auctionQuestions } from './_questions'
 import SidebarIcons from 'components/sidebarIcons'
 import { useAccount } from 'wagmi'
 import { fetcher } from 'utils/fetcher'
-import { GetDiscountResponse } from 'pages/api/getDiscount'
+import { GetDiscountResponse } from 'app/api/getDiscount'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 import Link from 'next/link'
 
