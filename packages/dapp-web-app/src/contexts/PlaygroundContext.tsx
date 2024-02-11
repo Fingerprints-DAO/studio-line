@@ -3,6 +3,7 @@ import {
   Direction,
   GridItemBaseProperties,
   GridSize,
+  ImageSizes,
   generateImage,
   getDirection,
 } from 'types/grid'
@@ -40,7 +41,7 @@ const generateFullGridDefaultState = () => {
         row,
         col,
         direction: getDirection(row),
-        image: generateImage(row + 1 + col + 1),
+        image: generateImage(col + row * GridSize, ImageSizes.SMALL),
       }
     }
   }

@@ -37,8 +37,10 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
   const itemId = lastSelectedGridItem
     ? lastSelectedGridItem.row * GridSize + lastSelectedGridItem.col
     : 0
-  const isFirstOrLastLine =
-    lastSelectedGridItem?.row === 24 || lastSelectedGridItem?.row === 0
+  const [isLastLine, isFirstLine] = [
+    lastSelectedGridItem?.row === 23,
+    lastSelectedGridItem?.row === 1,
+  ]
 
   const highlightItems = highlightGridItem
     .map((item) => gridItemsState[item])
@@ -135,13 +137,19 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
                 <TextLine title={'Type'}>
                   {lastSelectedGridItem.direction}
                 </TextLine>
-                <TextLine title={'Limit'}>
-                  {isFirstOrLastLine ? 'Yes' : 'No'}
-                </TextLine>
                 <TextLine title={'Starting point'}>
                   {lastSelectedGridItem.index.replace('-', ',')}
                 </TextLine>
-                <TextLine title={'Movements'}>{movements}</TextLine>
+                <TextLine title={'Has Reached End'}>
+                  {(lastSelectedGridItem.direction === Direction.UP &&
+                    isLastLine) ||
+                  (lastSelectedGridItem.direction === Direction.DOWN &&
+                    isFirstLine)
+                    ? 'Yes'
+                    : 'No'}
+                </TextLine>
+                <TextLine title={'Is Locked'}>No</TextLine>
+                <TextLine title={'Number of Movements'}>{movements}</TextLine>
                 <Link href={lastSelectedGridItem.image} isExternal>
                   Preview in new tab
                 </Link>

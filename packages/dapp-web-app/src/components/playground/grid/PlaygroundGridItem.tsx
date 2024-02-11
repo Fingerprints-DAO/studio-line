@@ -2,11 +2,12 @@ import React, { memo, useMemo, useState } from 'react'
 import { Box, Flex, Tooltip, Image as ChackraImage } from '@chakra-ui/react'
 import { GridItemProperties } from 'contexts/PlaygroundContext'
 import Image from 'next/image'
-import { Direction, GridSize } from 'types/grid'
+import { Direction, GridSize, ImageSizes, generateImage } from 'types/grid'
 import GridNumber from 'components/gridNumber'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 
 interface GridItemProps extends GridItemProperties {
+  gridId: number
   width: number
   height: number
   moveDirection?: Direction | null
@@ -47,6 +48,7 @@ const lineStyle = ({
 })
 
 const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
+  gridId,
   width,
   height,
   moveDirection,
@@ -76,7 +78,7 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
     isLastCol ||
     isBlocked ||
     (onlyHighlightedClick && !isHighlighted) ||
-    (isHighlighted && (isLastRow || isFirstRow))
+    (isHighlighted && (moveDirection === Direction.UP ? isFirstRow : isLastRow))
   const isBorder = isFirstRow || isFirstCol || isLastRow || isLastCol
   const isOdd = col % 2 === 0
 
@@ -163,12 +165,16 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
           border={isHighlighted ? '2px solid red' : `none`}
           borderColor={isHighlighted ? bgColor : `none`}
         >
-          <Image
-            src={image}
-            alt="placeholder"
-            width={width * 2}
-            height={height * 2}
-          />
+          {isOpened && (
+            <Image
+              src={image}
+              alt="placeholder"
+              width={104}
+              height={157}
+              // width={width * 2}
+              // height={height * 2}
+            />
+          )}
         </Box>
 
         <Tooltip
@@ -179,19 +185,20 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
           p={'8px'}
           bgColor={'rgba(45, 55, 72, 1)'}
           backdropFilter={'blur(4px)'}
-          isDisabled={disableClick}
           openDelay={500}
           label={
             <Flex
               flexDir={'column'}
               alignItems={'center'}
-              minW={'100px'}
-              minH={'150px'}
+              w={'100px'}
+              h={'150px'}
             >
               <ChakraNextImageLoader
-                src={image}
-                width={100}
-                height={150}
+                src={generateImage(gridId, ImageSizes.MEDIUM)}
+                width={286}
+                height={433}
+                // width={100}
+                // height={150}
                 alt="Token image"
               />
             </Flex>

@@ -32,6 +32,7 @@ const PlaygroundGrid: React.FC = () => {
       items.push(
         <PlaygroundGridItem
           key={index}
+          gridId={gridItemsState[id].id}
           width={itemWidth}
           height={itemHeight}
           moveDirection={lastSelectedGridItem?.direction}
