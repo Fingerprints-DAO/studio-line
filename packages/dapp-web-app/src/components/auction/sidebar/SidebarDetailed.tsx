@@ -7,17 +7,14 @@ import {
   Text,
   List,
   ListItem,
-  Checkbox,
   Input,
-  FormControl,
-  FormLabel,
   Skeleton,
 } from '@chakra-ui/react'
 import { BsX } from 'react-icons/bs'
 
 import { useTokensContext } from 'contexts/TokensContext'
 import { Direction } from 'types/grid'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { AuctionState } from 'types/auction'
 import { formatToEtherStringBN } from 'utils/price'
 import useCountdownTime from 'hooks/use-countdown-timer'
@@ -33,6 +30,7 @@ import { useWaitForTransaction } from 'wagmi'
 import ForceConnectButton from 'components/forceConnectButton'
 import { TransactionError } from 'types/transaction'
 import { TxMessage } from 'components/txMessage'
+import { useDiscount } from 'hooks/use-discount'
 
 const TextLine = ({ children, title = '', direction, ...props }: any) => (
   <ListItem
@@ -77,6 +75,7 @@ export function SidebarDetailed({ ...props }: any) {
   } = useAuctionContext()
   const [counter, setCounter] = useState(0)
   const { countdownInMili } = useCountdownTime()
+  const { value: discountValue, hasDiscount } = useDiscount()
   const mintRandom = useLineMintRandom({
     args: [BigInt(counter), merkleProof],
   })
@@ -91,16 +90,12 @@ export function SidebarDetailed({ ...props }: any) {
     enabled: mintPositions.data?.hash !== undefined,
     staleTime: 1_000,
   })
-  useEffect(() => {
-    if (mintPositionsTx.isSuccess || mintRandomTx.isSuccess) {
-      setCounter(0)
-      resetSelection()
-    }
+  const price = useMemo(() => {
+    if (!hasDiscount || discountValue === 0 || discountValue === null)
+      return currentPrice
 
-    // DONT ADD resetSelection to dependency array
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mintPositionsTx.isSuccess, mintRandomTx.isSuccess])
-
+    return currentPrice - (currentPrice * BigInt(discountValue)) / 100n
+  }, [currentPrice, discountValue, hasDiscount])
   const handleRandomMint = () => {
     mintRandom.write({
       value: BigInt(counter) * currentPrice,
@@ -117,11 +112,20 @@ export function SidebarDetailed({ ...props }: any) {
       value: BigInt(coordinates.length) * currentPrice,
     })
   }
+  useEffect(() => {
+    if (mintPositionsTx.isSuccess || mintRandomTx.isSuccess) {
+      setCounter(0)
+      resetSelection()
+    }
+
+    // DONT ADD resetSelection to dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mintPositionsTx.isSuccess, mintRandomTx.isSuccess])
 
   return (
     <Skeleton isLoaded={startPrice !== 0n} {...props}>
       <Box {...props}>
-        <Box as={'section'}>
+        <Box>
           <AuctionBanner />
           {(auctionState === AuctionState.STARTED ||
             auctionState === AuctionState.RESTING) && (
@@ -148,13 +152,34 @@ export function SidebarDetailed({ ...props }: any) {
                     fontWeight={'bold'}
                     textColor={'gray.900'}
                   >
-                    {formatToEtherStringBN(currentPrice)} ETH
+                    {hasDiscount && (
+                      <Flex alignItems={'center'}>
+                        <Text
+                          textColor={'gray.400'}
+                          textDecor={'line-through'}
+                          fontSize={'xs'}
+                        >
+                          {formatToEtherStringBN(currentPrice)} ETH
+                        </Text>
+                        <Text
+                          ml={2}
+                          bgColor={'gray.500'}
+                          textColor={'gray.50'}
+                          px={1}
+                          fontSize={'x-small'}
+                        >
+                          -{discountValue}%
+                        </Text>
+                      </Flex>
+                    )}
+                    {formatToEtherStringBN(price)} ETH
                   </Text>
                 </Flex>
                 {auctionState !== AuctionState.RESTING && (
                   <Flex
-                    bgColor={'gray.100'}
                     flexDirection={'column'}
+                    justifyContent={'center'}
+                    bgColor={'gray.100'}
                     py={1}
                     px={3}
                     ml={2}
@@ -178,8 +203,9 @@ export function SidebarDetailed({ ...props }: any) {
                 )}
 
                 <Flex
-                  bgColor={'gray.100'}
                   flexDirection={'column'}
+                  justifyContent={'center'}
+                  bgColor={'gray.100'}
                   py={1}
                   px={3}
                   ml={2}

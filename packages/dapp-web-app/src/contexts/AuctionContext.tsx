@@ -6,8 +6,6 @@ import React, {
   useEffect,
   useRef,
 } from 'react'
-import useAuctionGetConfig from 'services/web3/auction/use-auction-get-config'
-import useAuctionData from 'services/web3/auction/use-auction-get-data'
 import {
   useLineCanMove,
   useLineConfig,
