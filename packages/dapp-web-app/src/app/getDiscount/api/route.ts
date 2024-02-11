@@ -5,7 +5,7 @@ export type GetDiscountResponse = {
   discountPercentage: number
 }
 
-export default async function GET(req: Request) {
+export async function POST(req: Request) {
   const { address } = await req.json()
   let discountPercentage = 0
   let hasDiscount = false
