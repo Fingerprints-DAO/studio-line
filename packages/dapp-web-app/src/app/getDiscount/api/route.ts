@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server'
 import { fetcher } from 'utils/fetcher'
 
 export type GetDiscountResponse = {
@@ -30,7 +31,7 @@ export async function POST(req: Request) {
     hasDiscount = false
   }
 
-  return Response.json({
+  return NextResponse.json({
     hasDiscount,
     discountPercentage,
   })
