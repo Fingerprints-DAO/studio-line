@@ -26,14 +26,15 @@ export const metadata: Metadata = {
     type: 'website',
     url: getBaseURL(),
   },
-  other: {
-    'fc:frame': 'vNext',
-    'fc:frame:image': getBaseURL() + '/opengraph-image.jpg',
-    'fc:frame:button:1': 'Mint',
-    'fc:frame:button:1:action': 'mint',
-    // 'fc:frame:post_url': getBaseURL() + '/frame/api',
-    'fc:frame:button:1:target': getBaseURL() + '/auction',
-  },
+  // other: {
+  //   'fc:frame': 'vNext',
+  //   'fc:frame:image': getBaseURL() + '/opengraph-image.jpg',
+  //   'fc:frame:button:1': 'Mint',
+  //   'fc:frame:button:1:action': 'mint',
+  //   // 'fc:frame:post_url': getBaseURL() + '/frame/api',
+  //   'fc:frame:button:1:target':
+  //     'eip155:11155111:0x70b487b6e655307c56c231ac7b6a3d84dd4d7f26',
+  // },
 }
 
 function RootLayout({ children }: { children: React.ReactNode }) {
