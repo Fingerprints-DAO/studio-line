@@ -10,9 +10,10 @@ import {
   Fade,
 } from '@chakra-ui/react'
 import { AuctionBanner } from 'components/auctionBanner'
+import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 import Image from 'next/image'
-import { Direction, GridSize } from 'types/grid'
+import { Direction, GridSize, ImageSizes, generateImage } from 'types/grid'
 
 const TextLine = ({ children, title = '', ...props }: any) => (
   <Text fontSize={'md'} color={'gray.500'} mb={1} {...props}>
@@ -84,11 +85,13 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
             </Flex>
             <Flex justifyContent={'flex-start'}>
               <Box maxW={'55%'}>
-                <Image
-                  src={lastSelectedGridItem.image}
+                <ChakraNextImageLoader
+                  src={generateImage(itemId, ImageSizes.LARGE)}
                   alt={`Token ${lastSelectedGridItem.index}`}
-                  width={400}
-                  height={200}
+                  width={858}
+                  height={1298}
+                  // width={400}
+                  // height={200}
                   style={{ maxWidth: '100%' }}
                 />
                 {highlightItems.length > 0 && (
@@ -111,11 +114,11 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
                                 }%`
                           }
                         >
-                          <Image
+                          <ChakraNextImageLoader
                             src={item.image}
                             alt={`Token ${item.index}`}
-                            width={78}
-                            height={20}
+                            width={104}
+                            height={157}
                             style={{ width: '100%' }}
                           />
                           <Text fontSize={'xs'} mt={1}>

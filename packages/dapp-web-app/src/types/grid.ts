@@ -29,6 +29,7 @@ export interface GridItemBaseProperties {
 export enum ImageSizes {
   SMALL = 'small',
   MEDIUM = 'medium',
+  LARGE = 'large',
 }
 
 export const generateImage = (index: number, size = ImageSizes.SMALL) =>

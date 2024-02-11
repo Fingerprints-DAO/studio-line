@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import Image, { ImageProps } from 'next/image'
 import { Box, BoxProps, Skeleton } from '@chakra-ui/react'
 
@@ -20,6 +20,10 @@ export const ChakraNextImageLoader: FC<ChakraNextImageLoaderProps> = ({
   ...rest
 }) => {
   const [isLoading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setLoading(true)
+  }, [src])
 
   return (
     <Box
