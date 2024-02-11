@@ -31,6 +31,7 @@ import ForceConnectButton from 'components/forceConnectButton'
 import { TransactionError } from 'types/transaction'
 import { TxMessage } from 'components/txMessage'
 import { useDiscount } from 'hooks/use-discount'
+import TotalPriceDisplay from './TotalPriceDisplay'
 
 const TextLine = ({ children, title = '', direction, ...props }: any) => (
   <ListItem
@@ -267,13 +268,12 @@ export function SidebarDetailed({ ...props }: any) {
                   </List>
                 </Box>
                 <Box ml={4} flex={2}>
-                  <Text fontSize={'xs'} fontWeight={'bold'}>
-                    Total:{' '}
-                    {formatToEtherStringBN(
-                      BigInt(selectedItems.length) * currentPrice,
-                    )}{' '}
-                    ETH
-                  </Text>
+                  <TotalPriceDisplay
+                    selectedItemsCount={selectedItems.length}
+                    currentPrice={currentPrice}
+                    hasDiscount={hasDiscount}
+                    price={price}
+                  />
                   <Text fontSize={'xs'} fontWeight={'normal'} my={2}>
                     Unavailable tokens for minting will be refunded in the same
                     transaction.
@@ -354,10 +354,14 @@ export function SidebarDetailed({ ...props }: any) {
                   </Flex>
                 </Box>
                 <Box ml={4} flex={2}>
-                  <Text fontSize={'xs'} fontWeight={'bold'} mb={2}>
-                    Total:{' '}
-                    {formatToEtherStringBN(BigInt(counter) * currentPrice)} ETH
-                  </Text>
+                  <Box mb={2}>
+                    <TotalPriceDisplay
+                      selectedItemsCount={counter}
+                      currentPrice={currentPrice}
+                      hasDiscount={hasDiscount}
+                      price={price}
+                    />
+                  </Box>
                   <ForceConnectButton buttonText="Connect to mint">
                     <>
                       <Button
