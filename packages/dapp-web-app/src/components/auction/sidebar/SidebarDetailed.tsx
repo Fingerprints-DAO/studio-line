@@ -32,37 +32,8 @@ import { TransactionError } from 'types/transaction'
 import { TxMessage } from 'components/txMessage'
 import { useDiscount } from 'hooks/use-discount'
 import TotalPriceDisplay from './TotalPriceDisplay'
+import { TextLine } from './TextLine'
 
-const TextLine = ({ children, title = '', direction, ...props }: any) => (
-  <ListItem
-    mb={1}
-    bgColor={'gray.100'}
-    px={1}
-    display={'flex'}
-    justifyContent={'space-between'}
-    w={'100%'}
-    {...props}
-  >
-    <Flex alignItems={'center'} gap={1}>
-      <Text
-        as={'span'}
-        fontWeight={'bold'}
-        textColor={direction === Direction.DOWN ? 'cyan.500' : 'red.500'}
-        textTransform={'uppercase'}
-        fontSize={'md'}
-      >
-        LINE #{title}
-      </Text>{' '}
-      <Text as={'span'} fontSize={'xs'} color={'gray.500'}>
-        ({children})
-      </Text>
-    </Flex>
-    <Button variant={'link'} onClick={() => {}} minW={'none'} ml={2}>
-      <BsX size={16} color="gray.700" />
-    </Button>
-  </ListItem>
-)
-const merkleProof: Address[] = []
 export function SidebarDetailed({ ...props }: any) {
   const { selectedItems, gridItemsState, toggleSelectedItem, resetSelection } =
     useTokensContext()
@@ -76,7 +47,7 @@ export function SidebarDetailed({ ...props }: any) {
   } = useAuctionContext()
   const [counter, setCounter] = useState(0)
   const { countdownInMili } = useCountdownTime()
-  const { value: discountValue, hasDiscount } = useDiscount()
+  const { value: discountValue, hasDiscount, merkleProof } = useDiscount()
   const mintRandom = useLineMintRandom({
     args: [BigInt(counter), merkleProof],
   })
@@ -97,9 +68,10 @@ export function SidebarDetailed({ ...props }: any) {
 
     return currentPrice - (currentPrice * BigInt(discountValue)) / 100n
   }, [currentPrice, discountValue, hasDiscount])
+
   const handleRandomMint = () => {
     mintRandom.write({
-      value: BigInt(counter) * currentPrice,
+      value: BigInt(counter) * price,
     })
   }
 
@@ -108,9 +80,10 @@ export function SidebarDetailed({ ...props }: any) {
       const [y, x] = coordinate.split('-')
       return { x: BigInt(x), y: BigInt(y) }
     })
+
     mintPositions.write({
       args: [coordinates, merkleProof],
-      value: BigInt(coordinates.length) * currentPrice,
+      value: BigInt(coordinates.length) * price,
     })
   }
   useEffect(() => {

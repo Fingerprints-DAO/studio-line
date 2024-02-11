@@ -3,10 +3,11 @@
 import { GetDiscountResponse } from 'app/getDiscount/api/route'
 import { useState, useEffect } from 'react'
 import { fetcher } from 'utils/fetcher'
-import { useAccount } from 'wagmi'
+import { Address, useAccount } from 'wagmi'
 
 export function useDiscount() {
   const [discountValue, setDiscountValue] = useState<number | null>(null)
+  const [merkleProof, setMerkleProof] = useState<Address[]>([])
   const { address } = useAccount()
 
   useEffect(() => {
@@ -21,6 +22,7 @@ export function useDiscount() {
           },
         )
         setDiscountValue(response.discountPercentage)
+        setMerkleProof(response.merkleProof as Address[])
       } catch (error) {
         console.error('Error checking discounts:', error)
         setDiscountValue(null)
@@ -34,5 +36,6 @@ export function useDiscount() {
     value: discountValue,
     hasDiscount: discountValue !== null && discountValue > 0,
     isLoading: !discountValue,
+    merkleProof,
   }
 }

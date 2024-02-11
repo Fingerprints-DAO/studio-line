@@ -25,6 +25,7 @@ import { fetcher } from 'utils/fetcher'
 import { GetDiscountResponse } from 'app/getDiscount/api/route'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 import Link from 'next/link'
+import { useDiscount } from 'hooks/use-discount'
 
 const textProps: TextProps = {
   my: 4,
@@ -45,29 +46,7 @@ const imagesProps: BoxProps = {
 
 export default function About() {
   const { isRegularScreen, isMediumScreen } = useDisplayConfig()
-  const [discountValue, setDiscountValue] = useState<number | null>(null)
-  const { address } = useAccount()
-
-  useEffect(() => {
-    const checkDiscount = async (address: string) => {
-      try {
-        const response = await fetcher<GetDiscountResponse>(
-          '/getDiscount/api',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ address }),
-          },
-        )
-        setDiscountValue(response.discountPercentage)
-      } catch (error) {
-        console.error('Error checking discounts:', error)
-        setDiscountValue(null)
-      }
-    }
-
-    if (address) checkDiscount(address)
-  }, [address])
+  const { value: discountValue } = useDiscount()
 
   return (
     <Container maxW={'8xl'}>
