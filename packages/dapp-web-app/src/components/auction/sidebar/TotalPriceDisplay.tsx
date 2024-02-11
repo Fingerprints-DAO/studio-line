@@ -1,4 +1,4 @@
-import { Text } from '@chakra-ui/react'
+import { Box, Text } from '@chakra-ui/react'
 import { formatToEtherStringBN } from 'utils/price'
 
 interface TotalPriceDisplayProps {
@@ -20,7 +20,7 @@ const TotalPriceDisplay: React.FC<TotalPriceDisplayProps> = ({
   const showDiscount = hasDiscount && itemCount > 0
 
   return (
-    <Text fontSize={'xs'} fontWeight={'bold'}>
+    <Box fontSize={'xs'} fontWeight={'bold'}>
       Total:{' '}
       <Text
         as={'span'}
@@ -34,7 +34,7 @@ const TotalPriceDisplay: React.FC<TotalPriceDisplayProps> = ({
           {discountedPrice} ETH
         </Text>
       )}
-    </Text>
+    </Box>
   )
 }
 

@@ -122,6 +122,7 @@ export function SidebarDetailed({ ...props }: any) {
                       : 'Current price'}
                   </Text>
                   <Text
+                    as={'div'}
                     fontSize={'lg'}
                     fontWeight={'bold'}
                     textColor={'gray.900'}
