@@ -84,8 +84,8 @@ export default function About() {
           {isMediumScreen && <SidebarIcons alignItems={'flex-end'} />}
           <Box
             as={'main'}
-            mt={isRegularScreen ? '62px' : '0'}
-            // mt={isRegularScreen ? '92px' : '0'}
+            // mt={isRegularScreen ? '62px' : '0'}
+            mt={isRegularScreen ? '92px' : '0'}
             // mt={10}
             textColor={'gray.500'}
           >
@@ -98,19 +98,20 @@ export default function About() {
                 imageProps={{ priority: true }}
               />
             </Box>
+            <Text {...titleProps}>LINE by Figure31</Text>
+
             <Collapse
               in={discountValue !== null && discountValue > 0}
               animateOpacity
               unmountOnExit
             >
-              <Box pb={10}>
+              <Box>
                 <Alert status="success" bgColor={'gray.200'}>
                   <AlertIcon color={'gray.500'} />
                   {`You are eligible for a ${discountValue}% discount on Mint.`}
                 </Alert>
               </Box>
             </Collapse>
-            <Text {...titleProps}>LINE by Figure31</Text>
             <Text {...textProps}>
               <b>Date:</b> Dutch auction on Wednesday, February 21 at 10 AM PT /
               1 PM ET / 7 PM CET{' - '}
@@ -125,6 +126,7 @@ export default function About() {
               <b>Starting/Resting price:</b> 1.0 ETH → 0.15 ETH <br />
               <b>Supply:</b> 200 tokens
             </Text>
+
             <Text {...textProps}>
               LINE is a photographic series of 200 tokens placed within a
               synthetic landscape. Using photographic and post-production

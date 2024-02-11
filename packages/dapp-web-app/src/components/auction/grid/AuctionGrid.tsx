@@ -67,7 +67,7 @@ const AuctionGrid: React.FC = () => {
     <Box
       ref={ref}
       height={'100%'}
-      w={height > 0 ? height : 'auto'}
+      w={!showGrid ? '100%' : height > 0 ? height : 'auto'}
       minW={ref.current ? 'none' : '50vw'}
       pos={'relative'}
     >
