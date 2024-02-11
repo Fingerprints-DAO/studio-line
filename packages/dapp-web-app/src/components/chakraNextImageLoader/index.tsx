@@ -56,6 +56,8 @@ export const ChakraNextImageLoader: FC<ChakraNextImageLoaderProps> = ({
         onLoadingComplete={() => setLoading(false)}
         style={{
           width: '100%',
+          opacity: isLoading ? 0 : 1,
+          transition: 'opacity 0.5s',
         }}
         {...imageProps}
       />
