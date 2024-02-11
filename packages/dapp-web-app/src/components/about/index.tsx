@@ -70,7 +70,7 @@ export default function About() {
   }, [address])
 
   return (
-    <Container maxW={'6xl'}>
+    <Container maxW={'8xl'}>
       <Flex pos={'relative'} justifyContent={'center'}>
         <VStack
           bg="white"

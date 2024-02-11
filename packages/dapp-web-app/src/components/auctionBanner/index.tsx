@@ -22,17 +22,31 @@ export function AuctionBanner({ displayMintNow = false }) {
   ) {
     if (!displayMintNow) return null
     return (
-      <Box as={'section'} bgColor={'gray.200'} p={4} mb={4}>
+      <Box
+        as={'section'}
+        bgColor={'gray.200'}
+        p={4}
+        mb={4}
+        display={'flex'}
+        alignItems={'center'}
+      >
         <Text
           as={'h2'}
           fontWeight={'bold'}
           textColor={'gray.700'}
           fontSize={'lg'}
           textTransform={'uppercase'}
+          flex={3}
         >
           Auction is live!
         </Text>
-        <Button as={Link} href={'/auction'} variant={'solid'} mt={2} w={'full'}>
+        <Button
+          as={Link}
+          href={'/auction'}
+          variant={'solid'}
+          w={'full'}
+          flex={1}
+        >
           MINT NOW
         </Button>
       </Box>
@@ -47,16 +61,19 @@ export function AuctionBanner({ displayMintNow = false }) {
         textColor={'gray.700'}
         fontSize={'lg'}
       >
-        Minting opens {startDate.format('dddd, MMMM D, hh:mma')}.
+        Minting opens {startDate.format('dddd, MMMM D, hh:mma')} (your
+        timezone).
       </Text>
       <Text fontSize={'xs'} my={1}>
         Linear dutch auction over 1 hour. Starting price of{' '}
-        {formatEther(startPrice).toString()}ETH, resting price of{' '}
+        {formatEther(startPrice).toString()} ETH, resting price of{' '}
         {formatEther(endPrice).toString()} ETH, no rebate. Bidders can select
         specific tokens before minting or mint randomly. As soon as you place
         your bid your tokens will be minted. Supply of {maxSupply.toString()}.
       </Text>
-      <ChakraLink href={'#'}>Add to calendar</ChakraLink>
+      <ChakraLink href={'https://www.addevent.com/event/VX20075579'} isExternal>
+        Add to calendar
+      </ChakraLink>
     </Box>
   )
 }

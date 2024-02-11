@@ -9,35 +9,29 @@ import { useLineCanMove } from 'services/web3/generated'
 // import Wallet from 'components/wallet'
 // import { isAfterStage, PageState } from 'utils/currentStage'
 
-// let nav = isAfterStage(PageState.Released) ? [{ href: '/auction', label: 'auction' }] : []
-// const navLinks = [
-//   { href: '/', label: 'playground', isDisabled: true },
-//   { href: '/move', label: '', isDisabled: true },
-//   { href: '/about', label: 'about', isDisabled: false },
-// ]
 const navLinks = [
-  // { href: '/about', label: 'playground', isDisabled: true },
+  { href: '/', label: 'playground', isDisabled: false },
+  { href: '/move', label: '', isDisabled: false },
   { href: '/about', label: 'about', isDisabled: false },
-  { href: '/about', label: 'auction', isDisabled: true },
 ]
 
 const Header = ({ isDrawer = false }) => {
   const pathname = usePathname()
   const [nav, setNav] = useState(navLinks)
-  // const { data: canMove, isSuccess: isCanMoveSuccess } = useLineCanMove({
-  //   watch: true,
-  // })
+  const { data: canMove, isSuccess: isCanMoveSuccess } = useLineCanMove({
+    watch: true,
+  })
 
-  // useEffect(() => {
-  //   if (!isCanMoveSuccess) return
-  //   const newNav = [...navLinks]
-  //   if (!canMove) {
-  //     newNav[1] = { href: '/auction', label: 'auction', isDisabled: true }
-  //   } else {
-  //     newNav[1].label = 'tokens'
-  //   }
-  //   setNav(newNav)
-  // }, [canMove, isCanMoveSuccess])
+  useEffect(() => {
+    if (!isCanMoveSuccess) return
+    const newNav = [...navLinks]
+    if (!canMove) {
+      newNav[1] = { href: '/auction', label: 'auction', isDisabled: false }
+    } else {
+      newNav[1].label = 'tokens'
+    }
+    setNav(newNav)
+  }, [canMove, isCanMoveSuccess])
 
   return (
     <Grid
@@ -96,7 +90,7 @@ const Header = ({ isDrawer = false }) => {
               </Box>
             )
           })}
-          {/* <Wallet ml={6} isDrawer={isDrawer} /> */}
+          <Wallet ml={6} isDrawer={isDrawer} />
         </Flex>
       </GridItem>
     </Grid>
