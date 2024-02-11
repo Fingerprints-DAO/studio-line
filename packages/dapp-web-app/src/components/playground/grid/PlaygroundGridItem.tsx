@@ -197,8 +197,6 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
                 src={generateImage(gridId, ImageSizes.MEDIUM)}
                 width={286}
                 height={433}
-                // width={100}
-                // height={150}
                 alt="Token image"
               />
             </Flex>

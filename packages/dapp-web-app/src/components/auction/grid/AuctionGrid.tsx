@@ -33,6 +33,7 @@ const AuctionGrid: React.FC = () => {
       items.push(
         <AuctionGridItem
           key={index}
+          gridId={gridItemsState[id]?.id}
           width={itemWidth}
           height={itemHeight}
           toggleGridItem={toggleSelectedItem}

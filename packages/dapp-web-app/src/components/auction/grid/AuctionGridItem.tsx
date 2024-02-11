@@ -1,11 +1,13 @@
 import React, { memo, useMemo, useState } from 'react'
 import { Box, Flex, Tooltip, Image as ChackraImage } from '@chakra-ui/react'
 import { GridItemProperties } from 'contexts/TokensContext'
-import { Direction, GridSize } from 'types/grid'
+import { Direction, GridSize, ImageSizes, generateImage } from 'types/grid'
 import GridNumber from 'components/gridNumber'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 
 interface GridItemProps extends GridItemProperties {
+  gridId: number | null
+  image: string
   width: number
   height: number
   lineWidth: number
@@ -46,6 +48,7 @@ const lineStyle = ({
 })
 
 const AuctionGridItemComponent: React.FC<GridItemProps> = ({
+  gridId,
   width,
   height,
   image,
@@ -131,13 +134,17 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
             <Flex
               flexDir={'column'}
               alignItems={'center'}
-              minW={'100px'}
-              minH={'150px'}
+              w={'100px'}
+              h={'150px'}
             >
               <ChakraNextImageLoader
-                src={image}
-                width={100}
-                height={150}
+                src={
+                  gridId !== null
+                    ? generateImage(gridId, ImageSizes.MEDIUM)
+                    : image
+                }
+                width={286}
+                height={433}
                 alt="Token image"
               />
             </Flex>
