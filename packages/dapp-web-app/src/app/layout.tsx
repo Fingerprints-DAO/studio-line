@@ -29,10 +29,16 @@ export const metadata: Metadata = {
   other: {
     'fc:frame': 'vNext',
     'fc:frame:image': getBaseURL() + '/opengraph-image.jpg',
-    'fc:frame:button:1': 'Mint',
-    'fc:frame:button:1:action': 'post_redirect',
-    // 'fc:frame:button:1:target': getBaseURL() + '/mint',
+    'fc:frame:button:1': '',
+    'fc:frame:button:1:action': '',
+    'fc:frame:button:2': '',
+    'fc:frame:button:2:action': '',
+    'fc:frame:button:3': '',
+    'fc:frame:button:3:action': '',
+    'fc:frame:button:4': 'Mint',
+    'fc:frame:button:4:action': 'post_redirect',
     'fc:frame:post_url': getBaseURL() + '/frame/api',
+    // 'fc:frame:button:1:target': getBaseURL() + '/mint',
   },
 }
 
