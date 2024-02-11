@@ -1,24 +1,47 @@
-import BigNumber from 'bignumber.js'
-import { BigNumberish as BN, formatEther } from 'ethers'
 import { NumberSettings } from 'types/number-settings'
+import { formatEther } from 'viem'
 
-export const getNumberToStringOrZero = (n?: BN) => n?.toString() ?? 0
+export const formatToEtherStringBN = (n?: bigint) =>
+  formatEther(n ?? 0n).toString()
 
-export const normalizeBigNumber = (n?: BN) =>
-  BigNumber(getNumberToStringOrZero(n))
-
-export const formatToEtherStringBN = (n?: BN) =>
-  BigNumber(formatEther(getNumberToStringOrZero(n))).toString()
 export const formatToEtherString = (n?: string) =>
-  BigNumber(formatEther(n ?? '0'))
+  formatEther(BigInt(Number(n)) ?? 0n).toString()
 
-export const formatBigNumberUp = (n?: BigNumber) =>
-  n?.toFormat(NumberSettings.Decimals, BigNumber.ROUND_UP) ?? '0'
-export const formatBigNumberFloor = (n?: BigNumber) =>
-  n?.toFormat(NumberSettings.Decimals, BigNumber.ROUND_FLOOR) ?? '0'
+export const formatBigNumberUp = (
+  n?: bigint,
+  decimals: number = NumberSettings.Decimals,
+) => formatBigNumber(n, decimals, 'up')
 
-export const roundEtherUp = (n?: BN) =>
-  normalizeBigNumber(n).toFormat(NumberSettings.Decimals, BigNumber.ROUND_UP)
+export const formatBigNumberFloor = (
+  n?: bigint,
+  decimals: number = NumberSettings.Decimals,
+) => formatBigNumber(n, decimals, 'down')
 
-export const roundEtherFloor = (n?: BN) =>
-  normalizeBigNumber(n).toFormat(NumberSettings.Decimals, BigNumber.ROUND_FLOOR)
+export const roundEtherUp = (
+  n?: bigint,
+  decimals: number = NumberSettings.Decimals,
+) => formatBigNumber(n, decimals, 'up')
+
+function formatBigNumber(
+  n: bigint | undefined,
+  decimals: number,
+  mode: 'up' | 'down' = 'up',
+): string {
+  if (n === undefined) {
+    return '0'
+  }
+  const str = n.toString()
+  const integerPart = str.substring(0, str.length - decimals) || '0'
+  const decimalPart = str.substring(str.length - decimals).padEnd(decimals, '0')
+
+  const roundedDecimal =
+    mode === 'up'
+      ? Math.ceil(Number(`0.${decimalPart}`))
+          .toString()
+          .padStart(decimals, '0')
+      : Math.floor(Number(`0.${decimalPart}`))
+          .toString()
+          .padStart(decimals, '0')
+
+  return `${integerPart}.${roundedDecimal}`
+}

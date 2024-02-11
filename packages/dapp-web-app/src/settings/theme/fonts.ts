@@ -1,8 +1,8 @@
 import { Theme } from '@chakra-ui/react'
 
 const fonts: Partial<Theme['fonts']> = {
-  body: 'Helvetica',
-  heading: 'Helvetica',
+  body: '"Helvetica Neue", serif',
+  heading: '"Helvetica Neue", serif',
 }
 
 export default fonts

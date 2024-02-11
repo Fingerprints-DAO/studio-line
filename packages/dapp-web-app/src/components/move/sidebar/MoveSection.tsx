@@ -1,0 +1,177 @@
+'use client'
+
+import { useEffect, useMemo, useState } from 'react'
+import { Box, Button, Fade, Flex, Text } from '@chakra-ui/react'
+import Image from 'next/image'
+import { useMoveContext } from 'contexts/MoveContext'
+import { SidebarArrow } from 'components/arrow/SidebarArrow'
+import { TxMessage } from 'components/txMessage'
+import { TransactionError } from 'types/transaction'
+import {
+  getNextPoint,
+  getSpecificArrowMoveDirection,
+} from 'components/arrow/utils'
+import useMovePoint from 'hooks/useMovePoint'
+import { ArrowDirections } from 'types/movements'
+import { TRAITS } from 'types/nft'
+import { useWaitForTransaction } from 'wagmi'
+
+export function MoveSection({ token }: { token: any }) {
+  const {
+    selectedGridItem,
+    unavailableDirections,
+    refreshAfterMove,
+    resetSelection,
+    toggleFixMyToken,
+  } = useMoveContext()
+  const [arrowHover, setArrowHover] = useState<ArrowDirections | undefined>()
+  const [nextPoint, setNextPoint] = useState<{
+    col: number | null
+    row: number | null
+  }>({ col: null, row: null })
+  const [arrowSelected, setArrowSelected] = useState<
+    ArrowDirections | undefined
+  >()
+  const { getMoveFunction, getCurrentMoveToCall } = useMovePoint()
+  const moveTx = useWaitForTransaction({
+    hash: getCurrentMoveToCall().data?.hash,
+    enabled: getCurrentMoveToCall().data?.hash !== undefined,
+    staleTime: 1_000,
+  })
+
+  const tokenDirection = useMemo(() => {
+    if (!token) return ''
+
+    return (
+      token.attributes
+        .find((attr: any) => attr.trait_type === TRAITS.DIRECTION)
+        ?.value.toLowerCase() ?? ''
+    )
+  }, [token])
+
+  const handleArrowMouseOver = (direction?: ArrowDirections) => {
+    setArrowHover(direction)
+  }
+  const handleArrowOnClick = (direction: ArrowDirections) => {
+    if (!selectedGridItem) return
+    setArrowSelected(direction)
+    const { row, col } = getNextPoint(
+      Number(selectedGridItem.col),
+      Number(selectedGridItem.row),
+      tokenDirection,
+      direction,
+    )
+    setNextPoint({ row, col })
+  }
+  const handleMove = () => {
+    const pointDirection = getSpecificArrowMoveDirection(
+      tokenDirection,
+      arrowSelected!,
+    )
+    if (!pointDirection) return
+
+    const moveFunction = getMoveFunction(pointDirection!)
+    moveFunction.write({
+      args: [BigInt(selectedGridItem?.id || 0)],
+    })
+  }
+
+  useEffect(() => {
+    setArrowHover(undefined)
+    setArrowSelected(undefined)
+    setNextPoint({ col: null, row: null })
+    setArrowHover(undefined)
+    setArrowSelected(undefined)
+  }, [selectedGridItem])
+
+  useEffect(() => {
+    if (moveTx.isSuccess && !!arrowSelected) {
+      setTimeout(() => {
+        window.location.reload()
+      }, 500)
+    }
+  }, [arrowSelected, moveTx.isSuccess, refreshAfterMove, resetSelection])
+
+  return (
+    <Fade in={!!selectedGridItem} unmountOnExit>
+      <Box pos={'relative'} w={'full'} h={'45px'}>
+        <SidebarArrow
+          displayCircle
+          direction={selectedGridItem?.direction ?? null}
+          isAvailable
+          handleOnClick={handleArrowOnClick}
+          handleMouseOver={handleArrowMouseOver}
+          selected={arrowSelected}
+          hovered={arrowHover}
+          disableArrows={unavailableDirections}
+        />
+      </Box>
+      {!arrowSelected && (
+        <Text fontSize={'xs'} fontWeight={'bold'} mt={1}>
+          Select a direction <br />
+          to move
+        </Text>
+      )}
+      {arrowSelected && (
+        <Flex alignItems={'flex-end'} mt={1}>
+          <Box>
+            <Text fontSize={'xs'} fontWeight={'bold'}>
+              From
+            </Text>
+            <Text fontSize={'xs'}>
+              ({selectedGridItem?.col},{selectedGridItem?.row})
+            </Text>
+          </Box>
+          <Box mx={1}>
+            <Image
+              src={'/move-to.svg'}
+              width={16}
+              height={16}
+              alt={'Arrow to right'}
+            />
+          </Box>
+          <Box>
+            <Text fontSize={'xs'} fontWeight={'bold'}>
+              To
+            </Text>
+            <Text fontSize={'xs'}>
+              ({nextPoint.col},{nextPoint.row})
+            </Text>
+          </Box>
+        </Flex>
+      )}
+      <Button
+        variant={'solid'}
+        w={'full'}
+        mt={4}
+        mb={1}
+        onClick={handleMove}
+        isDisabled={
+          !arrowSelected || getCurrentMoveToCall().isLoading || moveTx.isLoading
+        }
+      >
+        {getCurrentMoveToCall().isLoading
+          ? 'Waiting for approval...'
+          : moveTx.isLoading
+            ? 'Processing...'
+            : 'Move'}
+      </Button>
+      <TxMessage
+        hash={getCurrentMoveToCall().data?.hash}
+        error={getCurrentMoveToCall().error as TransactionError}
+        successMessage="Token moved successfully! Reloading the page..."
+      />
+
+      <Button
+        variant={'solid'}
+        w={'full'}
+        mt={4}
+        mb={1}
+        onClick={toggleFixMyToken}
+        colorScheme="purple"
+      >
+        Fix my token on grid
+      </Button>
+    </Fade>
+  )
+}

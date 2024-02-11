@@ -31,5 +31,5 @@
     "./files/*.json",
     "./logs/*.json"
   ],
-  "files": ["./hardhat.config.ts"],
+  // "files": ["./hardhat.config.ts"],
 }

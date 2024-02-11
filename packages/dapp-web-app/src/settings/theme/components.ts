@@ -1,4 +1,4 @@
-import { defineStyle, defineStyleConfig } from '@chakra-ui/react'
+import { Checkbox, defineStyle, defineStyleConfig } from '@chakra-ui/react'
 
 const customColor = (colorScheme: any) => {
   if (colorScheme === 'black') {
@@ -13,70 +13,115 @@ const customColor = (colorScheme: any) => {
 }
 
 const components = {
-  Container: {
+  // Container: {
+  //   baseStyle: {
+  //     maxWidth: {
+  //       base: '100%',
+  //       sm: '100%',
+  //       lg: '1440px',
+  //     },
+  //     paddingLeft: '32px',
+  //     paddingRight: '32px',
+  //   },
+  // },
+  Input: defineStyleConfig({
     baseStyle: {
-      maxWidth: {
-        base: '100%',
-        sm: '100%',
-        lg: '1440px',
-      },
-      paddingLeft: '32px',
-      paddingRight: '32px',
+      borderRadius: 0,
+      rounded: 'none',
+      borderColor: 'gray.900',
     },
-  },
+  }),
   Button: defineStyleConfig({
-    sizes: {
-      lg: {
-        fontWeight: 'bold',
-        height: 12,
-        fontSize: 16,
-        px: 4,
-      },
-    },
+    // sizes: {
+    //   lg: {
+    //     fontWeight: 'bold',
+    //     height: 12,
+    //     fontSize: 16,
+    //     px: 4,
+    //   },
+    // },
     variants: {
       solid: defineStyle(({ colorScheme }) => ({
-        bg: `${colorScheme}.900`,
-        background: `${colorScheme}.900`,
-        color: customColor(colorScheme),
+        bgColor: `${colorScheme}.900`,
+        color: 'gray.50',
+        borderWidth: 2,
+        borderColor: `${colorScheme}.900`,
         _hover: {
-          background: `${colorScheme}.900`,
+          bgColor: `gray.50`,
+          color: `${colorScheme}.900`,
+          borderWidth: '2px',
+          borderColor: `${colorScheme}.900`,
+          borderStyle: 'solid',
+          _disabled: {
+            bgColor: `${colorScheme}.900`,
+            color: 'gray.50',
+            borderWidth: '2px',
+            borderColor: `${colorScheme}.900`,
+            borderStyle: 'solid',
+          },
         },
         _active: {
           background: ``,
         },
       })),
       outline: defineStyle(({ colorScheme }) => ({
-        borderColor: `black`,
         borderWidth: 2,
-        color: `black`,
+        borderColor: `${colorScheme}.900`,
         rounded: 'none',
-        backgroundColor: 'white',
       })),
     },
     baseStyle: {
-      lineHeight: 1,
-    },
-  }),
-  Input: {
-    sizes: {
-      lg: {
-        field: {
-          borderRadius: '8px',
-        },
+      borderRadius: 0,
+      _disabled: {
+        transition: 'none',
       },
     },
-    variants: {
-      outline: defineStyle(({ colorScheme = 'gray' }) => ({
-        field: {
-          background: `${colorScheme}.50`,
-          borderColor: `${colorScheme}.100`,
-          color: `${colorScheme}.900`,
-          borderWidth: 2,
-          _placeholder: { color: 'gray.400' },
-        },
-      })),
+  }),
+  Link: defineStyleConfig({
+    baseStyle: {
+      color: 'cyan.500',
+      _hover: {
+        color: 'cyan.400',
+        textDecoration: 'underline',
+      },
     },
-  },
+  }),
+  Checkbox: defineStyleConfig({
+    baseStyle: {
+      control: {
+        rounde: 'none',
+        borderRadius: 0,
+      },
+    },
+    // variants: {
+    //   solid: defineStyle(() => ({
+    //     control: {
+    //       rounde: 'none',
+    //       borderRadius: 0,
+    //     },
+    //   })),
+    // },
+  }),
+  // Input: {
+  //   sizes: {
+  //     lg: {
+  //       field: {
+  //         borderRadius: '8px',
+  //       },
+  //     },
+  //   },
+  //   variants: {
+  //     outline: defineStyle(({ colorScheme = 'gray' }) => ({
+  //       field: {
+  //         background: `${colorScheme}.50`,
+  //         borderColor: `${colorScheme}.100`,
+  //         color: `${colorScheme}.900`,
+  //         borderWidth: 2,
+  //         _placeholder: { color: 'gray.400' },
+  //       },
+  //     })),
+  //   },
+  // },
 }
 
 export default components

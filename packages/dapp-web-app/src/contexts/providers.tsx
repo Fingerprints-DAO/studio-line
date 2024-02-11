@@ -1,36 +1,61 @@
 'use client'
 
-import * as React from 'react'
-// import { ConnectKitProvider } from 'connectkit'
-// import { WagmiConfig } from 'wagmi'
-import { ChakraProvider } from '@chakra-ui/react'
+import { ConnectKitProvider } from 'connectkit'
+import {
+  Alert,
+  AlertDescription,
+  Box,
+  ChakraProvider,
+  CloseButton,
+  Fade,
+  useDisclosure,
+} from '@chakra-ui/react'
 import { CacheProvider } from '@chakra-ui/next-js'
 import duration from 'dayjs/plugin/duration'
 import dayjs from 'dayjs'
+import { WagmiConfig } from 'wagmi'
+
+import { config } from 'settings/wagmi'
+import theme from 'settings/theme'
+import { TbScreenShareOff } from 'react-icons/tb'
+import { useDisplayConfig } from 'hooks/useDisplayConfig'
 
 dayjs.extend(duration)
 
-import { config } from '../settings/wagmi'
-import { GridItemProvider } from './GridItemContext'
-import theme from 'settings/theme'
-
 function Providers({ children }: { children: React.ReactNode }) {
-  const [mounted, setMounted] = React.useState(false)
-  React.useEffect(() => {
-    setMounted(true)
-  }, [])
+  const { isMediumScreen } = useDisplayConfig()
+  // TODO: make it true to version 2
+  const { isOpen: isVisible, onClose } = useDisclosure({ defaultIsOpen: false })
 
   return (
     <CacheProvider>
       <ChakraProvider theme={theme}>
-        <GridItemProvider>
-          {/* <WagmiConfig config={config}> */}
-          {!mounted && <p>Loading</p>}
-          {/* <ConnectKitProvider> */}
-          {mounted && children}
-          {/* </ConnectKitProvider> */}
-          {/* </WagmiConfig> */}
-        </GridItemProvider>
+        <WagmiConfig config={config}>
+          <ConnectKitProvider theme={'minimal'} mode="light">
+            <Fade in unmountOnExit>
+              {children}
+            </Fade>
+          </ConnectKitProvider>
+        </WagmiConfig>
+        {isVisible && isMediumScreen && (
+          <Box position={'fixed'} bottom={0} left={0} right={0}>
+            <Alert status="warning" bgColor={'gray.300'}>
+              <TbScreenShareOff size={40} color="gray.700" />
+              <AlertDescription fontSize={'md'} ml={4} textColor={'gray.700'}>
+                For the best experience, please use this website on a desktop or
+                laptop.
+              </AlertDescription>
+              <CloseButton
+                alignSelf="flex-start"
+                position="relative"
+                right={-1}
+                top={-1}
+                onClick={onClose}
+                textColor={'gray.700'}
+              />
+            </Alert>
+          </Box>
+        )}
       </ChakraProvider>
     </CacheProvider>
   )
