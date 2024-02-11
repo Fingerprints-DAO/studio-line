@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     hasDiscount = false
   }
 
-  Response.json({
+  return Response.json({
     hasDiscount,
     discountPercentage,
   })
