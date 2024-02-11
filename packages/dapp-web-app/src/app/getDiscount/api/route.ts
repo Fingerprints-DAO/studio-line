@@ -1,5 +1,3 @@
-import { ethers } from 'ethers'
-import { NextApiRequest, NextApiResponse } from 'next'
 import { fetcher } from 'utils/fetcher'
 
 export type GetDiscountResponse = {
@@ -7,11 +5,8 @@ export type GetDiscountResponse = {
   discountPercentage: number
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<GetDiscountResponse>,
-) {
-  const { address } = req.body
+export default async function GET(req: Request) {
+  const { address } = await req.json()
   let discountPercentage = 0
   let hasDiscount = false
 
@@ -35,7 +30,7 @@ export default async function handler(
     hasDiscount = false
   }
 
-  res.status(200).json({
+  Response.json({
     hasDiscount,
     discountPercentage,
   })

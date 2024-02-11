@@ -22,7 +22,7 @@ import { questions, auctionQuestions } from './_questions'
 import SidebarIcons from 'components/sidebarIcons'
 import { useAccount } from 'wagmi'
 import { fetcher } from 'utils/fetcher'
-import { GetDiscountResponse } from 'app/api/getDiscount'
+import { GetDiscountResponse } from 'app/getDiscount/api/route'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 import Link from 'next/link'
 
@@ -52,7 +52,7 @@ export default function About() {
     const checkDiscount = async (address: string) => {
       try {
         const response = await fetcher<GetDiscountResponse>(
-          '/api/getDiscount',
+          '/getDiscount/api',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

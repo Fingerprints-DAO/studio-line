@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     'fc:frame:button:1': 'Mint',
     'fc:frame:button:1:action': 'post_redirect',
     // 'fc:frame:button:1:target': getBaseURL() + '/mint',
-    'fc:frame:post_url': getBaseURL() + '/api/frame',
+    'fc:frame:post_url': getBaseURL() + '/frame/api',
   },
 }
 
