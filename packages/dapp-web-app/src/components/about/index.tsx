@@ -123,10 +123,10 @@ export default function About() {
               </ChakraLink>
               <br />
               <b>Starting/Resting price:</b> 1.0 ETH → 0.15 ETH <br />
-              <b>Supply:</b> 200 tokens
+              <b>Supply:</b> 250 tokens
             </Text>
             <Text {...textProps}>
-              LINE is a photographic series of 200 tokens placed within a
+              LINE is a photographic series of 250 tokens placed within a
               synthetic landscape. Using photographic and post-production
               techniques similar to Figure31&apos;s SALT, the images in LINE are
               captured using a digital camera combined with ultra-telephoto

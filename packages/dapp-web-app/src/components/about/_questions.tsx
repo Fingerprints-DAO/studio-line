@@ -38,7 +38,7 @@ export const questions = [
     question: 'What is the collection size?',
     answer: (
       <>
-        A total of <b>200 tokens</b> will be available for mint. If the
+        A total of <b>250 tokens</b> will be available for mint. If the
         collection does not mint out after the auction or 48-hour minting
         period, the remaining tokens will not get minted.
       </>
