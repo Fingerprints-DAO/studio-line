@@ -1,18 +1,10 @@
 'use client'
 
-import {
-  Box,
-  Button,
-  Flex,
-  Link,
-  Text,
-  Image as ChackraImage,
-  Fade,
-} from '@chakra-ui/react'
+import { Box, Button, Flex, Link, Text, Fade } from '@chakra-ui/react'
 import { AuctionBanner } from 'components/auctionBanner'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 import Image from 'next/image'
-import { Direction, GridSize } from 'types/grid'
+import { GridSize } from 'types/grid'
 
 const TextLine = ({ children, title = '', ...props }: any) => (
   <Text fontSize={'md'} color={'gray.500'} mb={1} {...props}>

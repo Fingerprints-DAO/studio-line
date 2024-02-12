@@ -65,9 +65,9 @@ export const auctionQuestions = [
           mx="auto"
         >
           <ChakraNextImageLoader
-            src={'/about/grid-tokens.jpg'}
-            width={3000}
-            height={3000}
+            src={'/about/layout-animation.gif'}
+            width={1510}
+            height={1510}
             alt="Grid with tokens"
           />
         </Box>
@@ -91,10 +91,35 @@ export const auctionQuestions = [
           mx="auto"
         >
           <ChakraNextImageLoader
+            src={'/about/tokens-arrows.gif'}
+            width={1510}
+            height={1510}
+            alt="Gif illustrating directions of the tokens"
+          />
+        </Box>
+      </>
+    ),
+  },
+  {
+    question: 'What will my field of view look like?',
+    answer: (
+      <>
+        Fields of view are unique, but they may overlap with others. They are
+        defined by the 625 photographs of the 25 x 25 grid. A specific
+        coordinate can only be occupied by one token at a time.
+        <Box
+          as={'span'}
+          display={'block'}
+          w={'100%'}
+          maxW={'xl'}
+          textAlign={'center'}
+          mx="auto"
+        >
+          <ChakraNextImageLoader
             src={'/about/tokens-image.gif'}
             width={1500}
             height={1500}
-            alt="Images illustrating day by day token view"
+            alt="Gif illustrating directions of the tokens"
           />
         </Box>
       </>
