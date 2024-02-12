@@ -92,7 +92,7 @@ export default function About() {
             <Box {...imagesProps}>
               <ChakraNextImageLoader
                 src={'/about/header.jpg'}
-                width={3900}
+                width={5200}
                 height={1966}
                 alt="Header image"
                 imageProps={{ priority: true }}
@@ -112,8 +112,11 @@ export default function About() {
             </Collapse>
             <Text {...titleProps}>LINE by Figure31</Text>
             <Text {...textProps}>
-              <b>Date:</b> Dutch auction on Wednesday, February 21 at 10 AM PT /
-              1 PM ET / 7 PM CET{' - '}
+              <b>Discovery Phase:</b> Begins on Monday, February 19 (more info
+              below)
+              <br />
+              <b>Auction Date:</b> 60-minute Dutch auction on Wednesday,
+              February 21 at 10 AM PT / 1 PM ET / 7 PM CET{' - '}
               <ChakraLink
                 as={Link}
                 href={'https://www.addevent.com/event/VX20075579'}
@@ -123,7 +126,8 @@ export default function About() {
               </ChakraLink>
               <br />
               <b>Starting/Resting price:</b> 1.0 ETH → 0.15 ETH <br />
-              <b>Supply:</b> 250 tokens
+              <b>Supply:</b> 250 tokens; only available to mint through desktop,
+              not mobile.
             </Text>
             <Text {...textProps}>
               LINE is a photographic series of 250 tokens placed within a

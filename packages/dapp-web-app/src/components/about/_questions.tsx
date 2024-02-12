@@ -66,8 +66,8 @@ export const auctionQuestions = [
         >
           <ChakraNextImageLoader
             src={'/about/layout-animation.gif'}
-            width={1510}
-            height={1510}
+            width={1200}
+            height={1999}
             alt="Grid with tokens"
           />
         </Box>
