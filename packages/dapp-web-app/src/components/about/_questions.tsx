@@ -29,8 +29,17 @@ export const questions = [
       <>
         The Dutch auction is first come, first served. Collectors can choose to
         mint specific tokens or mint random ones. Tokens will be minted as soon
-        as a bid is placed. However, allowlisted wallets will be eligible for a
-        discount at the time of mint.
+        as a bid is placed. Note that there will not be rebates. However,
+        allowlisted wallets will be eligible for a discount at the time of mint.
+      </>
+    ),
+  },
+  {
+    question: 'Can I mint multiple tokens?',
+    answer: (
+      <>
+        Yes, if you like various tokens/coordinates, they will appear on your
+        auction page, and you can mint up to 5 at a time.
       </>
     ),
   },
@@ -106,7 +115,8 @@ export const auctionQuestions = [
       <>
         Fields of view are unique, but they may overlap with others. They are
         defined by the 625 photographs of the 25 x 25 grid. A specific
-        coordinate can only be occupied by one token at a time.
+        coordinate can only be occupied by one token at a time. Images cycle
+        daily per token.
         <Box
           as={'span'}
           display={'block'}
@@ -163,8 +173,9 @@ export const auctionQuestions = [
     answer: (
       <>
         Tokens are pieces; they can go up or down, diagonally or laterally; they
-        simulate a 180-degree field of view. Depending on their initial
-        placement at the time of mint, some tokens face up, others down.
+        simulate a 180-degree field of view. Tokens minted below the middle line
+        face up (red) while tokens minted above face down (blue), some tokens
+        face up, others down.
         <Box
           as={'span'}
           display={'block'}
@@ -191,19 +202,19 @@ export const auctionQuestions = [
   {
     question: 'Do I have to pay anything to move my token?',
     answer:
-      'Movements are free. You only have to pay the transaction costs associated with the move function.',
+      'Movements are free. Yet, the only cost is the gas fees associated with the move function.',
   },
   {
     question:
       'How can I get a special “star” token with a 360-degree field of view?',
     answer: (
       <>
-        After mint, collectors can move their tokens to new coordinates on the
-        grid. The first 20 tokens to reach the borders of the grid can use a
-        special function that will allow them to choose to relocate to any
-        coordinate on the grid they want. Their token&apos;s field of view will
-        change to become a full 360-degree. If they decide to do so, their
-        position will be locked down, and they cannot move anymore.
+        After the auction, collectors can move their tokens to new coordinates
+        on the grid. The first 25 tokens to reach the upper or lower borders of
+        the grid can use a special function that will allow them to choose to
+        relocate to any coordinate on the grid they want. Their token&apos;s
+        field of view will change to become a full 360-degree. If they decide to
+        do so, their position will be locked down, and they cannot move anymore.
         <Box
           as={'span'}
           display={'block'}

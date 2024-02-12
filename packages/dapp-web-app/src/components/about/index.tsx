@@ -153,7 +153,7 @@ export default function About() {
               image it perceives. The metadata of a token is dynamic; images and
               attributes travel back and forth between the different points
               within the reach of its field of view. Most tokens will have a
-              180-degree view, and only 20 “star” tokens will have a 360-degree
+              180-degree view, and only 25 “star” tokens will have a 360-degree
               view. Images cycle daily.
             </Text>
             <Text {...titleProps}>About Figure31</Text>
