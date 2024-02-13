@@ -1,19 +1,40 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { Box, Fade, SimpleGrid, Skeleton } from '@chakra-ui/react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Box,
+  Button,
+  Fade,
+  SimpleGrid,
+  Skeleton,
+  useDisclosure,
+} from '@chakra-ui/react'
 import PlaygroundGridItem from './PlaygroundGridItem'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 import { GridItemsTotal, GridSize, GridSpace } from 'types/grid'
 import useGridSizes from 'hooks/useGridSizes'
+import { useHasReachedEnd } from 'hooks/use-has-reached-end'
 
 const PlaygroundGrid: React.FC = () => {
   const { ref, height, itemHeight, itemWidth, gridSpaceX } = useGridSizes()
   const [showGrid, setShowGrid] = useState(false)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const cancelRef = useRef<HTMLButtonElement>(null)
   const {
     gridItemsState,
     toggleGridItem,
     highlightGridItem,
     lastSelectedGridItem,
+    isFixed,
   } = usePlaygroundContext()
+  const hasReachedEnd = useHasReachedEnd({
+    row: lastSelectedGridItem?.row,
+    direction: lastSelectedGridItem?.direction,
+  })
 
   const gridItems = useMemo(() => {
     const items = []
@@ -41,19 +62,23 @@ const PlaygroundGrid: React.FC = () => {
           toggleGridItem={toggleGridItem}
           lineWidth={Math.round(itemWidth + gridSpaceX)}
           lineHeight={Math.round(itemHeight + GridSpace)}
+          hasReachedEnd={hasReachedEnd}
+          isFixed={isFixed}
           {...gridItemsState[id]}
         />,
       )
     }
     return items
   }, [
+    gridItemsState,
     itemWidth,
     itemHeight,
     lastSelectedGridItem?.direction,
     highlightGridItem,
     toggleGridItem,
     gridSpaceX,
-    gridItemsState,
+    hasReachedEnd,
+    isFixed,
   ])
 
   useEffect(() => {
@@ -61,6 +86,12 @@ const PlaygroundGrid: React.FC = () => {
       setShowGrid(true)
     }, 1000)
   }, [])
+
+  useEffect(() => {
+    if (hasReachedEnd) {
+      onOpen()
+    }
+  }, [hasReachedEnd, onOpen])
 
   return (
     <Box
@@ -70,6 +101,33 @@ const PlaygroundGrid: React.FC = () => {
       minW={ref.current ? 'none' : '50vw'}
       pos={'relative'}
     >
+      <AlertDialog
+        isOpen={isOpen}
+        onClose={onClose}
+        leastDestructiveRef={cancelRef}
+        isCentered
+      >
+        <AlertDialogOverlay rounded={'0'}>
+          <AlertDialogContent rounded={'0'}>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Your token can be a star!
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Now you can relocate your token to any coordinate on the grid and
+              have it as a star. <br />
+              The token will have a full 360-degree field of view. However, the
+              token will be locked down, and cannot move anymore.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose} ml={3}>
+                OK
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
       <Box
         hidden={showGrid}
         pos={'absolute'}

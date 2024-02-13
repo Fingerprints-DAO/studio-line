@@ -23,6 +23,7 @@ export interface GridItemBaseProperties {
   index: string
   row: number
   col: number
+  isLocked: boolean
   direction: Direction | null
 }
 

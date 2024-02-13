@@ -16,6 +16,8 @@ interface GridItemProps extends GridItemProperties {
   isHighlighted: boolean
   onlyHighlightedClick: boolean
   toggleGridItem: (index: string) => void
+  hasReachedEnd: boolean
+  isFixed: boolean
   // id: number
 }
 
@@ -55,7 +57,6 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   lineWidth,
   lineHeight,
   isOpened,
-  isBlocked,
   image,
   index,
   row,
@@ -63,6 +64,8 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   isHighlighted,
   toggleGridItem,
   onlyHighlightedClick,
+  hasReachedEnd,
+  isFixed,
 }) => {
   const [isFirstRow, isLastRow, isFirstCol, isLastCol] = [
     row === GridSize - 1,
@@ -73,12 +76,33 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   const widthPx = `${width}px`
   const heightPx = `${height}px`
 
-  const disableClick =
-    isFirstCol ||
-    isLastCol ||
-    isBlocked ||
-    (onlyHighlightedClick && !isHighlighted) ||
-    (isHighlighted && (moveDirection === Direction.UP ? isFirstRow : isLastRow))
+  const disableClick = useMemo(() => {
+    if (isFixed) {
+      return true
+    }
+    if (hasReachedEnd) {
+      return isLastRow || isFirstRow || isLastCol || isFirstCol
+    }
+
+    return (
+      isFirstCol ||
+      isLastCol ||
+      (onlyHighlightedClick && !isHighlighted) ||
+      (isHighlighted &&
+        (moveDirection === Direction.UP ? isFirstRow : isLastRow))
+    )
+  }, [
+    hasReachedEnd,
+    isFirstCol,
+    isFirstRow,
+    isFixed,
+    isHighlighted,
+    isLastCol,
+    isLastRow,
+    moveDirection,
+    onlyHighlightedClick,
+  ])
+
   const isBorder = isFirstRow || isFirstCol || isLastRow || isLastCol
   const isOdd = col % 2 === 0
 
@@ -88,9 +112,9 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
 
   const bgColor = useMemo(() => {
     if (isHighlighted) {
-      return moveDirection === Direction.UP || moveDirection === Direction.ALL
-        ? 'red.100'
-        : 'cyan.200'
+      if (isFixed) return 'purple.500'
+
+      return moveDirection === Direction.UP ? 'red.100' : 'cyan.200'
     }
     if (isBorder) {
       return 'gray.300'
@@ -99,7 +123,7 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
       return 'gray.400'
     }
     return 'gray.500'
-  }, [isBorder, isHighlighted, isOdd, moveDirection])
+  }, [isBorder, isFixed, isHighlighted, isOdd, moveDirection])
 
   return (
     <Box
@@ -157,11 +181,10 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
           left={0}
           right={0}
           bottom={0}
-          zIndex={isOpened || isBlocked ? 1 : 0}
+          zIndex={isOpened ? 1 : 0}
           _hover={{
             transition: 'filter 2s',
           }}
-          filter={isBlocked ? 'grayscale(100%)' : 'none'}
           border={isHighlighted ? '2px solid red' : `none`}
           borderColor={isHighlighted ? bgColor : `none`}
         >
@@ -208,7 +231,7 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
             pos={'absolute'}
             w={'100%'}
             h={'100%'}
-            zIndex={isBlocked || isOpened ? 0 : 1}
+            zIndex={isOpened ? 0 : 1}
             fontSize={'xx-small'}
           />
         </Tooltip>

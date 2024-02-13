@@ -1,3 +1,4 @@
+import { useHasReachedEnd } from 'hooks/use-has-reached-end'
 import React, { createContext, useState, useContext } from 'react'
 import {
   Direction,
@@ -10,7 +11,6 @@ import {
 
 export interface GridItemProperties extends GridItemBaseProperties {
   isOpened: boolean
-  isBlocked: boolean
   id: number
 }
 
@@ -20,11 +20,11 @@ export type GridItemState = {
 
 export const gridItemDefaultState = {
   isOpened: false,
-  isBlocked: false,
   image: '',
   index: '',
   row: 0,
   col: 0,
+  isLocked: false,
   direction: Direction.UP,
 }
 
@@ -40,6 +40,7 @@ const generateFullGridDefaultState = () => {
         index,
         row,
         col,
+        isLocked: false,
         direction: getDirection(row),
         image: generateImage(col + row * GridSize, ImageSizes.SMALL),
       }
@@ -55,6 +56,7 @@ const PlaygroundContext = createContext<{
   resetGrid: () => void
   movements: number
   originPoint: string
+  isFixed: boolean
   lastSelectedGridItem?: {
     direction: Direction | null
   } & GridItemProperties
@@ -65,6 +67,7 @@ const PlaygroundContext = createContext<{
   resetGrid: () => {},
   movements: 0,
   originPoint: '',
+  isFixed: false,
   lastSelectedGridItem: undefined,
 })
 
@@ -83,6 +86,11 @@ export const PlaygroundProvider = ({
     useState<GridItemProperties>()
   const [movements, setMovements] = useState(0)
   const [originPoint, setOriginPoint] = useState('')
+  const hasReachedEnd = useHasReachedEnd({
+    row: lastSelectedGridItem?.row,
+    direction: lastSelectedGridItem?.direction,
+  })
+  const [isFixed, setIsFixed] = useState(false)
 
   const toggleGridItem = (index: string) => {
     if (!lastSelectedGridItem) {
@@ -91,15 +99,21 @@ export const PlaygroundProvider = ({
       setMovements(movements + 1)
     }
     setGridItemsState((prevState) => {
+      const isMovementToFix =
+        hasReachedEnd &&
+        (prevState[index].row !== lastSelectedGridItem?.row ||
+          prevState[index].col - lastSelectedGridItem?.col > 1)
       const direction =
         lastSelectedGridItem?.direction ?? prevState[index].direction
+
       setLastSelectedGridItem({
         ...prevState[index],
         direction,
       })
       const [row, col] = index.split('-').map((n) => Number(n))
-      const nextRow = direction !== Direction.UP ? row - 1 : row + 1
-      // TODO: if all, order should be different
+      const nextRow =
+        isMovementToFix || direction !== Direction.UP ? row - 1 : row + 1
+
       const newHighlightGridItem = [
         `${row}-${col - 1}`,
         `${nextRow}-${col - 1}`,
@@ -108,13 +122,16 @@ export const PlaygroundProvider = ({
         `${row}-${col + 1}`,
       ]
 
-      // if (direction === Direction.ALL) {
-      //   newHighlightGridItem.push(
-      //     `${row + 1}-${col}`,
-      //     `${row + 1}-${col - 1}`,
-      //     `${row + 1}-${col + 1}`
-      //   )
-      // }
+      if (isMovementToFix) {
+        newHighlightGridItem.push(
+          `${row + 1}-${col}`,
+          `${row + 1}-${col - 1}`,
+          `${row + 1}-${col + 1}`,
+        )
+      }
+      if (isMovementToFix) {
+        setIsFixed(true)
+      }
 
       setHighlightGridItem(newHighlightGridItem)
       return {
@@ -133,6 +150,7 @@ export const PlaygroundProvider = ({
     setLastSelectedGridItem(undefined)
     setMovements(0)
     setOriginPoint('')
+    setIsFixed(false)
   }
 
   return (
@@ -145,6 +163,7 @@ export const PlaygroundProvider = ({
         resetGrid,
         movements,
         originPoint,
+        isFixed,
       }}
     >
       {children}

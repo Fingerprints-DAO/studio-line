@@ -8,11 +8,19 @@ import {
   Text,
   Image as ChackraImage,
   Fade,
+  useDisclosure,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
 } from '@chakra-ui/react'
 import { AuctionBanner } from 'components/auctionBanner'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
-import Image from 'next/image'
+import { useHasReachedEnd } from 'hooks/use-has-reached-end'
+import { useEffect, useMemo, useRef } from 'react'
 import { Direction, GridSize, ImageSizes, generateImage } from 'types/grid'
 
 const TextLine = ({ children, title = '', ...props }: any) => (
@@ -27,6 +35,8 @@ const TextLine = ({ children, title = '', ...props }: any) => (
 )
 
 export function SidebarDetailed({ isDrawer = false, ...props }: any) {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const cancelRef = useRef<HTMLButtonElement>(null)
   const {
     lastSelectedGridItem,
     resetGrid,
@@ -34,14 +44,15 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
     gridItemsState,
     movements,
     originPoint,
+    isFixed,
   } = usePlaygroundContext()
+  const hasReachedEnd = useHasReachedEnd({
+    row: lastSelectedGridItem?.row,
+    direction: lastSelectedGridItem?.direction,
+  })
   const itemId = lastSelectedGridItem
     ? lastSelectedGridItem.row * GridSize + lastSelectedGridItem.col
     : 0
-  const [isLastLine, isFirstLine] = [
-    lastSelectedGridItem?.row === 23,
-    lastSelectedGridItem?.row === 1,
-  ]
 
   const highlightItems = highlightGridItem
     .map((item) => gridItemsState[item])
@@ -90,8 +101,6 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
                   alt={`Token ${lastSelectedGridItem.index}`}
                   width={858}
                   height={1298}
-                  // width={400}
-                  // height={200}
                   style={{ maxWidth: '100%' }}
                 />
                 {highlightItems.length > 0 && (
@@ -121,7 +130,7 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
                             height={157}
                             style={{ width: '100%' }}
                           />
-                          <Text fontSize={'xs'} mt={1}>
+                          <Text fontSize={'xs'} mt={1} mb={isFixed ? 2 : 0}>
                             ({item.index.replace('-', ',')})
                           </Text>
                         </Box>
@@ -144,14 +153,11 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
                   {lastSelectedGridItem.index.replace('-', ',')}
                 </TextLine>
                 <TextLine title={'Has Reached End'}>
-                  {(lastSelectedGridItem.direction === Direction.UP &&
-                    isLastLine) ||
-                  (lastSelectedGridItem.direction === Direction.DOWN &&
-                    isFirstLine)
-                    ? 'Yes'
-                    : 'No'}
+                  {hasReachedEnd ? 'Yes' : 'No'}
                 </TextLine>
-                <TextLine title={'Is Locked'}>No</TextLine>
+                <TextLine title={'Is Locked'}>
+                  {isFixed ? 'Yes' : 'No'}
+                </TextLine>
                 <TextLine title={'Number of Movements'}>{movements}</TextLine>
                 <Link href={lastSelectedGridItem.image} isExternal>
                   Preview in new tab
