@@ -25,6 +25,7 @@ export const gridItemDefaultState = {
   index: '',
   row: 0,
   col: 0,
+  isLocked: false,
   direction: Direction.UP,
 }
 
@@ -40,6 +41,7 @@ const generateFullGridDefaultState = () => {
         row,
         col,
         direction: getDirection(row),
+        isLocked: false,
         image: generateImage(row + 1 + col + 1),
       }
     }
