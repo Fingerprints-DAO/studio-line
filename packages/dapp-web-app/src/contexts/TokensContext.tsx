@@ -84,18 +84,19 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
   const getGrid = useLineGetGrid({ watch: true })
 
   const toggleSelectedItem = (index: string) => {
-    const isAdded = selectedItems.includes(index)
+    const willRemove = selectedItems.includes(index)
 
-    if (!reachedLimit && !isAdded && selectedItems.length + 1 > limitPerTx) {
+    if (!willRemove && selectedItems.length + 1 > limitPerTx) {
       setReachedLimit(true)
       return
     }
-    if (reachedLimit && isAdded) {
+
+    if (reachedLimit && willRemove) {
       setReachedLimit(false)
     }
 
     setSelectedItems(
-      isAdded
+      willRemove
         ? selectedItems.filter((i) => i !== index)
         : [...selectedItems, index],
     )
