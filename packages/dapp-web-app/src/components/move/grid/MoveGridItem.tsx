@@ -207,8 +207,8 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
             left={'50%'}
             top={'50%'}
             transform={`translate(-50%, -50%)`}
-            ml={isStar ? '' : '-0.5px'}
-            mb={isStar ? '' : '-0.5px'}
+            ml={isStar ? '0.5px' : '-0.5px'}
+            mb={isStar ? '0' : '-0.5px'}
             zIndex={1}
           >
             {isStar && (

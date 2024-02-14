@@ -1,27 +1,11 @@
 'use client'
 
-import {
-  Box,
-  Button,
-  Flex,
-  Link,
-  Text,
-  Image as ChackraImage,
-  Fade,
-  useDisclosure,
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-} from '@chakra-ui/react'
+import { Box, Button, Flex, Link, Text, Fade } from '@chakra-ui/react'
 import { AuctionBanner } from 'components/auctionBanner'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 import { useHasReachedEnd } from 'hooks/use-has-reached-end'
-import { useEffect, useMemo, useRef } from 'react'
-import { Direction, GridSize, ImageSizes, generateImage } from 'types/grid'
+import { GridSize, ImageSizes, generateImage } from 'types/grid'
 
 const TextLine = ({ children, title = '', ...props }: any) => (
   <Text fontSize={'md'} color={'gray.500'} mb={1} {...props}>
@@ -35,8 +19,6 @@ const TextLine = ({ children, title = '', ...props }: any) => (
 )
 
 export function SidebarDetailed({ isDrawer = false, ...props }: any) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const cancelRef = useRef<HTMLButtonElement>(null)
   const {
     lastSelectedGridItem,
     resetGrid,

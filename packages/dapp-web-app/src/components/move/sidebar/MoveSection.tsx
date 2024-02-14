@@ -15,6 +15,7 @@ import useMovePoint from 'hooks/useMovePoint'
 import { ArrowDirections } from 'types/movements'
 import { TRAITS } from 'types/nft'
 import { useWaitForTransaction } from 'wagmi'
+import { useHasReachedEnd } from 'hooks/use-has-reached-end'
 
 export function MoveSection({ token }: { token: any }) {
   const {
@@ -24,6 +25,10 @@ export function MoveSection({ token }: { token: any }) {
     resetSelection,
     toggleFixMyToken,
   } = useMoveContext()
+  const hasReachedEnd = useHasReachedEnd({
+    row: selectedGridItem?.row,
+    direction: selectedGridItem?.direction,
+  })
   const [arrowHover, setArrowHover] = useState<ArrowDirections | undefined>()
   const [nextPoint, setNextPoint] = useState<{
     col: number | null
@@ -161,17 +166,18 @@ export function MoveSection({ token }: { token: any }) {
         error={getCurrentMoveToCall().error as TransactionError}
         successMessage="Token moved successfully! Reloading the page..."
       />
-
-      <Button
-        variant={'solid'}
-        w={'full'}
-        mt={4}
-        mb={1}
-        onClick={toggleFixMyToken}
-        colorScheme="purple"
-      >
-        Fix my token on grid
-      </Button>
+      {hasReachedEnd && (
+        <Button
+          variant={'solid'}
+          w={'full'}
+          mt={4}
+          mb={1}
+          onClick={toggleFixMyToken}
+          colorScheme="purple"
+        >
+          Fix my token on grid
+        </Button>
+      )}
     </Fade>
   )
 }
