@@ -6,7 +6,7 @@ import { getBaseURL } from 'utils/getLink'
 const defaultText = {
   title: 'LINE by Figure31',
   description:
-    'LINE is a photographic series of 200 tokens placed within a synthetic landscape, made up of a grid with distinct coordinates. Every token has an origin point which defines a unique “field of view.”',
+    'LINE is a photographic series of 250 tokens placed within a synthetic landscape, made up of a grid with distinct coordinates. Every token has an origin point which defines a unique “field of view.”',
 }
 
 export const metadata: Metadata = {
