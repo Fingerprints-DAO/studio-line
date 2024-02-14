@@ -60,6 +60,24 @@
   },
   {
     "type": "function",
+    "name": "artistMint",
+    "inputs": [
+      { "name": "receiver", "type": "address", "internalType": "address" },
+      {
+        "name": "coordinates",
+        "type": "tuple[]",
+        "internalType": "struct ITokenDescriptor.Coordinate[]",
+        "components": [
+          { "name": "x", "type": "uint256", "internalType": "uint256" },
+          { "name": "y", "type": "uint256", "internalType": "uint256" }
+        ]
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "availableCoordinates",
     "inputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
     "outputs": [
@@ -122,6 +140,11 @@
         "name": "endPriceInWei",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "fundsRecipient",
+        "type": "address",
+        "internalType": "address payable"
       }
     ],
     "stateMutability": "view"
@@ -151,6 +174,13 @@
         "internalType": "contract ITokenDescriptor"
       }
     ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "fpMembersMerkleRoot",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
     "stateMutability": "view"
   },
   {
@@ -311,6 +341,13 @@
   },
   {
     "type": "function",
+    "name": "holdersMerkleRoot",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "isApprovedForAll",
     "inputs": [
       { "name": "", "type": "address", "internalType": "address" },
@@ -329,13 +366,6 @@
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "merkleRoot",
-    "inputs": [],
-    "outputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
-    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -662,6 +692,11 @@
         "name": "endPriceInWei",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "fundsRecipient",
+        "type": "address",
+        "internalType": "address payable"
       }
     ],
     "outputs": [],
@@ -669,9 +704,14 @@
   },
   {
     "type": "function",
-    "name": "updateMerkleRoot",
+    "name": "updateMerkleRoots",
     "inputs": [
-      { "name": "_root", "type": "bytes32", "internalType": "bytes32" }
+      { "name": "_holderRoot", "type": "bytes32", "internalType": "bytes32" },
+      {
+        "name": "_fpMembersRoot",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
     ],
     "outputs": [],
     "stateMutability": "nonpayable"

@@ -35,8 +35,14 @@ import TotalPriceDisplay from './TotalPriceDisplay'
 import { TextLine } from './TextLine'
 
 export function SidebarDetailed({ ...props }: any) {
-  const { selectedItems, gridItemsState, toggleSelectedItem, resetSelection } =
-    useTokensContext()
+  const {
+    selectedItems,
+    gridItemsState,
+    toggleSelectedItem,
+    resetSelection,
+    limitPerTx,
+    reachedLimit,
+  } = useTokensContext()
   const {
     startPrice,
     endPrice,
@@ -69,6 +75,11 @@ export function SidebarDetailed({ ...props }: any) {
     return currentPrice - (currentPrice * BigInt(discountValue)) / 100n
   }, [currentPrice, discountValue, hasDiscount])
 
+  const availableToMint = useMemo(() => {
+    const available = Number(maxSupply - minted)
+    return available > limitPerTx ? limitPerTx : available
+  }, [limitPerTx, maxSupply, minted])
+
   const handleRandomMint = () => {
     mintRandom.write({
       value: BigInt(counter) * price,
@@ -86,6 +97,15 @@ export function SidebarDetailed({ ...props }: any) {
       value: BigInt(coordinates.length) * price,
     })
   }
+  const handlerCounter = (value: number) => {
+    if (value < 0) return
+    if (value > availableToMint) {
+      setCounter(availableToMint)
+      return
+    }
+    setCounter(value)
+  }
+
   useEffect(() => {
     if (mintPositionsTx.isSuccess || mintRandomTx.isSuccess) {
       setCounter(0)
@@ -208,7 +228,8 @@ export function SidebarDetailed({ ...props }: any) {
                 {formatEther(endPrice).toString()} ETH, no rebate. Bidders can
                 select specific tokens before minting or mint randomly. As soon
                 as you place your bid your tokens will be minted. Supply of{' '}
-                {maxSupply.toString()}.
+                {maxSupply.toString()}. Limit per transaction: {limitPerTx}{' '}
+                tokens.
               </Text>
             </>
           )}
@@ -275,6 +296,12 @@ export function SidebarDetailed({ ...props }: any) {
                         hash={mintPositions.data?.hash}
                         error={mintPositions.error as TransactionError}
                       />
+                      {reachedLimit && (
+                        <Text fontSize={'xs'} color={'red.500'} mt={2}>
+                          You have reached the limit per transaction:{' '}
+                          {limitPerTx} tokens.
+                        </Text>
+                      )}
                     </>
                   </ForceConnectButton>
                 </Box>
@@ -296,7 +323,7 @@ export function SidebarDetailed({ ...props }: any) {
                     <Button
                       variant={'outline'}
                       mr={2}
-                      onClick={() => setCounter(counter - 1)}
+                      onClick={() => handlerCounter(counter - 1)}
                     >
                       -
                     </Button>
@@ -316,12 +343,12 @@ export function SidebarDetailed({ ...props }: any) {
                       borderRadius={'none'}
                       borderWidth={'2px'}
                       value={counter}
-                      onChange={(e) => setCounter(Number(e.target.value))}
+                      onChange={(e) => handlerCounter(Number(e.target.value))}
                     />
                     <Button
                       variant={'outline'}
                       mr={2}
-                      onClick={() => setCounter(counter + 1)}
+                      onClick={() => handlerCounter(counter + 1)}
                     >
                       +
                     </Button>

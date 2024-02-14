@@ -1,7 +1,7 @@
 import React, { memo, useMemo, useState } from 'react'
 import { Box, Flex, Tooltip, Image as ChackraImage } from '@chakra-ui/react'
 import { GridItemProperties } from 'contexts/MoveContext'
-import { Direction, GridSize } from 'types/grid'
+import { Direction, GridSize, ImageSizes, generateImage } from 'types/grid'
 import { Arrow } from 'components/arrow/GridArrow'
 import { useHexColor } from 'components/arrow/utils'
 import { ArrowDirections } from 'types/movements'
@@ -80,6 +80,7 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
   ]
   const widthPx = `${width}px`
   const heightPx = `${height}px`
+  const posId = useMemo(() => col + row * GridSize, [col, row])
 
   const disableClick = isSelectable ? isMinted : !isMinted
   const renderArrows = isMinted || isAvailable || isSelectable
@@ -156,13 +157,17 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
               <Flex
                 flexDir={'column'}
                 alignItems={'center'}
-                minW={'100px'}
-                minH={'150px'}
+                w={'100px'}
+                h={'150px'}
               >
                 <ChakraNextImageLoader
-                  src={image}
-                  width={100}
-                  height={150}
+                  src={
+                    posId !== null
+                      ? generateImage(posId, ImageSizes.MEDIUM)
+                      : image
+                  }
+                  width={286}
+                  height={433}
                   alt="Token image"
                 />
               </Flex>

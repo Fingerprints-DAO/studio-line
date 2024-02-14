@@ -38,6 +38,7 @@ const MoveGrid: React.FC<MoveGridProps> = ({}) => {
       items.push(
         <MoveGridItem
           key={index}
+          // gridId={gridItemsState[id]?.id}
           width={itemWidth}
           height={itemHeight}
           toggleGridItem={toggleSelectedItem}

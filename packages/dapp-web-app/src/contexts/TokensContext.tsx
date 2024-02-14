@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from 'react'
 import {
   useLineGetAvailableCoordinates,
   useLineGetGrid,
+  useLineMaxMintPerTx,
 } from 'services/web3/generated'
 import {
   Direction,
@@ -54,6 +55,8 @@ const TokensContext = createContext<{
   selectedItems: string[]
   availableItems: string[]
   mintedItems: (string | null)[]
+  limitPerTx: number
+  reachedLimit: boolean
   toggleSelectedItem: (index: string) => void
   resetSelection: () => void
 }>({
@@ -61,6 +64,8 @@ const TokensContext = createContext<{
   selectedItems: [],
   availableItems: [],
   mintedItems: [],
+  limitPerTx: 0,
+  reachedLimit: false,
   toggleSelectedItem: () => {},
   resetSelection: () => {},
 })
@@ -72,18 +77,32 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedItems, setSelectedItems] = useState<string[]>([])
   const [availableItems, setAvailableItems] = useState<string[]>([])
   const [mintedItems, setMintedItems] = useState<(string | null)[]>([])
+  const [limitPerTx, setLimitPerTx] = useState(5)
+  const [reachedLimit, setReachedLimit] = useState(false)
+  const maxMintPerTx = useLineMaxMintPerTx()
   const getAvailableTokens = useLineGetAvailableCoordinates({ watch: true })
   const getGrid = useLineGetGrid({ watch: true })
 
   const toggleSelectedItem = (index: string) => {
+    const isAdded = selectedItems.includes(index)
+
+    if (!reachedLimit && !isAdded && selectedItems.length + 1 > limitPerTx) {
+      setReachedLimit(true)
+      return
+    }
+    if (reachedLimit && isAdded) {
+      setReachedLimit(false)
+    }
+
     setSelectedItems(
-      selectedItems.includes(index)
+      isAdded
         ? selectedItems.filter((i) => i !== index)
         : [...selectedItems, index],
     )
   }
 
   const resetSelection = () => {
+    setReachedLimit(false)
     setSelectedItems([])
   }
 
@@ -98,6 +117,10 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
       )
     }
   }, [getAvailableTokens.data, gridItemsState])
+
+  useEffect(() => {
+    setLimitPerTx(Number(maxMintPerTx?.data) ?? 5)
+  }, [maxMintPerTx?.data])
 
   useEffect(() => {
     if (getGrid.data && getGrid.data.length > 0) {
@@ -122,6 +145,8 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
         selectedItems,
         availableItems,
         mintedItems,
+        limitPerTx,
+        reachedLimit,
         toggleSelectedItem,
         resetSelection,
       }}

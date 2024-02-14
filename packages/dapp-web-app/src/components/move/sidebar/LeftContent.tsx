@@ -12,6 +12,7 @@ import {
 import { useMoveContext } from 'contexts/MoveContext'
 import { useMemo } from 'react'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
+import { GridSize, ImageSizes, generateImage } from 'types/grid'
 
 export function LeftContent({ token }: { token: any }) {
   const { gridItemsState, selectedGridItem, highlightGridItem } =
@@ -26,6 +27,11 @@ export function LeftContent({ token }: { token: any }) {
     ],
     [gridItemsState, highlightGridItem, selectedGridItem],
   )
+
+  const posId = useMemo(() => {
+    if (!selectedGridItem) return 0
+    return selectedGridItem?.col + selectedGridItem?.row * GridSize
+  }, [selectedGridItem])
 
   return (
     <Fade in={selectedGridItem && token} unmountOnExit>
@@ -46,10 +52,11 @@ export function LeftContent({ token }: { token: any }) {
         </Text>
       </Flex>
       <ChakraNextImageLoader
-        src={token.image}
+        src={generateImage(posId, ImageSizes.LARGE)}
         alt={token.name}
-        width={400}
-        height={600}
+        width={858}
+        height={1298}
+        style={{ maxWidth: '100%' }}
       />
       {highlightItems.length > 0 && (
         <Box
@@ -72,8 +79,8 @@ export function LeftContent({ token }: { token: any }) {
                 <ChakraNextImageLoader
                   src={item!.image}
                   alt={`Token ${item!.index}`}
-                  width={60}
-                  height={180}
+                  width={104}
+                  height={157}
                 />
                 <Text fontSize={'11px'} mt={1}>
                   ({item!.index.replace('-', ',')})

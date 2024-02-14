@@ -8,6 +8,7 @@ import {
   Direction,
   GridItemBaseProperties,
   GridSize,
+  ImageSizes,
   generateImage,
   handleDirectionFromContract,
 } from 'types/grid'
@@ -58,7 +59,7 @@ const generateFullGridDefaultState = () => {
         direction: null,
         isLocked: false,
         hasReachedEnd: false,
-        image: generateImage(row + 1 + col + 1),
+        image: generateImage(col + row * GridSize, ImageSizes.SMALL),
       }
     }
   }
