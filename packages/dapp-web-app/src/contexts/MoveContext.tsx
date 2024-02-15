@@ -112,13 +112,12 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
   const [tokensDirection, setTokensDirection] = useState<Record<string, any>>(
     [],
   )
-  const [tokensDiretionHandled, setTokensDirectionHandled] = useState(false)
+  const [tokensDirectionHandled, setTokensDirectionHandled] = useState(false)
   const { address } = useAccount()
   const getGrid = useLineGetGrid({ watch: true })
   const ownedTokens = useLineTokensOfOwner({
     args: [address!],
     enabled: !!address,
-    watch: true,
   })
   const getTokens = useLineGetTokens({ watch: true })
 
@@ -234,7 +233,7 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const gridItemStateValues = Object.values(gridItemsState)
     if (
-      !tokensDiretionHandled &&
+      !tokensDirectionHandled &&
       tokensDirection &&
       gridItemStateValues.length > 0
     ) {
@@ -255,7 +254,7 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
       setGridItemsState(newGrid)
       setTokensDirectionHandled(true)
     }
-  }, [gridItemsState, tokensDirection, tokensDiretionHandled])
+  }, [gridItemsState, tokensDirection, tokensDirectionHandled])
 
   // console.log(myItems, mintedItems)
   return (

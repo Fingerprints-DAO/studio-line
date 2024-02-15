@@ -45,7 +45,7 @@ export default function Layout({
             w={'100%'}
           >
             {sidebar}
-            <Footer />
+            {/* <Footer /> */}
           </Flex>
         </VStack>
       )}

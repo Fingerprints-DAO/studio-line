@@ -8,6 +8,7 @@ const GridNumber = ({ number = 0, isColumn = false, ...props }) => (
     flexDir={isColumn ? 'column' : 'row'}
     alignItems={'center'}
     justifyContent={'center'}
+    textColor={'gray.900'}
     {...props}
   >
     <Text fontSize={{ base: '6px', md: '10px' }}>{number}</Text>

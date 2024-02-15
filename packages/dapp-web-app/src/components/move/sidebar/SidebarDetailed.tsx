@@ -41,19 +41,16 @@ export function SidebarDetailed({ ...props }: any) {
   } = useMoveContext()
   const tokenData = useLineTokenUri({
     args: [BigInt(selectedGridItem?.id ?? 0)],
-    watch: true,
     enabled: !!selectedGridItem?.id,
   })
   const tokenOwner = useLineOwnerOf({
     args: [BigInt(selectedGridItem?.id ?? 0)],
-    watch: true,
     enabled: !!selectedGridItem?.id,
   })
   const moveToPosition = useLineLockOriginPoint()
   const moveTx = useWaitForTransaction({
     hash: moveToPosition.data?.hash,
     enabled: moveToPosition.data?.hash !== undefined,
-    staleTime: 1_000,
   })
 
   const tokenJson = useMemo(() => {

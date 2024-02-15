@@ -18,13 +18,8 @@ import { useWaitForTransaction } from 'wagmi'
 import { useHasReachedEnd } from 'hooks/use-has-reached-end'
 
 export function MoveSection({ token }: { token: any }) {
-  const {
-    selectedGridItem,
-    unavailableDirections,
-    refreshAfterMove,
-    resetSelection,
-    toggleFixMyToken,
-  } = useMoveContext()
+  const { selectedGridItem, unavailableDirections, toggleFixMyToken } =
+    useMoveContext()
   const hasReachedEnd = useHasReachedEnd({
     row: selectedGridItem?.row,
     direction: selectedGridItem?.direction,
@@ -41,7 +36,6 @@ export function MoveSection({ token }: { token: any }) {
   const moveTx = useWaitForTransaction({
     hash: getCurrentMoveToCall().data?.hash,
     enabled: getCurrentMoveToCall().data?.hash !== undefined,
-    staleTime: 1_000,
   })
 
   const tokenDirection = useMemo(() => {
@@ -95,7 +89,7 @@ export function MoveSection({ token }: { token: any }) {
         window.location.reload()
       }, 500)
     }
-  }, [arrowSelected, moveTx.isSuccess, refreshAfterMove, resetSelection])
+  }, [arrowSelected, moveTx.isSuccess])
 
   return (
     <Fade in={!!selectedGridItem} unmountOnExit>
