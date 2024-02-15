@@ -214,9 +214,11 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
             {isStar && (
               <ArrowAll
                 {...arrowsProps}
-                opacity={isLocked && !isSelected ? 0.5 : 1}
+                isLocked={isLocked}
                 isOwner={isAvailable}
-                isSelected={isFixedSelected}
+                isSelected={isSelected || isFixedSelected}
+                w={`${lineWidth * 2 - 10}px`}
+                h={`${lineHeight * 2 - 8}px`}
               />
             )}
             {!isStar && (

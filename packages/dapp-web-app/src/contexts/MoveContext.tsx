@@ -135,21 +135,28 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
     const {
       leftPos,
       diagonalLeftPos,
+      diagonalLeftPosReversed,
       centerPos,
+      centerPosReversed,
       diagonalRightPos,
+      diagonalRightPosReversed,
       rightPos,
       disableArrows,
     } = getArrowsAvailability({
       index: selected.index,
       direction: selected.direction,
       mintedPositions: mintedItems?.map((item) => item?.index ?? '') ?? [],
+      isStar: selected.isLocked,
     })
 
     setHighlightGridItem([
       leftPos,
       diagonalLeftPos,
+      diagonalLeftPosReversed,
       centerPos,
+      centerPosReversed,
       diagonalRightPos,
+      diagonalRightPosReversed,
       rightPos,
     ])
 

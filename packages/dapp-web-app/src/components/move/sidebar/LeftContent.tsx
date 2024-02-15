@@ -70,9 +70,10 @@ export function LeftContent({ token }: { token: any }) {
               <Box
                 key={item!.index}
                 textAlign={'center'}
+                mb={2}
                 w={
                   highlightItems.length > 6
-                    ? '23%'
+                    ? '19%'
                     : `${Math.floor(100 / highlightItems.length) - 1}%`
                 }
               >

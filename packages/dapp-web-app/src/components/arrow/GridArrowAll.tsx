@@ -1,15 +1,27 @@
 import { Box, Fade, useTheme } from '@chakra-ui/react'
 import { ArrowProps } from './utils'
 
-export function ArrowAll({ isOwner, isSelected, ...props }: ArrowProps) {
+type ArrowAllProps = ArrowProps & {
+  isLocked: boolean
+}
+
+export function ArrowAll({
+  isOwner,
+  isSelected,
+  isLocked,
+  ...props
+}: ArrowAllProps) {
   const theme = useTheme()
   // const handleFillColor = () => {
   //   return theme.colors['purple'][500]
   // }
   const handleFillColor = () => {
+    if (!isOwner && isSelected) return theme.colors['gray'][400]
+    if (!isOwner) return theme.colors['gray'][200]
+    if (isLocked && !isSelected) return theme.colors['purple'][200]
     if (isOwner || isSelected) return theme.colors['purple'][500]
 
-    return theme.colors['gray'][400]
+    return theme.colors['gray'][200]
   }
 
   return (
@@ -17,8 +29,8 @@ export function ArrowAll({ isOwner, isSelected, ...props }: ArrowProps) {
       <Box {...props} pos={'relative'}>
         <Box
           as="svg"
-          width={'49'}
-          height={'49'}
+          width={props.w || '49'}
+          height={props.h || '49'}
           viewBox="0 0 49 49"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

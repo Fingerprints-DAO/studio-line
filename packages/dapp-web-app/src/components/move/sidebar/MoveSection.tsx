@@ -68,7 +68,7 @@ export function MoveSection({ token }: { token: any }) {
     )
     setNextPoint({ row, col })
   }
-  const handleMove = () => {
+  const handleMove = async () => {
     const pointDirection = getSpecificArrowMoveDirection(
       tokenDirection,
       arrowSelected!,
@@ -76,7 +76,7 @@ export function MoveSection({ token }: { token: any }) {
     if (!pointDirection) return
 
     const moveFunction = getMoveFunction(pointDirection!)
-    moveFunction.write({
+    await moveFunction.writeAsync({
       args: [BigInt(selectedGridItem?.id || 0)],
     })
   }
