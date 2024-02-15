@@ -116,11 +116,13 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
 
       return moveDirection === Direction.UP ? 'red.600' : 'cyan.600'
     }
-    if (isOdd) {
-      return 'gray.300'
-    }
-    return 'gray.400'
-  }, [isFixed, isHighlighted, isOdd, moveDirection])
+    // if (isOdd) {
+    //   return 'gray.300'
+    // }
+    // return 'gray.400'
+    return 'gray.300'
+  }, [isFixed, isHighlighted, moveDirection])
+  // }, [isFixed, isHighlighted, isOdd, moveDirection])
 
   return (
     <Box
