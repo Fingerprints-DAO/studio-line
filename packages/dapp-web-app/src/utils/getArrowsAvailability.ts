@@ -45,21 +45,21 @@ export const getArrowsAvailability = ({
     if (
       mintedPositions.includes(diagonalLeftPos) ||
       isFirstAvailableCol ||
-      isFirstAvailableRow ||
-      isLastAvailableRow
+      (isFirstAvailableRow && direction === Direction.DOWN) ||
+      (isLastAvailableRow && direction === Direction.UP)
     )
       disableArrows.push(ArrowDirections.DIAGONAL_LEFT)
     if (
       mintedPositions.includes(centerPos) ||
-      isFirstAvailableRow ||
-      isLastAvailableRow
+      (isFirstAvailableRow && direction === Direction.DOWN) ||
+      (isLastAvailableRow && direction === Direction.UP)
     )
       disableArrows.push(ArrowDirections.CENTER)
     if (
       mintedPositions.includes(diagonalRightPos) ||
       isLastAvailableCol ||
-      isFirstAvailableRow ||
-      isLastAvailableRow
+      (isFirstAvailableRow && direction === Direction.DOWN) ||
+      (isLastAvailableRow && direction === Direction.UP)
     )
       disableArrows.push(ArrowDirections.DIAGONAL_RIGHT)
     if (mintedPositions.includes(rightPos) || isLastAvailableCol)
