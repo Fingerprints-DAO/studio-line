@@ -99,7 +99,7 @@ const PlaygroundGrid: React.FC = () => {
       <Box
         ref={ref}
         h={'100%'}
-        w={height > 0 ? height - 20 : 'auto'}
+        w={height > 0 ? height : 'auto'}
         minW={ref.current ? 'none' : '50vw'}
         pos={'relative'}
       >

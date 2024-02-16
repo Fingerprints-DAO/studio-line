@@ -65,8 +65,8 @@ export default function Layout({
   }
 
   return (
-    <Container maxW={'8xl'} maxH={'100vh'} overflow={'hidden'}>
-      <Header />
+    <Container maxW={'8xl'} maxH={'100vh'}>
+      {isRegularScreen && <Header />}
       <Flex
         pos={'relative'}
         justifyContent={{ base: 'space-between', md: 'center' }}
@@ -83,6 +83,7 @@ export default function Layout({
               : { base: 'calc(100vw - 80px)', md: 'calc(100vw - 100px)' }
           }
           justifyContent={'center'}
+          w={'100%'}
           // flex={isRegularScreen ? 6 : 9}
         >
           {children}

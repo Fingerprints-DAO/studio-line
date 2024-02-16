@@ -330,6 +330,7 @@ export function SidebarDetailed({ ...props }: any) {
                     <Input
                       htmlSize={4}
                       w={'40px'}
+                      height={8}
                       p={1}
                       textAlign={'center'}
                       mr={2}
