@@ -6,16 +6,16 @@ import { Box, BoxProps, Skeleton } from '@chakra-ui/react'
 export interface ChakraNextImageLoaderProps extends BoxProps {
   src: string
   alt: string
-  width: number
-  height?: number
+  imageWidth: number
+  imageHeight?: number
   imageProps?: Partial<ImageProps>
 }
 
 export const ChakraNextImageLoader: FC<ChakraNextImageLoaderProps> = ({
   src,
   alt,
-  width,
-  height,
+  imageWidth,
+  imageHeight,
   imageProps,
   ...rest
 }) => {
@@ -30,7 +30,7 @@ export const ChakraNextImageLoader: FC<ChakraNextImageLoaderProps> = ({
       as={'span'}
       display={'block'}
       position="relative"
-      width={width}
+      width={imageWidth}
       height={'auto'}
       maxW={'100%'}
       maxH={'100%'}
@@ -51,13 +51,14 @@ export const ChakraNextImageLoader: FC<ChakraNextImageLoaderProps> = ({
       <Image
         src={src}
         alt={alt}
-        width={width}
-        height={height}
+        width={imageWidth}
+        height={imageHeight}
         onLoadingComplete={() => setLoading(false)}
         style={{
           width: '100%',
           opacity: isLoading ? 0 : 1,
           transition: 'opacity 0.2s',
+          // objectFit: 'contain',
         }}
         {...imageProps}
       />

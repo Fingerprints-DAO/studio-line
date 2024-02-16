@@ -146,8 +146,8 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
                     ? generateImage(gridId, ImageSizes.MEDIUM)
                     : image
                 }
-                width={286}
-                height={433}
+                imageWidth={286}
+                imageHeight={433}
                 alt="Token image"
               />
             </Flex>

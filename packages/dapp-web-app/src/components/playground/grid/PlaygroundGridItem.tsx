@@ -213,8 +213,8 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
             >
               <ChakraNextImageLoader
                 src={generateImage(gridId, ImageSizes.MEDIUM)}
-                width={286}
-                height={433}
+                imageWidth={286}
+                imageHeight={433}
                 alt="Token image"
               />
             </Flex>

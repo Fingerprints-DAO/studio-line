@@ -54,8 +54,8 @@ export function LeftContent({ token }: { token: any }) {
       <ChakraNextImageLoader
         src={generateImage(posId, ImageSizes.LARGE)}
         alt={token.name}
-        width={858}
-        height={1298}
+        imageWidth={858}
+        imageHeight={1298}
         style={{ maxWidth: '100%' }}
       />
       {highlightItems.length > 0 && (
@@ -80,8 +80,8 @@ export function LeftContent({ token }: { token: any }) {
                 <ChakraNextImageLoader
                   src={item!.image}
                   alt={`Token ${item!.index}`}
-                  width={104}
-                  height={157}
+                  imageWidth={104}
+                  imageHeight={157}
                 />
                 <Text fontSize={'11px'} mt={1}>
                   ({item!.index.replace('-', ',')})

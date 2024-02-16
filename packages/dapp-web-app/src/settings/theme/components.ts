@@ -35,7 +35,7 @@ const components = {
     sizes: {
       md: {
         // fontWeight: 'bold',
-        height: 6,
+        height: 8,
         fontSize: 12,
         px: 4,
         py: 0,

@@ -166,8 +166,8 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
                       ? generateImage(posId, ImageSizes.MEDIUM)
                       : image
                   }
-                  width={286}
-                  height={433}
+                  imageWidth={286}
+                  imageHeight={433}
                   alt="Token image"
                 />
               </Flex>

@@ -70,7 +70,7 @@ export default function About() {
   }, [address])
 
   return (
-    <Container maxW={'6xl'}>
+    <Container maxW={'8xl'}>
       <Flex pos={'relative'} justifyContent={'center'}>
         <VStack
           bg="white"
@@ -92,8 +92,8 @@ export default function About() {
             <Box {...imagesProps}>
               <ChakraNextImageLoader
                 src={'/about/header.jpg'}
-                width={5200}
-                height={1966}
+                imageWidth={5200}
+                imageHeight={1966}
                 alt="Header image"
                 imageProps={{ priority: true }}
               />
@@ -180,8 +180,8 @@ export default function About() {
           <Box {...imagesProps}>
             <ChakraNextImageLoader
               src={'/about/faq.jpg'}
-              width={3900}
-              height={1966}
+              imageWidth={3900}
+              imageHeight={1966}
               alt="FAQ image"
             />
           </Box>
@@ -256,13 +256,13 @@ export default function About() {
           <Box {...imagesProps}>
             <ChakraNextImageLoader
               src={'/about/footer.jpg'}
-              width={3900}
-              height={1966}
+              imageWidth={3900}
+              imageHeight={1966}
               alt="FAQ image"
             />
           </Box>
           <Flex
-            height={'100%'}
+            h={'100%'}
             w={'100%'}
             overflow={'auto'}
             flexDir={'column'}

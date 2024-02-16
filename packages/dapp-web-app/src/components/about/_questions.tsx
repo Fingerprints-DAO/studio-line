@@ -75,8 +75,8 @@ export const auctionQuestions = [
         >
           <ChakraNextImageLoader
             src={'/about/layout-animation.gif'}
-            width={1200}
-            height={1999}
+            imageWidth={1200}
+            imageHeight={1999}
             alt="Grid with tokens"
           />
         </Box>
@@ -101,8 +101,8 @@ export const auctionQuestions = [
         >
           <ChakraNextImageLoader
             src={'/about/tokens-arrows.gif'}
-            width={1510}
-            height={1510}
+            imageWidth={1510}
+            imageHeight={1510}
             alt="Gif illustrating directions of the tokens"
           />
         </Box>
@@ -127,8 +127,8 @@ export const auctionQuestions = [
         >
           <ChakraNextImageLoader
             src={'/about/tokens-image.gif'}
-            width={1500}
-            height={1500}
+            imageWidth={1500}
+            imageHeight={1500}
             alt="Gif illustrating directions of the tokens"
           />
         </Box>
@@ -186,8 +186,8 @@ export const auctionQuestions = [
         >
           <ChakraNextImageLoader
             src={'/about/movement.gif'}
-            width={1510}
-            height={1510}
+            imageWidth={1510}
+            imageHeight={1510}
             alt="Images illustrating token movements"
           />
         </Box>
@@ -225,8 +225,8 @@ export const auctionQuestions = [
         >
           <ChakraNextImageLoader
             src={'/about/token-types.jpg'}
-            width={3349}
-            height={1874}
+            imageWidth={3349}
+            imageHeight={1874}
             alt="All token types"
           />
         </Box>
