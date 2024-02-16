@@ -2,12 +2,12 @@
 
 import { Box, Flex, Link, Text, Fade } from '@chakra-ui/react'
 import { AuctionBanner } from 'components/auctionBanner'
+import { AuctionStaticBanner } from 'components/auctionStaticBanner'
 import { TextLine } from 'components/textLine'
 import { TokenPreview } from 'components/tokenPreview'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 import { useCoordinates } from 'hooks/use-coordinates'
 import { useHasReachedEnd } from 'hooks/use-has-reached-end'
-import { useDisplayConfig } from 'hooks/useDisplayConfig'
 import { useMemo } from 'react'
 import { Direction, GridSize } from 'types/grid'
 import { getArweaveImageURL } from 'utils/getLink'
@@ -44,7 +44,8 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
     <Box w={'100%'} h={'100%'} {...props}>
       {!lastSelectedGridItem && (
         <>
-          <AuctionBanner displayMintNow />
+          <AuctionStaticBanner />
+          {/* <AuctionBanner displayMintNow /> */}
           <Text fontWeight={'bold'} mt={4} fontSize={'2xl'} as={'h1'}>
             Select a token to get started
           </Text>
