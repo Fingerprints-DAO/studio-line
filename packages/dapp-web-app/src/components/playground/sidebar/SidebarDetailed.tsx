@@ -60,11 +60,11 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
         style={{ width: '100%', height: 'auto' }}
       >
         {lastSelectedGridItem && (
-          <Box as="section" w={'100%'} h={'100%'}>
-            <Flex as="header" alignItems={'center'}>
+          <Box as="section" w={'100%'} h={'100%'} mt={'-8px'}>
+            <Flex as="header" alignItems={'center'} mb={4}>
               <Text
                 fontWeight={'bold'}
-                my={4}
+                // mb={4}
                 textColor={'gray.900'}
                 fontSize={'2xl'}
                 textTransform={'uppercase'}
@@ -80,12 +80,15 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
               w={'100%'}
               h={'100%'}
               pb={isDrawer ? 2 : 0}
+              flexDir={isDrawer ? 'column' : 'row'}
+              gap={isDrawer ? 4 : 0}
             >
               <TokenPreview
                 // maxW={'300px'}
                 // maxHeight={'80vh'}
-                // minW={'300px'}
-                maxW={isDrawer ? '65%' : { base: '50%', xl: '65%' }}
+                minW={'300px'}
+                maxW={'330px'}
+                w={isDrawer ? '65%' : { base: '50%', xl: '45%' }}
                 // minW={'250px'}
                 itemId={itemId}
                 thumbnailsItems={highlightItems}
@@ -93,7 +96,7 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
                 flex={1}
                 overflow={'hidden'}
               />
-              <Box ml={8} minW={'170px'} mr={2}>
+              <Box ml={isDrawer ? 0 : 8} minW={'170px'} mr={2}>
                 <TextLine title={'Origin point'}>
                   {coordinatesToText(lastSelectedGridItem.index)}
                 </TextLine>

@@ -40,7 +40,7 @@ export const TokenPreview = ({
                 textAlign={'center'}
                 w={
                   thumbnailsItems.length > 5
-                    ? '19%'
+                    ? '23%'
                     : `${Math.floor(100 / thumbnailsItems.length) - 1}%`
                 }
               >

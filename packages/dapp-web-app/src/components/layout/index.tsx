@@ -41,6 +41,7 @@ export default function Layout({
             h={'100%'}
             minH={'90vh'}
             maxH={'90vh'}
+            // maxW={{ base: '40vw', md: '' }}
             overflow={'auto'}
             flexDir={'column'}
             justifyContent={'space-between'}
@@ -85,6 +86,7 @@ export default function Layout({
           // }
           justifyContent={'center'}
           flex={'0 0 auto'}
+          maxW={isMediumScreen ? '90%' : ''}
         >
           {children}
         </Flex>

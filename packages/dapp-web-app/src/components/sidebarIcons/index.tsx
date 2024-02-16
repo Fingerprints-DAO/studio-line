@@ -38,7 +38,6 @@ export default function SidebarIcons({
         maxH={'100%'}
         minW={{ base: '30px', md: '44px' }}
         pos={'relative'}
-        flex={0}
         alignItems={'flex-end'}
       >
         <Flex
