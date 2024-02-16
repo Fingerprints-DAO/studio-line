@@ -26,23 +26,25 @@ export default function Layout({
       {isRegularScreen && (
         <VStack
           bg="white"
-          px={4}
+          pl={4}
+          pt={4}
           alignItems="stretch"
           maxH={'100vh'}
           minW={'30vw'}
           pos={'relative'}
-          flex={4}
+          flex={1}
+          w={'100%'}
+          h={'100%'}
         >
-          <Header />
           <Flex
-            height={'100%'}
+            w={'100%'}
+            h={'100%'}
             overflow={'auto'}
             flexDir={'column'}
             justifyContent={'space-between'}
-            mt={'62px'}
-            mr={'-20px'}
-            pr={'20px'}
-            w={'100%'}
+            // mt={'62px'}
+            // mr={'-20px'}
+            // pr={'20px'}
           >
             {sidebar}
             {/* <Footer /> */}
@@ -62,22 +64,24 @@ export default function Layout({
 
   return (
     <Container maxW={'8xl'}>
+      <Header />
       <Flex
         pos={'relative'}
         justifyContent={{ base: 'space-between', md: 'center' }}
+        w={'100%'}
       >
         <Flex
           p={2}
           mt={'1vh'}
           bgColor={'white'}
-          h={'95vh'}
+          h={'92vh'}
           maxW={
             isRegularScreen
               ? 'none'
               : { base: 'calc(100vw - 80px)', md: 'calc(100vw - 100px)' }
           }
           justifyContent={'center'}
-          flex={isRegularScreen ? 6 : 9}
+          // flex={isRegularScreen ? 6 : 9}
         >
           {children}
         </Flex>
