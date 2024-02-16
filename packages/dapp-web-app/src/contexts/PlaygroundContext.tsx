@@ -55,7 +55,7 @@ const PlaygroundContext = createContext<{
   toggleGridItem: (index: string) => void
   resetGrid: () => void
   movements: number
-  originPoint: string
+  startingPoint: string
   isFixed: boolean
   lastSelectedGridItem?: {
     direction: Direction | null
@@ -66,7 +66,7 @@ const PlaygroundContext = createContext<{
   toggleGridItem: () => {},
   resetGrid: () => {},
   movements: 0,
-  originPoint: '',
+  startingPoint: '',
   isFixed: false,
   lastSelectedGridItem: undefined,
 })
@@ -85,7 +85,7 @@ export const PlaygroundProvider = ({
   const [lastSelectedGridItem, setLastSelectedGridItem] =
     useState<GridItemProperties>()
   const [movements, setMovements] = useState(0)
-  const [originPoint, setOriginPoint] = useState('')
+  const [startingPoint, setStartingPoint] = useState('')
   const hasReachedEnd = useHasReachedEnd({
     row: lastSelectedGridItem?.row,
     direction: lastSelectedGridItem?.direction,
@@ -94,7 +94,7 @@ export const PlaygroundProvider = ({
 
   const toggleGridItem = (index: string) => {
     if (!lastSelectedGridItem) {
-      setOriginPoint(index)
+      setStartingPoint(index)
     } else {
       setMovements(movements + 1)
     }
@@ -149,7 +149,7 @@ export const PlaygroundProvider = ({
     setHighlightGridItem([])
     setLastSelectedGridItem(undefined)
     setMovements(0)
-    setOriginPoint('')
+    setStartingPoint('')
     setIsFixed(false)
   }
 
@@ -162,7 +162,7 @@ export const PlaygroundProvider = ({
         lastSelectedGridItem,
         resetGrid,
         movements,
-        originPoint,
+        startingPoint: startingPoint,
         isFixed,
       }}
     >

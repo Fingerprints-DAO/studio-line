@@ -1,18 +1,47 @@
 'use client'
 
-import { Box, Button, Flex, Link, Text, Fade } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Flex,
+  Link,
+  Text,
+  Fade,
+  TextProps,
+} from '@chakra-ui/react'
 import { AuctionBanner } from 'components/auctionBanner'
-import ChakraNextImageLoader from 'components/chakraNextImageLoader'
+import { TokenPreview } from 'components/tokenPreview'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
+import { useCoordinates } from 'hooks/use-coordinates'
 import { useHasReachedEnd } from 'hooks/use-has-reached-end'
-import { GridSize, ImageSizes, generateImage } from 'types/grid'
+import { useMemo } from 'react'
+import { Direction, GridSize } from 'types/grid'
+import { coordinatesToText } from 'utils/handleCoordinates'
 
-const TextLine = ({ children, title = '', ...props }: any) => (
-  <Text fontSize={'md'} color={'gray.500'} mb={1} {...props}>
+const getRandomNumber = (): number => {
+  return Math.floor(Math.random() * 250)
+}
+
+type TextLineProps = TextProps & {
+  valueProps?: TextProps
+}
+const TextLine = ({
+  children,
+  title = '',
+  valueProps = {},
+  ...props
+}: TextLineProps) => (
+  <Text
+    fontSize={'md'}
+    color={'gray.500'}
+    mb={1}
+    textTransform={'lowercase'}
+    {...props}
+  >
     <Text as={'span'} fontWeight={'bold'} textColor={'gray.700'}>
       {title}:
     </Text>{' '}
-    <Text as={'span'} textTransform={'capitalize'}>
+    <Text as={'span'} textTransform={'lowercase'} {...valueProps}>
       {children}
     </Text>
   </Text>
@@ -25,13 +54,15 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
     highlightGridItem,
     gridItemsState,
     movements,
-    originPoint,
+    startingPoint,
     isFixed,
   } = usePlaygroundContext()
   const hasReachedEnd = useHasReachedEnd({
     row: lastSelectedGridItem?.row,
     direction: lastSelectedGridItem?.direction,
   })
+  const randomTokenId = useMemo(getRandomNumber, [])
+  const { x, y } = useCoordinates(lastSelectedGridItem?.index)
   const itemId = lastSelectedGridItem
     ? lastSelectedGridItem.row * GridSize + lastSelectedGridItem.col
     : 0
@@ -70,69 +101,36 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
                 fontSize={'2xl'}
                 textTransform={'uppercase'}
               >
-                LINE #{itemId}
+                LINE {randomTokenId}
               </Text>
               <Text fontSize={'md'} textColor={'gray.500'} ml={2}>
-                ({lastSelectedGridItem.index.replace('-', ',')})
+                ({x}, {y})
               </Text>
             </Flex>
             <Flex justifyContent={'flex-start'}>
-              <Box maxW={'55%'}>
-                <ChakraNextImageLoader
-                  src={generateImage(itemId, ImageSizes.LARGE)}
-                  alt={`Token ${lastSelectedGridItem.index}`}
-                  width={858}
-                  height={1298}
-                  style={{ maxWidth: '100%' }}
-                />
-                {highlightItems.length > 0 && (
-                  <Box
-                    display={'flex'}
-                    justifyContent={'space-between'}
-                    mt={2}
-                    flexWrap={highlightItems.length > 5 ? 'wrap' : 'nowrap'}
-                  >
-                    {highlightItems.map((item) => {
-                      return (
-                        <Box
-                          key={item.index}
-                          textAlign={'center'}
-                          w={
-                            highlightItems.length > 5
-                              ? '23%'
-                              : `${
-                                  Math.floor(100 / highlightItems.length) - 1
-                                }%`
-                          }
-                        >
-                          <ChakraNextImageLoader
-                            src={item.image}
-                            alt={`Token ${item.index}`}
-                            width={104}
-                            height={157}
-                            style={{ width: '100%' }}
-                          />
-                          <Text fontSize={'xs'} mt={1} mb={isFixed ? 2 : 0}>
-                            ({item.index.replace('-', ',')})
-                          </Text>
-                        </Box>
-                      )
-                    })}
-                  </Box>
-                )}
-              </Box>
+              <TokenPreview
+                maxW={'55%'}
+                itemId={itemId}
+                thumbnailsItems={highlightItems}
+                isFixed={isFixed}
+              />
               <Box ml={8} flexShrink={0}>
                 <TextLine title={'Origin point'}>
-                  {originPoint.replace('-', ',')}
+                  {coordinatesToText(lastSelectedGridItem.index)}
                 </TextLine>
-                <TextLine title={'Image point'}>
-                  {lastSelectedGridItem.index.replace('-', ',')}
-                </TextLine>
-                <TextLine title={'Type'}>
+                <TextLine
+                  title={'Type'}
+                  valueProps={{
+                    textColor:
+                      lastSelectedGridItem.direction === Direction.UP
+                        ? 'red.600'
+                        : 'cyan.600',
+                  }}
+                >
                   {lastSelectedGridItem.direction}
                 </TextLine>
                 <TextLine title={'Starting point'}>
-                  {lastSelectedGridItem.index.replace('-', ',')}
+                  {coordinatesToText(startingPoint)}
                 </TextLine>
                 <TextLine title={'Has Reached End'}>
                   {hasReachedEnd ? 'Yes' : 'No'}
@@ -142,7 +140,7 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
                 </TextLine>
                 <TextLine title={'Number of Movements'}>{movements}</TextLine>
                 <Link href={lastSelectedGridItem.image} isExternal>
-                  Preview in new tab
+                  view image in new tab
                 </Link>
               </Box>
             </Flex>

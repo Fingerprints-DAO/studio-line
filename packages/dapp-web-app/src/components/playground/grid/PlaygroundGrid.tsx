@@ -109,15 +109,12 @@ const PlaygroundGrid: React.FC = () => {
       >
         <AlertDialogOverlay rounded={'0'}>
           <AlertDialogContent rounded={'0'}>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Your token can be a star!
-            </AlertDialogHeader>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold" />
 
             <AlertDialogBody>
-              Now you can relocate your token to any coordinate on the grid and
-              have it as a star. <br />
-              The token will have a full 360-degree field of view. However, the
-              token will be locked down, and cannot move anymore.
+              You have reached the end of the map. Keep exploring, or relocate
+              anywhere you want on the grid. If you choose to do so, this will
+              be your final move.
             </AlertDialogBody>
 
             <AlertDialogFooter>

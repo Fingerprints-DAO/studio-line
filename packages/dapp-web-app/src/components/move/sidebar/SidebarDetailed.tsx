@@ -226,7 +226,7 @@ export function SidebarDetailed({ ...props }: any) {
                     View on Opensea
                   </Link>
                   <Link href={tokenJson.image} isExternal display={'block'}>
-                    Preview in new tab
+                    view image in new tab
                   </Link>
                 </SkeletonText>
               </Box>
