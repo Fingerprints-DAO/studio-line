@@ -126,7 +126,7 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
       w={widthPx}
       h={heightPx}
       onClick={disableClick ? undefined : handleClick}
-      cursor={disableClick ? 'not-allowed' : isOpened ? 'grabbing' : 'pointer'}
+      cursor={disableClick ? 'default' : isOpened ? 'grabbing' : 'pointer'}
       _after={
         !isLastRow
           ? lineStyle({
