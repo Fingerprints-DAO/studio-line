@@ -76,6 +76,7 @@ const components = {
       _disabled: {
         transition: 'none',
       },
+      textTransform: 'uppercase',
     },
   }),
   Link: defineStyleConfig({

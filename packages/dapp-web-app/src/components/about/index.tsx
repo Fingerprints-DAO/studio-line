@@ -84,7 +84,7 @@ export default function About() {
           {isMediumScreen && <SidebarIcons alignItems={'flex-end'} />}
           <Box
             as={'main'}
-            mt={isRegularScreen ? '62px' : '0'}
+            // mt={isRegularScreen ? '62px' : '0'}
             // mt={isRegularScreen ? '92px' : '0'}
             // mt={10}
             textColor={'gray.500'}
