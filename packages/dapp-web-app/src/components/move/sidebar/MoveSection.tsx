@@ -150,10 +150,10 @@ export function MoveSection({ token }: { token: any }) {
         }
       >
         {getCurrentMoveToCall().isLoading
-          ? 'Waiting for approval...'
+          ? 'waiting for approval...'
           : moveTx.isLoading
-            ? 'Processing...'
-            : 'Move'}
+            ? 'processing...'
+            : 'move'}
       </Button>
       <TxMessage
         hash={getCurrentMoveToCall().data?.hash}
@@ -176,7 +176,7 @@ export function MoveSection({ token }: { token: any }) {
             backgroundColor: 'white',
           }}
         >
-          Fix my token on grid
+          fix my token on grid
         </Button>
       )}
     </Fade>

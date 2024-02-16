@@ -32,14 +32,14 @@ const components = {
     },
   }),
   Button: defineStyleConfig({
-    // sizes: {
-    //   lg: {
-    //     fontWeight: 'bold',
-    //     height: 12,
-    //     fontSize: 16,
-    //     px: 4,
-    //   },
-    // },
+    sizes: {
+      md: {
+        // fontWeight: 'bold',
+        height: 8,
+        // fontSize: 16,
+        // px: 4,
+      },
+    },
     variants: {
       solid: defineStyle(({ colorScheme }) => ({
         bgColor: `${colorScheme}.900`,
@@ -68,6 +68,7 @@ const components = {
         borderWidth: 2,
         borderColor: `${colorScheme}.900`,
         rounded: 'none',
+        height: '30px',
       })),
     },
     baseStyle: {

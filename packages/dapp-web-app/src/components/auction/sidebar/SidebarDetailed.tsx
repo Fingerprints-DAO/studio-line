@@ -287,10 +287,10 @@ export function SidebarDetailed({ ...props }: any) {
                         }
                       >
                         {mintPositions.isLoading
-                          ? 'Waiting for approval...'
+                          ? 'waiting for approval...'
                           : mintPositionsTx.isLoading
-                            ? 'Processing...'
-                            : ' Mint selected tokens'}
+                            ? 'processing...'
+                            : ' mint selected tokens'}
                       </Button>
                       <TxMessage
                         hash={mintPositions.data?.hash}
@@ -376,10 +376,10 @@ export function SidebarDetailed({ ...props }: any) {
                         onClick={handleRandomMint}
                       >
                         {mintRandom.isLoading
-                          ? 'Waiting for approval...'
+                          ? 'waiting for approval...'
                           : mintRandomTx.isLoading
-                            ? 'Processing...'
-                            : 'Random Mint'}
+                            ? 'processing...'
+                            : 'random Mint'}
                       </Button>
                       <TxMessage
                         hash={mintRandom.data?.hash}

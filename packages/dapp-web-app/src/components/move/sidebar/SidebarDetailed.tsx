@@ -158,10 +158,10 @@ export function SidebarDetailed({ ...props }: any) {
                           }}
                         >
                           {moveToPosition.isLoading
-                            ? 'Waiting for approval...'
+                            ? 'waiting for approval...'
                             : moveTx.isLoading
-                              ? 'Processing...'
-                              : 'Confirm'}
+                              ? 'processing...'
+                              : 'confirm'}
                         </Button>
                         <Button
                           w={'full'}
@@ -170,7 +170,7 @@ export function SidebarDetailed({ ...props }: any) {
                           onClick={toggleFixMyToken}
                           variant={'outline'}
                         >
-                          Go Back
+                          go back
                         </Button>
                         <TxMessage
                           hash={moveToPosition.data?.hash}

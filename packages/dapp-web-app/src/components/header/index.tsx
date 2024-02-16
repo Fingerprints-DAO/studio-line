@@ -28,7 +28,7 @@ const Header = ({ isDrawer = false }) => {
     if (!canMove) {
       newNav[1] = { href: '/auction', label: 'auction', isDisabled: false }
     } else {
-      newNav[1].label = 'tokens'
+      newNav[1].label = 'move'
     }
     setNav(newNav)
   }, [canMove, isCanMoveSuccess])
@@ -70,21 +70,26 @@ const Header = ({ isDrawer = false }) => {
                 mr={0}
                 ml={6}
                 _hover={{
-                  color: item.isDisabled ? 'gray.400' : 'cyan.500',
+                  color: item.isDisabled ? 'gray.300' : 'gray.900',
                   cursor: item.isDisabled ? 'not-allowed' : 'pointer',
                 }}
                 color={
                   item.isDisabled
-                    ? 'gray.400'
+                    ? 'gray.300'
                     : isActive
-                      ? 'cyan.500'
-                      : 'gray.900'
+                      ? 'gray.900'
+                      : 'gray.500'
                 }
                 transition="ease"
                 transitionProperty="color"
                 transitionDuration="0.2s"
               >
-                <Text as="strong" fontSize="16px" lineHeight={'16px'}>
+                <Text
+                  as="strong"
+                  fontSize="16px"
+                  lineHeight={'16px'}
+                  textTransform={'uppercase'}
+                >
                   {item.label}
                 </Text>
               </Box>

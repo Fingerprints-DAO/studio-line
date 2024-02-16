@@ -119,7 +119,7 @@ const PlaygroundGrid: React.FC = () => {
 
             <AlertDialogFooter>
               <Button ref={cancelRef} onClick={onClose} ml={3}>
-                OK
+                ok
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

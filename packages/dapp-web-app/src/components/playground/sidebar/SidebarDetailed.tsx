@@ -64,8 +64,8 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
       )}
       <Fade in={!!lastSelectedGridItem}>
         {lastSelectedGridItem && !isDrawer && (
-          <Button variant={'outline'} my={4} onClick={resetGrid}>
-            Reset playground
+          <Button variant={'outline'} my={1} onClick={resetGrid}>
+            restart
           </Button>
         )}
         {lastSelectedGridItem && (

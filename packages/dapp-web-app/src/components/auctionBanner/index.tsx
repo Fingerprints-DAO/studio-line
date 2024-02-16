@@ -47,7 +47,7 @@ export function AuctionBanner({ displayMintNow = false }) {
           w={'full'}
           flex={1}
         >
-          MINT NOW
+          mint now
         </Button>
       </Box>
     )
