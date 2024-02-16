@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, Grid, GridItem, Text } from '@chakra-ui/react'
 import Wallet from 'components/wallet'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -38,10 +38,11 @@ const Header = ({ isDrawer = false }) => {
       zIndex={1}
       justifyContent={isDrawer ? 'center' : 'right'}
       my={isDrawer ? 8 : 0}
-      pos={isDrawer ? 'static' : 'absolute'}
+      // pos={isDrawer ? 'static' : 'absolute'}
       bgColor={'white'}
-      right={4}
-      left={0}
+      w={'full'}
+      // right={4}
+      // left={0}
     >
       <GridItem colSpan={isDrawer ? 1 : 10}>
         <Flex
