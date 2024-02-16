@@ -56,7 +56,7 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
       )}
       <Fade
         in={!!lastSelectedGridItem}
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%', height: 'auto' }}
       >
         {lastSelectedGridItem && (
           <Box as="section" w={'100%'} h={'100%'}>
@@ -74,12 +74,17 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
                 ({x}, {y})
               </Text>
             </Flex>
-            <Flex justifyContent={'flex-start'} w={'100%'} h={'100%'}>
+            <Flex
+              justifyContent={'flex-start'}
+              w={'100%'}
+              h={'100%'}
+              pb={isDrawer ? 2 : 0}
+            >
               <TokenPreview
                 // maxW={'300px'}
                 // maxHeight={'80vh'}
                 // minW={'300px'}
-                maxW={isDrawer ? '65%' : '60%'}
+                maxW={isDrawer ? '65%' : { base: '50%', xl: '65%' }}
                 // minW={'250px'}
                 itemId={itemId}
                 thumbnailsItems={highlightItems}
