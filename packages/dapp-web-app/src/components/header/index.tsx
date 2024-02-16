@@ -1,13 +1,9 @@
 import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react'
 import Wallet from 'components/wallet'
 import Link from 'next/link'
-// import useMediaQuery from 'hooks/use-media-query'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useLineCanMove } from 'services/web3/generated'
-// import Grid from 'components/grid'
-// import Wallet from 'components/wallet'
-// import { isAfterStage, PageState } from 'utils/currentStage'
 
 const navLinks = [
   { href: '/', label: 'playground', isDisabled: false },
@@ -36,8 +32,8 @@ const Header = ({ isDrawer = false }) => {
   return (
     <Grid
       as="header"
-      pt={6}
-      pb={4}
+      pt={3}
+      pb={2}
       position="relative"
       zIndex={1}
       justifyContent={isDrawer ? 'center' : 'right'}
@@ -86,8 +82,8 @@ const Header = ({ isDrawer = false }) => {
               >
                 <Text
                   as="strong"
-                  fontSize="16px"
-                  lineHeight={'16px'}
+                  fontSize="14px"
+                  lineHeight={'14px'}
                   textTransform={'uppercase'}
                 >
                   {item.label}

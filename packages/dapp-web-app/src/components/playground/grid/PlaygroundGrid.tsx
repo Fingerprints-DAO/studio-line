@@ -30,6 +30,7 @@ const PlaygroundGrid: React.FC = () => {
     highlightGridItem,
     lastSelectedGridItem,
     isFixed,
+    resetGrid,
   } = usePlaygroundContext()
   const hasReachedEnd = useHasReachedEnd({
     row: lastSelectedGridItem?.row,
@@ -97,7 +98,7 @@ const PlaygroundGrid: React.FC = () => {
     <Box
       ref={ref}
       height={'100%'}
-      w={height > 0 ? height : 'auto'}
+      w={height > 0 ? height - 40 : 'auto'}
       minW={ref.current ? 'none' : '50vw'}
       pos={'relative'}
     >
@@ -138,6 +139,15 @@ const PlaygroundGrid: React.FC = () => {
         <Skeleton h={'100%'} w={'100%'} />
       </Box>
       <Fade in={showGrid}>
+        <Box mb={3}>
+          <Button
+            variant={'outline'}
+            onClick={resetGrid}
+            isDisabled={!lastSelectedGridItem}
+          >
+            restart
+          </Button>
+        </Box>
         <SimpleGrid
           columns={GridSize}
           spacingY={`${GridSpace}px`}

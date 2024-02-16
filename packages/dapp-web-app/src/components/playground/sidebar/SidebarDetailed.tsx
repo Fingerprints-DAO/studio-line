@@ -1,14 +1,6 @@
 'use client'
 
-import {
-  Box,
-  Button,
-  Flex,
-  Link,
-  Text,
-  Fade,
-  TextProps,
-} from '@chakra-ui/react'
+import { Box, Flex, Link, Text, Fade } from '@chakra-ui/react'
 import { AuctionBanner } from 'components/auctionBanner'
 import { TextLine } from 'components/textLine'
 import { TokenPreview } from 'components/tokenPreview'
@@ -27,7 +19,6 @@ const getRandomNumber = (): number => {
 export function SidebarDetailed({ isDrawer = false, ...props }: any) {
   const {
     lastSelectedGridItem,
-    resetGrid,
     highlightGridItem,
     gridItemsState,
     movements,
@@ -49,7 +40,7 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
     .filter((item) => item)
 
   return (
-    <Box {...props}>
+    <Box w={'100%'} {...props}>
       {!lastSelectedGridItem && (
         <>
           <AuctionBanner displayMintNow />
@@ -63,11 +54,6 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
         </>
       )}
       <Fade in={!!lastSelectedGridItem}>
-        {lastSelectedGridItem && !isDrawer && (
-          <Button variant={'outline'} my={1} onClick={resetGrid}>
-            restart
-          </Button>
-        )}
         {lastSelectedGridItem && (
           <Box as="section">
             <Flex as="header" alignItems={'center'}>
@@ -86,7 +72,7 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
             </Flex>
             <Flex justifyContent={'flex-start'}>
               <TokenPreview
-                maxW={'55%'}
+                maxW={'60%'}
                 itemId={itemId}
                 thumbnailsItems={highlightItems}
                 isFixed={isFixed}

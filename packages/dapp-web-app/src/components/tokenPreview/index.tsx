@@ -38,7 +38,7 @@ export const TokenPreview = ({
                 textAlign={'center'}
                 w={
                   thumbnailsItems.length > 5
-                    ? '23%'
+                    ? '19%'
                     : `${Math.floor(100 / thumbnailsItems.length) - 1}%`
                 }
               >
@@ -49,7 +49,7 @@ export const TokenPreview = ({
                   height={157}
                   style={{ width: '100%' }}
                 />
-                <Text fontSize={'xs'} mt={1} mb={isFixed ? 2 : 0}>
+                <Text fontSize={'11px'} mt={1} mb={isFixed ? 2 : 0}>
                   ({coordinatesToText(item.index)})
                 </Text>
               </Box>

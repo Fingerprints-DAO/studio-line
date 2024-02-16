@@ -39,7 +39,7 @@ export default function Layout({
             overflow={'auto'}
             flexDir={'column'}
             justifyContent={'space-between'}
-            mt={'92px'}
+            mt={'62px'}
             mr={'-20px'}
             pr={'20px'}
             w={'100%'}
