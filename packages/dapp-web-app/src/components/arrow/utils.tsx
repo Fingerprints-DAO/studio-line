@@ -65,9 +65,9 @@ export const useArrowColors = ({
   const theme = useTheme()
 
   if (direction === Direction.UP)
-    return [theme.colors['red'][300], theme.colors['red'][600]]
+    return [theme.colors['red'][500], theme.colors['red'][600]]
   if (direction === Direction.DOWN)
-    return [theme.colors['cyan'][300], theme.colors['cyan'][600]]
+    return [theme.colors['cyan'][500], theme.colors['cyan'][600]]
 
   return theme.colors['gray'][200]
 }

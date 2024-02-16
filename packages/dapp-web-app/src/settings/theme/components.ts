@@ -79,7 +79,7 @@ const components = {
   }),
   Link: defineStyleConfig({
     baseStyle: {
-      color: 'cyan.500',
+      color: 'links.500',
       _hover: {
         color: 'cyan.400',
         textDecoration: 'underline',

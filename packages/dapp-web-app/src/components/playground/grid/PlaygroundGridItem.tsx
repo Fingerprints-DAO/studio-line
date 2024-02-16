@@ -103,8 +103,8 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
     onlyHighlightedClick,
   ])
 
-  const isBorder = isFirstRow || isFirstCol || isLastRow || isLastCol
-  const isOdd = col % 2 === 0
+  // const isBorder = isFirstRow || isFirstCol || isLastRow || isLastCol
+  // const isOdd = col % 2 === 0
 
   const handleClick = () => {
     toggleGridItem(index)
@@ -112,14 +112,10 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
 
   const bgColor = useMemo(() => {
     if (isHighlighted) {
-      if (isFixed) return 'purple.500'
+      if (isFixed) return 'purple.600'
 
       return moveDirection === Direction.UP ? 'red.600' : 'cyan.600'
     }
-    // if (isOdd) {
-    //   return 'gray.300'
-    // }
-    // return 'gray.400'
     return 'gray.300'
   }, [isFixed, isHighlighted, moveDirection])
   // }, [isFixed, isHighlighted, isOdd, moveDirection])

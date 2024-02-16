@@ -168,6 +168,13 @@ export function MoveSection({ token }: { token: any }) {
           mb={1}
           onClick={toggleFixMyToken}
           colorScheme="purple"
+          bgColor={'purple.600'}
+          borderColor={'purple.600'}
+          _hover={{
+            color: 'purple.600',
+            borderColor: 'purple.600',
+            backgroundColor: 'white',
+          }}
         >
           Fix my token on grid
         </Button>

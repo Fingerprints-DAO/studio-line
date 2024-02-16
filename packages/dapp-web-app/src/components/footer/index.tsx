@@ -67,7 +67,7 @@ const Footer = ({ isDrawer = false }) => {
               Developed by{' '}
               <Text
                 as="a"
-                color={'cyan.500'}
+                color={'links.500'}
                 title="arod.studio"
                 href="https://arod.studio"
                 target="_blank"

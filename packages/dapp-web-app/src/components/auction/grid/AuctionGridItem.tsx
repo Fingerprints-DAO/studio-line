@@ -80,9 +80,12 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
   }
 
   const bgColor = useMemo(() => {
-    if (isMinted) return 'gray.200'
-    if (direction === Direction.UP) return 'red.500'
-    if (direction === Direction.DOWN) return 'cyan.500'
+    if (isMinted) {
+      if (direction === Direction.UP) return 'red.100'
+      if (direction === Direction.DOWN) return 'cyan.100'
+    }
+    if (direction === Direction.UP) return 'red.600'
+    if (direction === Direction.DOWN) return 'cyan.600'
 
     return 'gray.500'
   }, [direction, isMinted])

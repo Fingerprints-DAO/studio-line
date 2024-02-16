@@ -194,7 +194,7 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
                 bgColor={renderPoint && !isFixedSelected ? 'white' : ''}
                 borderWidth={renderPoint && !isFixedSelected ? '2px' : ''}
                 borderColor={
-                  renderPoint && !isFixedSelected ? 'purple.500' : ''
+                  renderPoint && !isFixedSelected ? 'purple.200' : ''
                 }
                 zIndex={4}
               />

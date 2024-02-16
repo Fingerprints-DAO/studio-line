@@ -157,6 +157,14 @@ export function SidebarDetailed({ ...props }: any) {
                             moveTx.isLoading ||
                             moveToPosition.isLoading
                           }
+                          colorScheme="purple"
+                          bgColor={'purple.600'}
+                          borderColor={'purple.600'}
+                          _hover={{
+                            color: 'purple.600',
+                            borderColor: 'purple.600',
+                            backgroundColor: 'white',
+                          }}
                         >
                           {moveToPosition.isLoading
                             ? 'Waiting for approval...'
