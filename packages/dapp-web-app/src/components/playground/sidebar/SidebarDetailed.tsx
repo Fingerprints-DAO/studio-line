@@ -16,6 +16,7 @@ import { useCoordinates } from 'hooks/use-coordinates'
 import { useHasReachedEnd } from 'hooks/use-has-reached-end'
 import { useMemo } from 'react'
 import { Direction, GridSize } from 'types/grid'
+import { getArweaveImageURL } from 'utils/getLink'
 import { coordinatesToText } from 'utils/handleCoordinates'
 
 const getRandomNumber = (): number => {
@@ -139,7 +140,10 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
                   {isFixed ? 'Yes' : 'No'}
                 </TextLine>
                 <TextLine title={'Number of Movements'}>{movements}</TextLine>
-                <Link href={lastSelectedGridItem.image} isExternal>
+                <Link
+                  href={getArweaveImageURL(lastSelectedGridItem.id)}
+                  isExternal
+                >
                   view image in new tab
                 </Link>
               </Box>

@@ -22,3 +22,17 @@ export const getExternalTxUrl = (address?: Address) => {
   const base = process.env.NEXT_PUBLIC_ETHERSCAN_URL
   return `${base}tx/${address ?? ''}`
 }
+
+export const handleArweaveUrl = (url?: string) => {
+  // ar://Y-05cY1jiKkVn9aCL3Di3sOWfCUZRPLaoASs0LYJOsU/446.jpg
+  // https://arweave.net/Y-05cY1jiKkVn9aCL3Di3sOWfCUZRPLaoASs0LYJOsU/1.jpg
+  if (!url) return ''
+  const olPrefix = 'ar://'
+  const newPrefix = 'https://arweave.net/'
+
+  return url.startsWith(olPrefix) ? url.replace(olPrefix, newPrefix) : url
+}
+
+export const getArweaveImageURL = (id: string | number) => {
+  return `https://arweave.net/Y-05cY1jiKkVn9aCL3Di3sOWfCUZRPLaoASs0LYJOsU/${id}.jpg`
+}
