@@ -95,51 +95,15 @@ const PlaygroundGrid: React.FC = () => {
   }, [hasReachedEnd, onOpen])
 
   return (
-    <Box
-      ref={ref}
-      height={'100%'}
-      w={height > 0 ? height - 40 : 'auto'}
-      minW={ref.current ? 'none' : '50vw'}
-      pos={'relative'}
-    >
-      <AlertDialog
-        isOpen={isOpen}
-        onClose={onClose}
-        leastDestructiveRef={cancelRef}
-        isCentered
-      >
-        <AlertDialogOverlay rounded={'0'}>
-          <AlertDialogContent rounded={'0'}>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold" />
-
-            <AlertDialogBody>
-              You have reached the end of the map. Keep exploring, or relocate
-              anywhere you want on the grid. If you choose to do so, this will
-              be your final move.
-            </AlertDialogBody>
-
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose} ml={3}>
-                ok
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
+    <>
       <Box
-        hidden={showGrid}
-        pos={'absolute'}
-        top={0}
-        left={0}
-        right={0}
-        bottom={0}
-        // bgColor={'whiteAlpha.800'}
-        zIndex={5}
+        ref={ref}
+        h={'100%'}
+        w={height > 0 ? height - 20 : 'auto'}
+        minW={ref.current ? 'none' : '50vw'}
+        pos={'relative'}
       >
-        <Skeleton h={'100%'} w={'100%'} />
-      </Box>
-      <Fade in={showGrid}>
-        <Box mb={3}>
+        <Box mb={3} zIndex={5} pos={'absolute'} top={'-55px'} left={0}>
           <Button
             variant={'outline'}
             onClick={resetGrid}
@@ -148,15 +112,53 @@ const PlaygroundGrid: React.FC = () => {
             restart
           </Button>
         </Box>
-        <SimpleGrid
-          columns={GridSize}
-          spacingY={`${GridSpace}px`}
-          spacingX={`${gridSpaceX}px`}
+        <AlertDialog
+          isOpen={isOpen}
+          onClose={onClose}
+          leastDestructiveRef={cancelRef}
+          isCentered
         >
-          {gridItems}
-        </SimpleGrid>
-      </Fade>
-    </Box>
+          <AlertDialogOverlay rounded={'0'}>
+            <AlertDialogContent rounded={'0'}>
+              <AlertDialogHeader fontSize="lg" fontWeight="bold" />
+
+              <AlertDialogBody>
+                You have reached the end of the map. Keep exploring, or relocate
+                anywhere you want on the grid. If you choose to do so, this will
+                be your final move.
+              </AlertDialogBody>
+
+              <AlertDialogFooter>
+                <Button ref={cancelRef} onClick={onClose} ml={3}>
+                  ok
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogOverlay>
+        </AlertDialog>
+        <Box
+          hidden={showGrid}
+          pos={'absolute'}
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          // bgColor={'whiteAlpha.800'}
+          zIndex={5}
+        >
+          <Skeleton h={'100%'} w={'100%'} />
+        </Box>
+        <Fade in={showGrid}>
+          <SimpleGrid
+            columns={GridSize}
+            spacingY={`${GridSpace}px`}
+            spacingX={`${gridSpaceX}px`}
+          >
+            {gridItems}
+          </SimpleGrid>
+        </Fade>
+      </Box>
+    </>
   )
 }
 
