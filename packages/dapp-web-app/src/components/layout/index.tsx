@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Container, Flex, VStack } from '@chakra-ui/react'
+import { Box, Container, Flex, VStack } from '@chakra-ui/react'
 import Header from 'components/header'
 import Footer from 'components/footer'
 import { AuctionProvider } from 'contexts/AuctionContext'
@@ -24,17 +24,17 @@ export default function Layout({
   const renderSidebars = () => (
     <>
       {isRegularScreen && (
-        <VStack
+        <Box
+          alignItems="stretch"
+          flex={'1'}
+          h={'100%'}
+          maxH={'100vh'}
+          // maxW={'calc(100% - 400px)'}
+          overflow={'hidden'}
+          pos={'relative'}
           bg="white"
           pl={4}
           pt={4}
-          alignItems="stretch"
-          maxH={'100vh'}
-          minW={'30vw'}
-          pos={'relative'}
-          flex={1}
-          w={'100%'}
-          h={'100%'}
         >
           <Flex
             w={'100%'}
@@ -51,7 +51,7 @@ export default function Layout({
             {sidebar}
             {/* <Footer /> */}
           </Flex>
-        </VStack>
+        </Box>
       )}
       {isMediumScreen && <SidebarIcons additionalNav={sidebarIcons} />}
     </>
@@ -65,7 +65,7 @@ export default function Layout({
   }
 
   return (
-    <Container maxW={'8xl'} maxH={'100vh'}>
+    <Container maxW={'8xl'} maxH={'100vh'} overflow={'hidden'}>
       {isRegularScreen && <Header />}
       <Flex
         pos={'relative'}
@@ -75,16 +75,16 @@ export default function Layout({
         <Flex
           p={2}
           mt={'1vh'}
+          ml={'1vw'}
           bgColor={'white'}
-          h={'92vh'}
-          maxW={
-            isRegularScreen
-              ? 'none'
-              : { base: 'calc(100vw - 80px)', md: 'calc(100vw - 100px)' }
-          }
+          h={'90vh'}
+          // maxW={
+          //   isRegularScreen
+          //     ? 'none'
+          //     : { base: 'calc(100vw - 80px)', md: 'calc(100vw - 100px)' }
+          // }
           justifyContent={'center'}
-          w={'100%'}
-          // flex={isRegularScreen ? 6 : 9}
+          flex={'0 0 auto'}
         >
           {children}
         </Flex>

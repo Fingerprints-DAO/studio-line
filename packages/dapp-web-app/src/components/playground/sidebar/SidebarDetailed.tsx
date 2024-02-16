@@ -79,13 +79,15 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
                 // maxW={'300px'}
                 // maxHeight={'80vh'}
                 // minW={'300px'}
-                maxW={isDrawer ? '65%' : '45%'}
-                minW={'250px'}
+                maxW={isDrawer ? '65%' : '60%'}
+                // minW={'250px'}
                 itemId={itemId}
                 thumbnailsItems={highlightItems}
                 isFixed={isFixed}
+                flex={1}
+                overflow={'hidden'}
               />
-              <Box ml={8} minW={'200px'}>
+              <Box ml={8} minW={'170px'} mr={2}>
                 <TextLine title={'Origin point'}>
                   {coordinatesToText(lastSelectedGridItem.index)}
                 </TextLine>

@@ -30,7 +30,7 @@ export const TokenPreview = ({
         justifyContent={'space-between'}
         mt={2}
         flexWrap={thumbnailsItems.length > 5 ? 'wrap' : 'nowrap'}
-        h={'20%'}
+        // h={'20%'}
       >
         {thumbnailsItems.map((item) => {
           return (

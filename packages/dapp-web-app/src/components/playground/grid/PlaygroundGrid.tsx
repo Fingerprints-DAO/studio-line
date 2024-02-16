@@ -109,7 +109,7 @@ const PlaygroundGrid: React.FC = () => {
             onClick={resetGrid}
             isDisabled={!lastSelectedGridItem}
           >
-            restart
+            RESTART
           </Button>
         </Box>
         <AlertDialog
