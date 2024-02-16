@@ -19,6 +19,7 @@ export const TokenPreview = ({
     <ChakraNextImageLoader
       src={generateImage(itemId, ImageSizes.LARGE)}
       alt={`Token ${itemId}`}
+      // maxH={'80%'}
       imageWidth={858}
       imageHeight={1298}
       style={{ maxWidth: '100%' }}
@@ -29,6 +30,7 @@ export const TokenPreview = ({
         justifyContent={'space-between'}
         mt={2}
         flexWrap={thumbnailsItems.length > 5 ? 'wrap' : 'nowrap'}
+        h={'20%'}
       >
         {thumbnailsItems.map((item) => {
           return (

@@ -7,6 +7,7 @@ import { TokenPreview } from 'components/tokenPreview'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 import { useCoordinates } from 'hooks/use-coordinates'
 import { useHasReachedEnd } from 'hooks/use-has-reached-end'
+import { useDisplayConfig } from 'hooks/useDisplayConfig'
 import { useMemo } from 'react'
 import { Direction, GridSize } from 'types/grid'
 import { getArweaveImageURL } from 'utils/getLink'
@@ -40,7 +41,7 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
     .filter((item) => item)
 
   return (
-    <Box w={'100%'} {...props}>
+    <Box w={'100%'} h={'100%'} {...props}>
       {!lastSelectedGridItem && (
         <>
           <AuctionBanner displayMintNow />
@@ -53,9 +54,12 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
           </Text>
         </>
       )}
-      <Fade in={!!lastSelectedGridItem}>
+      <Fade
+        in={!!lastSelectedGridItem}
+        style={{ width: '100%', height: '100%' }}
+      >
         {lastSelectedGridItem && (
-          <Box as="section">
+          <Box as="section" w={'100%'} h={'100%'}>
             <Flex as="header" alignItems={'center'}>
               <Text
                 fontWeight={'bold'}
@@ -70,14 +74,18 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
                 ({x}, {y})
               </Text>
             </Flex>
-            <Flex justifyContent={'flex-start'}>
+            <Flex justifyContent={'flex-start'} w={'100%'} h={'100%'}>
               <TokenPreview
-                maxW={'60%'}
+                // maxW={'300px'}
+                // maxHeight={'80vh'}
+                // minW={'300px'}
+                maxW={isDrawer ? '65%' : '45%'}
+                minW={'250px'}
                 itemId={itemId}
                 thumbnailsItems={highlightItems}
                 isFixed={isFixed}
               />
-              <Box ml={8} flexShrink={0}>
+              <Box ml={8} minW={'200px'}>
                 <TextLine title={'Origin point'}>
                   {coordinatesToText(lastSelectedGridItem.index)}
                 </TextLine>

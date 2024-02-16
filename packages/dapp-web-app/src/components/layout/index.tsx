@@ -39,6 +39,8 @@ export default function Layout({
           <Flex
             w={'100%'}
             h={'100%'}
+            minH={'90vh'}
+            maxH={'90vh'}
             overflow={'auto'}
             flexDir={'column'}
             justifyContent={'space-between'}
@@ -63,7 +65,7 @@ export default function Layout({
   }
 
   return (
-    <Container maxW={'8xl'}>
+    <Container maxW={'8xl'} maxH={'100vh'} overflow={'hidden'}>
       <Header />
       <Flex
         pos={'relative'}
