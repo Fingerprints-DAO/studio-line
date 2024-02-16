@@ -36,7 +36,7 @@ const components = {
       md: {
         // fontWeight: 'bold',
         height: 8,
-        fontSize: 12,
+        fontSize: 11,
         px: 4,
         py: 0,
       },
@@ -69,6 +69,8 @@ const components = {
         borderWidth: 2,
         borderColor: `${colorScheme}.900`,
         rounded: 'none',
+        // pt: 1,
+        // pb: 0,
       })),
     },
     baseStyle: {
