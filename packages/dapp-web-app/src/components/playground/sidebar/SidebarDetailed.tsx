@@ -10,6 +10,7 @@ import {
   TextProps,
 } from '@chakra-ui/react'
 import { AuctionBanner } from 'components/auctionBanner'
+import { TextLine } from 'components/textLine'
 import { TokenPreview } from 'components/tokenPreview'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 import { useCoordinates } from 'hooks/use-coordinates'
@@ -22,31 +23,6 @@ import { coordinatesToText } from 'utils/handleCoordinates'
 const getRandomNumber = (): number => {
   return Math.floor(Math.random() * 250)
 }
-
-type TextLineProps = TextProps & {
-  valueProps?: TextProps
-}
-const TextLine = ({
-  children,
-  title = '',
-  valueProps = {},
-  ...props
-}: TextLineProps) => (
-  <Text
-    fontSize={'md'}
-    color={'gray.500'}
-    mb={1}
-    textTransform={'lowercase'}
-    {...props}
-  >
-    <Text as={'span'} fontWeight={'bold'} textColor={'gray.700'}>
-      {title}:
-    </Text>{' '}
-    <Text as={'span'} textTransform={'lowercase'} {...valueProps}>
-      {children}
-    </Text>
-  </Text>
-)
 
 export function SidebarDetailed({ isDrawer = false, ...props }: any) {
   const {

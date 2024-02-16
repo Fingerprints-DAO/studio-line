@@ -158,7 +158,7 @@ export function MoveSection({ token }: { token: any }) {
       <TxMessage
         hash={getCurrentMoveToCall().data?.hash}
         error={getCurrentMoveToCall().error as TransactionError}
-        successMessage="Token moved successfully! Reloading the page..."
+        successMessage="Moved! Reloading..."
       />
       {hasReachedEnd && (
         <Button

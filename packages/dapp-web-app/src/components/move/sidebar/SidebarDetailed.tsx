@@ -10,7 +10,7 @@ import {
   useLineOwnerOf,
   useLineTokenUri,
 } from 'services/web3/generated'
-import { getExternalOpenseaUrl } from 'utils/getLink'
+import { getExternalOpenseaUrl, handleArweaveUrl } from 'utils/getLink'
 import { shortenAddress } from 'utils/string'
 import { contractAddresses } from '@dapp/contracts'
 import { getChainId } from 'utils/chain'
@@ -19,17 +19,8 @@ import { MoveSection } from './MoveSection'
 import { useWaitForTransaction } from 'wagmi'
 import { TxMessage } from 'components/txMessage'
 import { TransactionError } from 'types/transaction'
-
-const TextLine = ({ children, title = '', ...props }: any) => (
-  <Text fontSize={'md'} color={'gray.500'} mb={1} {...props}>
-    <Text as={'span'} fontWeight={'bold'} textColor={'gray.700'}>
-      {title}:
-    </Text>{' '}
-    <Text as={'span'} textTransform={'capitalize'}>
-      {children}
-    </Text>
-  </Text>
-)
+import { TextLine } from 'components/textLine'
+import { Direction } from 'types/grid'
 
 export function SidebarDetailed({ ...props }: any) {
   const {
@@ -184,7 +175,7 @@ export function SidebarDetailed({ ...props }: any) {
                         <TxMessage
                           hash={moveToPosition.data?.hash}
                           error={moveTx.error as TransactionError}
-                          successMessage="Token moved successfully! Reloading the page..."
+                          successMessage="Moved! Reloading..."
                         />
                       </>
                     )}
@@ -207,7 +198,18 @@ export function SidebarDetailed({ ...props }: any) {
                       trait_type: string
                       value: string
                     }) => (
-                      <TextLine key={trait_type} title={trait_type}>
+                      <TextLine
+                        key={trait_type}
+                        title={trait_type}
+                        valueProps={{
+                          textColor:
+                            trait_type === 'Type'
+                              ? value.toLowerCase() === Direction.UP
+                                ? 'red.600'
+                                : 'cyan.600'
+                              : '',
+                        }}
+                      >
                         {value}
                       </TextLine>
                     ),
@@ -223,9 +225,13 @@ export function SidebarDetailed({ ...props }: any) {
                     isExternal
                     display={'block'}
                   >
-                    View on Opensea
+                    view on opensea
                   </Link>
-                  <Link href={tokenJson.image} isExternal display={'block'}>
+                  <Link
+                    href={handleArweaveUrl(tokenJson.image)}
+                    isExternal
+                    display={'block'}
+                  >
                     view image in new tab
                   </Link>
                 </SkeletonText>

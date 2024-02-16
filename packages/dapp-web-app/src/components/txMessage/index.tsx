@@ -82,7 +82,7 @@ export const TxMessage = ({
         unmountOnExit
       >
         <Link href={getExternalTxUrl(hash)} display={'block'} mt={2}>
-          View your transaction on Etherscan
+          view your transaction on Etherscan
         </Link>
       </Collapse>
     </>
