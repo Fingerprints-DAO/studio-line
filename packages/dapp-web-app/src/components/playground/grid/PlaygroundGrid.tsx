@@ -103,7 +103,9 @@ const PlaygroundGrid: React.FC = () => {
         minW={ref.current ? 'none' : '50vw'}
         pos={'relative'}
       >
-        <Box mb={3} zIndex={5} pos={'absolute'} top={'-55px'} left={0}>
+        {/* TODO: uncomment this to prod */}
+        {/* <Box mb={3} zIndex={5} pos={'absolute'} top={'-55px'} left={0}> */}
+        <Box mb={3} zIndex={5} pos={'absolute'} top={'-51px'} left={0}>
           <Button
             variant={'outline'}
             onClick={resetGrid}

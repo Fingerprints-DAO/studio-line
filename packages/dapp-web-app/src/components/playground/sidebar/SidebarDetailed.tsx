@@ -1,7 +1,6 @@
 'use client'
 
 import { Box, Flex, Link, Text, Fade } from '@chakra-ui/react'
-import { AuctionBanner } from 'components/auctionBanner'
 import { AuctionStaticBanner } from 'components/auctionStaticBanner'
 import { TextLine } from 'components/textLine'
 import { TokenPreview } from 'components/tokenPreview'
