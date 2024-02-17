@@ -1,5 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
+import ChakraNextImageLoaderFull from 'components/chakraNextImageLoaderFull'
 
 export const questions = [
   {
@@ -73,7 +74,7 @@ export const auctionQuestions = [
           textAlign={'center'}
           mx="auto"
         >
-          <ChakraNextImageLoader
+          <ChakraNextImageLoaderFull
             src={'/about/layout-animation.gif'}
             imageWidth={1200}
             imageHeight={1999}
@@ -99,7 +100,7 @@ export const auctionQuestions = [
           textAlign={'center'}
           mx="auto"
         >
-          <ChakraNextImageLoader
+          <ChakraNextImageLoaderFull
             src={'/about/tokens-arrows.gif'}
             imageWidth={1510}
             imageHeight={1510}
@@ -125,7 +126,7 @@ export const auctionQuestions = [
           textAlign={'center'}
           mx="auto"
         >
-          <ChakraNextImageLoader
+          <ChakraNextImageLoaderFull
             src={'/about/tokens-image.gif'}
             imageWidth={1500}
             imageHeight={1500}
@@ -184,7 +185,7 @@ export const auctionQuestions = [
           textAlign={'center'}
           mx="auto"
         >
-          <ChakraNextImageLoader
+          <ChakraNextImageLoaderFull
             src={'/about/movement.gif'}
             imageWidth={1510}
             imageHeight={1510}
@@ -223,7 +224,7 @@ export const auctionQuestions = [
           textAlign={'center'}
           mx="auto"
         >
-          <ChakraNextImageLoader
+          <ChakraNextImageLoaderFull
             src={'/about/token-types.jpg'}
             imageWidth={3349}
             imageHeight={1874}

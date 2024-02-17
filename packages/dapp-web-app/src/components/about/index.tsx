@@ -25,6 +25,7 @@ import { fetcher } from 'utils/fetcher'
 import { GetDiscountResponse } from 'app/getDiscount/api/route'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 import Link from 'next/link'
+import ChakraNextImageLoaderFull from 'components/chakraNextImageLoaderFull'
 
 const textProps: TextProps = {
   my: 4,
@@ -90,10 +91,11 @@ export default function About() {
             textColor={'gray.500'}
           >
             <Box {...imagesProps}>
-              <ChakraNextImageLoader
+              <ChakraNextImageLoaderFull
                 src={'/about/header.jpg'}
                 imageWidth={5200}
                 imageHeight={1966}
+                w={'full'}
                 alt="Header image"
                 imageProps={{ priority: true }}
               />
@@ -178,7 +180,7 @@ export default function About() {
             </Text>
           </Box>
           <Box {...imagesProps}>
-            <ChakraNextImageLoader
+            <ChakraNextImageLoaderFull
               src={'/about/faq.jpg'}
               imageWidth={3900}
               imageHeight={1966}
@@ -254,7 +256,7 @@ export default function About() {
           </Box>
 
           <Box {...imagesProps}>
-            <ChakraNextImageLoader
+            <ChakraNextImageLoaderFull
               src={'/about/footer.jpg'}
               imageWidth={3900}
               imageHeight={1966}
