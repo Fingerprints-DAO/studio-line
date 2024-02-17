@@ -76,11 +76,7 @@ export default function Layout({
   return (
     <Container maxW={'8xl'} maxH={'100vh'} overflow={'hidden'}>
       {isRegularScreen && <Header />}
-      <Flex
-        pos={'relative'}
-        justifyContent={{ base: 'space-between', md: 'center' }}
-        w={'100%'}
-      >
+      <Flex pos={'relative'} justifyContent={'center'} w={'100%'}>
         <Flex
           p={2}
           mt={'1vh'}

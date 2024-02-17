@@ -131,7 +131,7 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
                 <TextLine title={'Is Locked'}>
                   {isFixed ? 'Yes' : 'No'}
                 </TextLine>
-                <TextLine title={'Number of Movements'}>{movements}</TextLine>
+                <TextLine title={'movements'}>{movements}</TextLine>
                 <Link
                   href={getArweaveImageURL(lastSelectedGridItem.id)}
                   isExternal
