@@ -95,7 +95,7 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
               <TokenPreview
                 // maxW={'300px'}
                 // maxHeight={'80vh'}
-                // minW={'300px'}
+                minW={'200px'}
                 // maxW={'330px'}
                 // w={isDrawer ? '65%' : { base: '50%', xl: '45%' }}
                 // minW={'250px'}

@@ -1,4 +1,4 @@
-import { Box, BoxProps, Text } from '@chakra-ui/react'
+import { Box, BoxProps, Fade, Text } from '@chakra-ui/react'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 import { GridItemProperties } from 'contexts/PlaygroundContext'
 import useContainerSizes from 'hooks/useContainerSizes'
@@ -29,7 +29,7 @@ export const TokenPreview = ({
         // maxH={'75%'}
         ref={ref}
       />
-      {thumbnailsItems.length > 0 && (
+      <Fade in={thumbnailsItems.length > 0 && width > 0} unmountOnExit>
         <Box
           display={'flex'}
           justifyContent={'space-between'}
@@ -70,7 +70,7 @@ export const TokenPreview = ({
             )
           })}
         </Box>
-      )}
+      </Fade>
     </Box>
   )
 }
