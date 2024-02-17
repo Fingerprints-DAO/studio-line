@@ -90,7 +90,7 @@ export default function About() {
             // mt={10}
             textColor={'gray.500'}
           >
-            <Box {...imagesProps}>
+            <Box {...imagesProps} mt={0}>
               <ChakraNextImageLoaderFull
                 src={'/about/header.jpg'}
                 imageWidth={5200}
@@ -105,14 +105,16 @@ export default function About() {
               animateOpacity
               unmountOnExit
             >
-              <Box pb={10}>
+              <Box>
                 <Alert status="success" bgColor={'gray.200'}>
                   <AlertIcon color={'gray.500'} />
                   {`You are eligible for a ${discountValue}% discount on Mint.`}
                 </Alert>
               </Box>
             </Collapse>
-            <Text {...titleProps}>LINE by Figure31</Text>
+            <Text {...titleProps} mt={4}>
+              LINE by Figure31
+            </Text>
             <Text {...textProps}>
               <b>Discovery Phase:</b> Begins on Monday, February 19 (more info
               below)
@@ -255,7 +257,7 @@ export default function About() {
             </Box>
           </Box>
 
-          <Box {...imagesProps}>
+          <Box {...imagesProps} mb={0}>
             <ChakraNextImageLoaderFull
               src={'/about/footer.jpg'}
               imageWidth={3900}
