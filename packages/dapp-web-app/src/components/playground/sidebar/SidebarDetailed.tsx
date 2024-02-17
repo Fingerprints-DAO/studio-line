@@ -8,7 +8,7 @@ import { TokenPreview } from 'components/tokenPreview'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 import { useCoordinates } from 'hooks/use-coordinates'
 import { useHasReachedEnd } from 'hooks/use-has-reached-end'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Direction, GridSize } from 'types/grid'
 import { getArweaveImageURL } from 'utils/getLink'
 import { coordinatesToText } from 'utils/handleCoordinates'
@@ -18,6 +18,7 @@ const getRandomNumber = (): number => {
 }
 
 export function SidebarDetailed({ isDrawer = false, ...props }: any) {
+  const [hideBanner, setHideBanner] = useState(false)
   const {
     lastSelectedGridItem,
     highlightGridItem,
@@ -40,13 +41,18 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
     .map((item) => gridItemsState[item])
     .filter((item) => item)
 
+  useEffect(() => {
+    if (lastSelectedGridItem) {
+      setHideBanner(true)
+    }
+  }, [lastSelectedGridItem])
   return (
     <Box w={'100%'} h={'100%'} {...props}>
       {!lastSelectedGridItem && (
         <>
-          <AuctionStaticBanner />
+          {!hideBanner && <AuctionStaticBanner mb={4} />}
           {/* <AuctionBanner displayMintNow /> */}
-          <Text fontWeight={'bold'} mt={4} fontSize={'2xl'} as={'h1'}>
+          <Text fontWeight={'bold'} fontSize={'2xl'} as={'h1'} mt={'-5px'}>
             Select a token to get started
           </Text>
           <Text mb={4} fontSize={'md'}>
@@ -78,7 +84,10 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
             <Flex
               justifyContent={'flex-start'}
               w={'100%'}
-              h={'100%'}
+              h={'calc(100vh - 150px)'}
+              display={'flex'}
+              flexDirection={'column'}
+              // bgColor={'red.100'}
               pb={isDrawer ? 2 : 0}
               flexDir={isDrawer ? 'column' : 'row'}
               gap={isDrawer ? 4 : 0}
@@ -86,15 +95,17 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
               <TokenPreview
                 // maxW={'300px'}
                 // maxHeight={'80vh'}
-                minW={'300px'}
-                maxW={'330px'}
-                w={isDrawer ? '65%' : { base: '50%', xl: '45%' }}
+                // minW={'300px'}
+                // maxW={'330px'}
+                // w={isDrawer ? '65%' : { base: '50%', xl: '45%' }}
                 // minW={'250px'}
+                h={'100%'}
                 itemId={itemId}
                 thumbnailsItems={highlightItems}
                 isFixed={isFixed}
-                flex={1}
-                overflow={'hidden'}
+                maxW={{ base: '100%', md: 'calc(100% - 200px)' }}
+                // flex={2}
+                // overflow={'hidden'}
               />
               <Box ml={isDrawer ? 0 : 8} minW={'170px'} mr={2}>
                 <TextLine title={'Origin point'}>

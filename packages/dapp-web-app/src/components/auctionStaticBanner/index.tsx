@@ -1,8 +1,8 @@
-import { Box, Text, Link as ChakraLink } from '@chakra-ui/react'
+import { Box, Text, Link as ChakraLink, BoxProps } from '@chakra-ui/react'
 
-export function AuctionStaticBanner() {
+export function AuctionStaticBanner(bannerProps: BoxProps) {
   return (
-    <Box as={'section'} bgColor={'gray.200'} p={4} mb={4}>
+    <Box as={'section'} bgColor={'gray.200'} p={4} mb={4} {...bannerProps}>
       <Text
         as={'h2'}
         fontWeight={'bold'}
@@ -17,7 +17,11 @@ export function AuctionStaticBanner() {
         or mint randomly. As soon as you place your bid your tokens will be
         minted. Supply of 250 tokens.
       </Text>
-      <ChakraLink href={'https://www.addevent.com/event/VX20075579'} isExternal>
+      <ChakraLink
+        href={'https://www.addevent.com/event/VX20075579'}
+        isExternal
+        fontSize={'sm'}
+      >
         Add to calendar
       </ChakraLink>
     </Box>

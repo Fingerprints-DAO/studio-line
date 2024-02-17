@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Container, Flex, VStack } from '@chakra-ui/react'
 import Header from 'components/header'
 import Footer from 'components/footer'
@@ -20,6 +20,11 @@ export default function Layout({
   sidebarProvider?: typeof AuctionProvider
 }) {
   const { isRegularScreen, isMediumScreen } = useDisplayConfig()
+  const [showSidebar, setShowSidebar] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => setShowSidebar(true), 500)
+  }, [])
 
   const renderSidebars = () => (
     <>
@@ -33,8 +38,11 @@ export default function Layout({
           overflow={'hidden'}
           pos={'relative'}
           bg="white"
+          minW={'30%'}
           pl={4}
           pt={4}
+          opacity={showSidebar ? 1 : 0}
+          transition={'opacity 0.5s ease'}
         >
           <Flex
             w={'100%'}
