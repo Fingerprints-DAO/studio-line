@@ -16,20 +16,20 @@ const navLinks = [
 const Header = ({ isDrawer = false }) => {
   const pathname = usePathname()
   const [nav, setNav] = useState(navLinks)
-  // const { data: canMove, isSuccess: isCanMoveSuccess } = useLineCanMove({
-  //   watch: true,
-  // })
+  const { data: canMove, isSuccess: isCanMoveSuccess } = useLineCanMove({
+    watch: true,
+  })
 
-  // useEffect(() => {
-  //   if (!isCanMoveSuccess) return
-  //   const newNav = [...navLinks]
-  //   if (!canMove) {
-  //     newNav[1] = { href: '/auction', label: 'auction', isDisabled: false }
-  //   } else {
-  //     newNav[1].label = 'move'
-  //   }
-  //   setNav(newNav)
-  // }, [canMove, isCanMoveSuccess])
+  useEffect(() => {
+    if (!isCanMoveSuccess) return
+    const newNav = [...navLinks]
+    if (!canMove) {
+      newNav[1] = { href: '/auction', label: 'auction', isDisabled: false }
+    } else {
+      newNav[1].label = 'move'
+    }
+    setNav(newNav)
+  }, [canMove, isCanMoveSuccess])
 
   return (
     <Grid
@@ -94,7 +94,7 @@ const Header = ({ isDrawer = false }) => {
               </Box>
             )
           })}
-          {/* <Wallet ml={6} isDrawer={isDrawer} /> */}
+          <Wallet ml={6} isDrawer={isDrawer} />
         </Flex>
       </GridItem>
     </Grid>

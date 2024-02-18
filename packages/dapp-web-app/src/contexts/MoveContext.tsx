@@ -114,7 +114,7 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
   )
   const [tokensDirectionHandled, setTokensDirectionHandled] = useState(false)
   const { address } = useAccount()
-  const getGrid = useLineGetGrid({ watch: true })
+  const getGrid = useLineGetGrid({ watch: true, scopeKey: 'getGrid' })
   const ownedTokens = useLineTokensOfOwner({
     args: [address!],
     enabled: !!address,

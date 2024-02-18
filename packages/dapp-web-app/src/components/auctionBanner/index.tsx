@@ -67,9 +67,7 @@ export function AuctionBanner({ displayMintNow = false }) {
         textColor={'gray.700'}
         fontSize={'lg'}
       >
-        Minting opens {startDate.format('dddd, MMMM D, hh:mma')} (your
-        timezone).
-        <Countdown futureTimestamp={countdownInMili} />
+        Auction opens in <Countdown futureTimestamp={countdownInMili} />
       </Text>
       <Text fontSize={'xs'} my={1}>
         Linear dutch auction over 1 hour. Starting price of{' '}
@@ -78,7 +76,11 @@ export function AuctionBanner({ displayMintNow = false }) {
         specific tokens before minting or mint randomly. As soon as you place
         your bid your tokens will be minted. Supply of {maxSupply.toString()}.
       </Text>
-      <ChakraLink href={'https://www.addevent.com/event/VX20075579'} isExternal>
+      <ChakraLink
+        href={'https://www.addevent.com/event/VX20075579'}
+        isExternal
+        fontSize={'sm'}
+      >
         Add to calendar
       </ChakraLink>
     </Box>
