@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useLineCanMove } from 'services/web3/generated'
+import { Interval } from 'types/interval'
 
 const navLinks = [
   { href: '/', label: 'playground', isDisabled: false },
@@ -16,6 +17,8 @@ const Header = ({ isDrawer = false }) => {
   const [nav, setNav] = useState(navLinks)
   const { data: canMove, isSuccess: isCanMoveSuccess } = useLineCanMove({
     watch: true,
+    cacheTime: Interval.CanMove,
+    scopeKey: 'canMove',
   })
 
   useEffect(() => {

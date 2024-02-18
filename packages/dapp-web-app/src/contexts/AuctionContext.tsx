@@ -14,6 +14,7 @@ import {
   useLineMaxSupply,
 } from 'services/web3/generated'
 import { AuctionConfig, AuctionData, AuctionState } from 'types/auction'
+import { Interval } from 'types/interval'
 
 export const AuctionContext = createContext<
   AuctionConfig &
@@ -66,11 +67,18 @@ export const AuctionProvider = ({
   children: React.ReactNode
 }) => {
   const { data: config } = useLineConfig()
-  const { data: canMove } = useLineCanMove()
-  const { data: price = 0n } = useLineGetCurrentPrice({ watch: true })
+  const { data: canMove } = useLineCanMove({
+    scopeKey: 'canMove',
+    cacheTime: Interval.CanMove,
+  })
+  const { data: price = 0n } = useLineGetCurrentPrice({
+    watch: true,
+    scopeKey: 'price',
+  })
   const { data: currentTokenId = 1n } = useLineCurrentTokenId({
     watch: true,
-    cacheTime: 5_000,
+    cacheTime: Interval.TokenId,
+    scopeKey: 'currentTokenId',
   })
   const { data: maxSupply = 0n } = useLineMaxSupply()
   const [startTime, endTime, startPrice, endPrice] = config || [0n, 0n, 0n, 0n]

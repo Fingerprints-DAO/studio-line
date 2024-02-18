@@ -78,16 +78,6 @@
   },
   {
     "type": "function",
-    "name": "availableCoordinates",
-    "inputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
-    "outputs": [
-      { "name": "x", "type": "uint256", "internalType": "uint256" },
-      { "name": "y", "type": "uint256", "internalType": "uint256" }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "balanceOf",
     "inputs": [
       { "name": "owner", "type": "address", "internalType": "address" }
@@ -147,13 +137,6 @@
         "internalType": "address payable"
       }
     ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "coordinateHashToIndex",
-    "inputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
-    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
     "stateMutability": "view"
   },
   {
@@ -331,16 +314,6 @@
   },
   {
     "type": "function",
-    "name": "grid",
-    "inputs": [
-      { "name": "", "type": "uint256", "internalType": "uint256" },
-      { "name": "", "type": "uint256", "internalType": "uint256" }
-    ],
-    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "holdersMerkleRoot",
     "inputs": [],
     "outputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
@@ -402,13 +375,6 @@
     ],
     "outputs": [],
     "stateMutability": "payable"
-  },
-  {
-    "type": "function",
-    "name": "mintableCoordinates",
-    "inputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
-    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
-    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -574,8 +540,12 @@
     "inputs": [
       {
         "name": "positions",
-        "type": "uint256[]",
-        "internalType": "uint256[]"
+        "type": "tuple[]",
+        "internalType": "struct ITokenDescriptor.Coordinate[]",
+        "components": [
+          { "name": "x", "type": "uint256", "internalType": "uint256" },
+          { "name": "y", "type": "uint256", "internalType": "uint256" }
+        ]
       }
     ],
     "outputs": [],
@@ -706,7 +676,11 @@
     "type": "function",
     "name": "updateMerkleRoots",
     "inputs": [
-      { "name": "_holderRoot", "type": "bytes32", "internalType": "bytes32" },
+      {
+        "name": "_holdersRoot",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
       {
         "name": "_fpMembersRoot",
         "type": "bytes32",
@@ -840,11 +814,7 @@
   { "type": "error", "name": "HasNotReachedEnd", "inputs": [] },
   { "type": "error", "name": "IncorrectPrice", "inputs": [] },
   { "type": "error", "name": "InvalidDirection", "inputs": [] },
-  {
-    "type": "error",
-    "name": "MaxLockedOriginPointsAlreadyReached",
-    "inputs": []
-  },
+  { "type": "error", "name": "MaxStarTokensReached", "inputs": [] },
   { "type": "error", "name": "MintingClosed", "inputs": [] },
   { "type": "error", "name": "MovementLocked", "inputs": [] },
   { "type": "error", "name": "NotMinted", "inputs": [] },

@@ -6,6 +6,7 @@ import useCountdownTime from 'hooks/use-countdown-timer'
 import Link from 'next/link'
 import { useLineCanMove } from 'services/web3/generated'
 import { AuctionState } from 'types/auction'
+import { Interval } from 'types/interval'
 import { formatEther } from 'viem'
 
 export function AuctionBanner({ displayMintNow = false }) {
@@ -15,6 +16,8 @@ export function AuctionBanner({ displayMintNow = false }) {
   const startDate = dayjs.unix(Number(startTime))
   const { data: canMove, isSuccess: isCanMoveSuccess } = useLineCanMove({
     watch: true,
+    cacheTime: Interval.CanMove,
+    scopeKey: 'canMove',
   })
 
   if (!isCanMoveSuccess || canMove) return null

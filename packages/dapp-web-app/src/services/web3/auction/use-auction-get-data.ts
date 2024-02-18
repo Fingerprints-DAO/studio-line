@@ -6,10 +6,14 @@ import {
 } from '../generated'
 
 const useAuctionData = (): AuctionData => {
-  const { data: price } = useLineGetCurrentPrice({ watch: true })
+  const { data: price } = useLineGetCurrentPrice({
+    watch: true,
+    scopeKey: 'price',
+  })
   const { data: currentTokenId } = useLineCurrentTokenId({
     watch: true,
     cacheTime: 5_000,
+    scopeKey: 'currentTokenId',
   })
   const { data: maxSupply } = useLineMaxSupply()
 

@@ -81,7 +81,7 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
   const [reachedLimit, setReachedLimit] = useState(false)
   const maxMintPerTx = useLineMaxMintPerTx()
   const getAvailableTokens = useLineGetAvailableCoordinates({ watch: true })
-  const getGrid = useLineGetGrid({ watch: true })
+  const getGrid = useLineGetGrid({ watch: true, scopeKey: 'getGrid' })
 
   const toggleSelectedItem = (index: string) => {
     const willRemove = selectedItems.includes(index)
