@@ -14,7 +14,7 @@ export default function Playground() {
       <Layout
         sidebar={<SidebarDetailed />}
         sidebarIcons={<SidebarNav />}
-        sidebarProvider={AuctionProvider}
+        // sidebarProvider={AuctionProvider}
       >
         <PlaygroundGrid />
       </Layout>
