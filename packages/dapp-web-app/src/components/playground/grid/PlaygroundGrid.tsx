@@ -104,9 +104,7 @@ const PlaygroundGrid: React.FC = () => {
         maxH={'1000px'}
         pos={'relative'}
       >
-        {/* TODO: uncomment this to prod */}
-        {/* <Box mb={3} zIndex={5} pos={'absolute'} top={'-55px'} left={0}> */}
-        <Box mb={3} zIndex={5} pos={'absolute'} top={'-51px'} left={0}>
+        <Box mb={3} zIndex={5} pos={'absolute'} top={'-55px'} left={0}>
           <Button
             variant={'outline'}
             onClick={resetGrid}

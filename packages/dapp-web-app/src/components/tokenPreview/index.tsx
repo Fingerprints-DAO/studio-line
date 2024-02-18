@@ -1,13 +1,14 @@
 import { Box, BoxProps, Fade, Text } from '@chakra-ui/react'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 import { GridItemProperties } from 'contexts/PlaygroundContext'
+import { GridItemProperties as GridItemPropMove } from 'contexts/MoveContext'
 import useContainerSizes from 'hooks/useContainerSizes'
 import { generateImage, ImageSizes } from 'types/grid'
 import { coordinatesToText } from 'utils/handleCoordinates'
 
 export type TokenPreviewProps = BoxProps & {
   itemId: number
-  thumbnailsItems?: Partial<GridItemProperties>[]
+  thumbnailsItems?: Partial<GridItemProperties | GridItemPropMove>[]
   isFixed?: boolean
 }
 export const TokenPreview = ({
@@ -34,7 +35,7 @@ export const TokenPreview = ({
           display={'flex'}
           justifyContent={'space-between'}
           mt={2}
-          flexWrap={thumbnailsItems.length > 5 ? 'wrap' : 'nowrap'}
+          flexWrap={thumbnailsItems.length > 6 ? 'wrap' : 'nowrap'}
           w={width}
         >
           {thumbnailsItems.map((item) => {
@@ -44,7 +45,7 @@ export const TokenPreview = ({
                   key={item.index}
                   textAlign={'center'}
                   w={
-                    thumbnailsItems.length > 5
+                    thumbnailsItems.length > 6
                       ? '23%'
                       : `${Math.floor(100 / thumbnailsItems.length) - 1}%`
                   }

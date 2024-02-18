@@ -14,6 +14,7 @@ import {
   DrawerOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
+import { TransactionProvider } from 'contexts/TransactionContext'
 
 function MoveGridWithDrawer() {
   const { isRegularScreen, isMediumScreen } = useDisplayConfig()
@@ -39,7 +40,10 @@ function MoveGridWithDrawer() {
 
   return (
     <>
-      <Layout sidebar={isRegularScreen ? <SidebarDetailed /> : null}>
+      <Layout
+        sidebar={isRegularScreen ? <SidebarDetailed /> : null}
+        sidebarProvider={TransactionProvider}
+      >
         <MoveGrid />
       </Layout>
       {isMediumScreen && (
@@ -53,7 +57,7 @@ function MoveGridWithDrawer() {
           <DrawerContent pt={14}>
             <DrawerCloseButton rounded={'0'} textColor={'black'} />
             <DrawerBody>
-              <SidebarDetailed handleFixMyToken={onFixMyTokenClick} />
+              <SidebarDetailed handleFixMyToken={onFixMyTokenClick} isDrawer />
             </DrawerBody>
           </DrawerContent>
         </Drawer>

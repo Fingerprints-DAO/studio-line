@@ -26,7 +26,7 @@ const Header = ({ isDrawer = false }) => {
     if (!canMove) {
       newNav[1] = { href: '/auction', label: 'auction', isDisabled: false }
     } else {
-      newNav[1].label = 'move'
+      newNav[1] = { href: '/move', label: 'move', isDisabled: false }
     }
     setNav(newNav)
   }, [canMove, isCanMoveSuccess])

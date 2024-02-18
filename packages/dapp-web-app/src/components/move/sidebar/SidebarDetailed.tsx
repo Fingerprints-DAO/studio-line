@@ -1,7 +1,15 @@
 'use client'
 
 import { useEffect, useMemo } from 'react'
-import { Box, Button, Flex, Link, SkeletonText, Text } from '@chakra-ui/react'
+import {
+  Box,
+  BoxProps,
+  Button,
+  Flex,
+  Link,
+  SkeletonText,
+  Text,
+} from '@chakra-ui/react'
 
 import { useMoveContext } from 'contexts/MoveContext'
 import Image from 'next/image'
@@ -21,8 +29,18 @@ import { TxMessage } from 'components/txMessage'
 import { TransactionError } from 'types/transaction'
 import { TextLine } from 'components/textLine'
 import { Direction } from 'types/grid'
+import { useTransactionContext } from 'contexts/TransactionContext'
 
-export function SidebarDetailed({ ...props }: any) {
+type SidebarDetailedProps = BoxProps & {
+  handleFixMyToken?: () => void
+  isDrawer?: boolean
+}
+
+export function SidebarDetailed({
+  handleFixMyToken,
+  isDrawer = false,
+  ...props
+}: SidebarDetailedProps) {
   const {
     selectedGridItem,
     myItems,
@@ -30,6 +48,7 @@ export function SidebarDetailed({ ...props }: any) {
     fixTokenState,
     fixTokenSelected,
   } = useMoveContext()
+  const { isSuccess, hash, error } = useTransactionContext()
   const tokenData = useLineTokenUri({
     args: [BigInt(selectedGridItem?.id ?? 0)],
     enabled: !!selectedGridItem?.id,
@@ -73,12 +92,20 @@ export function SidebarDetailed({ ...props }: any) {
     }
   }, [moveTx.isSuccess])
 
+  useEffect(() => {
+    if (isSuccess) {
+      setTimeout(() => {
+        window.location.reload()
+      }, 2_000)
+    }
+  }, [isSuccess])
+
   return (
     <Box w={'100%'} {...props}>
       <Box as={'section'}>
         {!selectedGridItem && (
           <>
-            <Text fontWeight={'bold'} mt={4} fontSize={'2xl'} as={'h1'}>
+            <Text fontWeight={'bold'} mt={1} fontSize={'2xl'} as={'h1'}>
               Select a token to move
             </Text>
             <Text fontSize={'xs'}>
@@ -90,7 +117,7 @@ export function SidebarDetailed({ ...props }: any) {
           <Box as="section" mt={4}>
             <Flex justifyContent={'flex-start'} flexShrink={2}>
               <Box maxW={'60%'}>
-                <LeftContent token={tokenJson} />
+                <LeftContent token={tokenJson} isDrawer={isDrawer} />
               </Box>
               <Box ml={8} mt={2} flexShrink={1}>
                 {!selectedGridItem.isLocked &&
@@ -184,6 +211,13 @@ export function SidebarDetailed({ ...props }: any) {
                   <Box w={'full'} h={'45px'} />
                 )}
 
+                {(isSuccess || hash || error) && (
+                  <TxMessage
+                    hash={hash}
+                    error={error}
+                    successMessage="Moved! Reloading..."
+                  />
+                )}
                 <SkeletonText
                   noOfLines={9}
                   skeletonHeight="5"

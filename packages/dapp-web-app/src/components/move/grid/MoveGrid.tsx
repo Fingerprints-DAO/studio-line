@@ -78,7 +78,7 @@ const MoveGrid: React.FC<MoveGridProps> = ({}) => {
     <Box
       ref={ref}
       height={'100%'}
-      w={!showGrid ? '100%' : height > 0 ? height : 'auto'}
+      w={!showGrid ? '45vw' : height > 0 ? height - 20 : 'auto'}
       minW={ref.current ? 'none' : '50vw'}
       pos={'relative'}
     >

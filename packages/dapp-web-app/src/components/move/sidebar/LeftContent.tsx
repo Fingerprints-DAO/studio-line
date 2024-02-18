@@ -1,20 +1,20 @@
 'use client'
 
-import {
-  Box,
-  Fade,
-  Flex,
-  SkeletonText,
-  Text,
-  UseQueryProps,
-} from '@chakra-ui/react'
+import { Fade, Flex, SkeletonText, Text } from '@chakra-ui/react'
 
-import { useMoveContext } from 'contexts/MoveContext'
+import { GridItemProperties, useMoveContext } from 'contexts/MoveContext'
 import { useMemo } from 'react'
-import ChakraNextImageLoader from 'components/chakraNextImageLoader'
-import { GridSize, ImageSizes, generateImage } from 'types/grid'
+import { GridSize } from 'types/grid'
+import { TokenPreview } from 'components/tokenPreview'
 
-export function LeftContent({ token }: { token: any }) {
+type LeftContentProps = {
+  token: {
+    name: string
+  }
+  isDrawer?: boolean
+}
+
+export function LeftContent({ token, isDrawer = false }: LeftContentProps) {
   const { gridItemsState, selectedGridItem, highlightGridItem } =
     useMoveContext()
 
@@ -34,7 +34,7 @@ export function LeftContent({ token }: { token: any }) {
   }, [selectedGridItem])
 
   return (
-    <Fade in={selectedGridItem && token} unmountOnExit>
+    <Fade in={selectedGridItem && !!token} unmountOnExit>
       <Flex as="header" alignItems={'center'} mb={4}>
         <SkeletonText
           noOfLines={1}
@@ -51,46 +51,14 @@ export function LeftContent({ token }: { token: any }) {
           ({selectedGridItem?.col},{selectedGridItem?.row})
         </Text>
       </Flex>
-      <ChakraNextImageLoader
-        src={generateImage(posId, ImageSizes.LARGE)}
-        alt={token.name}
-        imageWidth={858}
-        imageHeight={1298}
-        style={{ maxWidth: '100%' }}
+
+      <TokenPreview
+        minW={'200px'}
+        h={isDrawer ? 'auto' : '100%'}
+        itemId={posId}
+        thumbnailsItems={highlightItems as GridItemProperties[]}
+        maxW={{ base: '100%', md: 'calc(100%)' }}
       />
-      {highlightItems.length > 0 && (
-        <Box
-          display={'flex'}
-          justifyContent={'space-between'}
-          mt={2}
-          flexWrap={highlightItems.length > 6 ? 'wrap' : 'nowrap'}
-        >
-          {highlightItems.map((item) => {
-            return (
-              <Box
-                key={item!.index}
-                textAlign={'center'}
-                mb={2}
-                w={
-                  highlightItems.length > 6
-                    ? '19%'
-                    : `${Math.floor(100 / highlightItems.length) - 1}%`
-                }
-              >
-                <ChakraNextImageLoader
-                  src={item!.image}
-                  alt={`Token ${item!.index}`}
-                  imageWidth={104}
-                  imageHeight={157}
-                />
-                <Text fontSize={'11px'} mt={1}>
-                  ({item!.index.replace('-', ',')})
-                </Text>
-              </Box>
-            )
-          })}
-        </Box>
-      )}
     </Fade>
   )
 }

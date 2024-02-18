@@ -16,10 +16,18 @@ import { ArrowDirections } from 'types/movements'
 import { TRAITS } from 'types/nft'
 import { useWaitForTransaction } from 'wagmi'
 import { useHasReachedEnd } from 'hooks/use-has-reached-end'
+import { useTransactionContext } from 'contexts/TransactionContext'
 
 export function MoveSection({ token }: { token: any }) {
   const { selectedGridItem, unavailableDirections, toggleFixMyToken } =
     useMoveContext()
+  const {
+    isLoading,
+    isSuccess,
+    isWaitingApproval,
+    move,
+    setNextPoint: setNextPointContext,
+  } = useTransactionContext()
   const hasReachedEnd = useHasReachedEnd({
     row: selectedGridItem?.row,
     direction: selectedGridItem?.direction,
@@ -32,11 +40,6 @@ export function MoveSection({ token }: { token: any }) {
   const [arrowSelected, setArrowSelected] = useState<
     ArrowDirections | undefined
   >()
-  const { getMoveFunction, getCurrentMoveToCall } = useMovePoint()
-  const moveTx = useWaitForTransaction({
-    hash: getCurrentMoveToCall().data?.hash,
-    enabled: getCurrentMoveToCall().data?.hash !== undefined,
-  })
 
   const tokenDirection = useMemo(() => {
     if (!token) return ''
@@ -69,8 +72,10 @@ export function MoveSection({ token }: { token: any }) {
     )
     if (!pointDirection) return
 
-    const moveFunction = getMoveFunction(pointDirection!)
-    await moveFunction.writeAsync({
+    const moveFunction = move(pointDirection!)
+    if (!moveFunction) return
+
+    await moveFunction.writeAsync!({
       args: [BigInt(selectedGridItem?.id || 0)],
     })
   }
@@ -81,15 +86,13 @@ export function MoveSection({ token }: { token: any }) {
     setNextPoint({ col: null, row: null })
     setArrowHover(undefined)
     setArrowSelected(undefined)
-  }, [selectedGridItem])
+  }, [selectedGridItem, setNextPoint])
 
   useEffect(() => {
-    if (moveTx.isSuccess && !!arrowSelected) {
-      setTimeout(() => {
-        window.location.reload()
-      }, 500)
+    if (isSuccess) {
+      setNextPointContext(`${nextPoint.row}-${nextPoint.col}`)
     }
-  }, [arrowSelected, moveTx.isSuccess])
+  }, [isSuccess, nextPoint.col, nextPoint.row, setNextPointContext])
 
   return (
     <Fade in={!!selectedGridItem} unmountOnExit>
@@ -145,26 +148,19 @@ export function MoveSection({ token }: { token: any }) {
         mt={4}
         mb={1}
         onClick={handleMove}
-        isDisabled={
-          !arrowSelected || getCurrentMoveToCall().isLoading || moveTx.isLoading
-        }
+        isDisabled={!arrowSelected || isLoading}
       >
-        {getCurrentMoveToCall().isLoading
+        {isWaitingApproval
           ? 'waiting for approval...'
-          : moveTx.isLoading
+          : isLoading
             ? 'processing...'
             : 'move'}
       </Button>
-      <TxMessage
-        hash={getCurrentMoveToCall().data?.hash}
-        error={getCurrentMoveToCall().error as TransactionError}
-        successMessage="Moved! Reloading..."
-      />
       {hasReachedEnd && (
         <Button
           variant={'solid'}
           w={'full'}
-          mt={4}
+          mt={1}
           mb={1}
           onClick={toggleFixMyToken}
           colorScheme="purple"
