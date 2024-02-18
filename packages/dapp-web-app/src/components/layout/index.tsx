@@ -33,7 +33,7 @@ export default function Layout({
           alignItems="stretch"
           flex={'1'}
           h={'100%'}
-          maxH={'100vh'}
+          // maxH={'100vh'}
           // maxW={'calc(100% - 400px)'}
           overflow={'hidden'}
           pos={'relative'}
@@ -46,9 +46,8 @@ export default function Layout({
         >
           <Flex
             w={'100%'}
-            h={'100%'}
-            minH={'90vh'}
-            maxH={'90vh'}
+            h={'90vh'}
+            maxH={'1000px'}
             // maxW={{ base: '40vw', md: '' }}
             overflow={'auto'}
             flexDir={'column'}
