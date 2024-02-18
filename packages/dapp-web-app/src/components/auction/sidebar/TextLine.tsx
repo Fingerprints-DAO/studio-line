@@ -34,11 +34,11 @@ export const TextLine = ({
         textTransform={'uppercase'}
         fontSize={'md'}
       >
-        LINE #{title}
+        LINE {title}
       </Text>{' '}
-      <Text as={'span'} fontSize={'xs'} color={'gray.500'}>
+      {/* <Text as={'span'} fontSize={'xs'} color={'gray.500'}>
         ({children})
-      </Text>
+      </Text> */}
     </Flex>
     <Button variant={'link'} onClick={() => {}} minW={'none'} ml={2}>
       <BsX size={16} color="gray.700" />

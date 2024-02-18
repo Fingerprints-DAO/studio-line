@@ -101,6 +101,7 @@ const PlaygroundGrid: React.FC = () => {
         h={'100%'}
         w={height > 0 ? height : 'auto'}
         minW={ref.current ? 'none' : '50vw'}
+        maxH={'1000px'}
         pos={'relative'}
       >
         {/* TODO: uncomment this to prod */}

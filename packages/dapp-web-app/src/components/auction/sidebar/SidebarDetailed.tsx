@@ -33,6 +33,7 @@ import { TxMessage } from 'components/txMessage'
 import { useDiscount } from 'hooks/use-discount'
 import TotalPriceDisplay from './TotalPriceDisplay'
 import { TextLine } from './TextLine'
+import { coordinatesToText } from 'utils/handleCoordinates'
 
 export function SidebarDetailed({ ...props }: any) {
   const {
@@ -253,12 +254,10 @@ export function SidebarDetailed({ ...props }: any) {
                         .map((item) => (
                           <TextLine
                             key={item.id}
-                            title={item.id}
+                            title={`(${coordinatesToText(item.index)})`}
                             direction={item.direction}
                             onClick={() => toggleSelectedItem(item.index)}
-                          >
-                            {item.index.replace('-', ',')}
-                          </TextLine>
+                          />
                         ))}
                   </List>
                 </Box>

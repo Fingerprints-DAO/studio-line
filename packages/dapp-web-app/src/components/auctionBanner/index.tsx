@@ -1,6 +1,8 @@
 import { Box, Text, Link as ChakraLink, Button, Flex } from '@chakra-ui/react'
+import Countdown from 'components/countdown'
 import { useAuctionContext } from 'contexts/AuctionContext'
 import dayjs from 'dayjs'
+import useCountdownTime from 'hooks/use-countdown-timer'
 import Link from 'next/link'
 import { useLineCanMove } from 'services/web3/generated'
 import { AuctionState } from 'types/auction'
@@ -9,6 +11,7 @@ import { formatEther } from 'viem'
 export function AuctionBanner({ displayMintNow = false }) {
   const { startTime, startPrice, endPrice, maxSupply, auctionState } =
     useAuctionContext()
+  const { countdownInMili } = useCountdownTime()
   const startDate = dayjs.unix(Number(startTime))
   const { data: canMove, isSuccess: isCanMoveSuccess } = useLineCanMove({
     watch: true,
@@ -63,6 +66,7 @@ export function AuctionBanner({ displayMintNow = false }) {
       >
         Minting opens {startDate.format('dddd, MMMM D, hh:mma')} (your
         timezone).
+        <Countdown futureTimestamp={countdownInMili} />
       </Text>
       <Text fontSize={'xs'} my={1}>
         Linear dutch auction over 1 hour. Starting price of{' '}
