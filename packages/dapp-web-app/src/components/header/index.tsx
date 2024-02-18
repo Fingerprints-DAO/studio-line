@@ -7,7 +7,7 @@ import { useLineCanMove } from 'services/web3/generated'
 
 const navLinks = [
   { href: '/', label: 'playground', isDisabled: false },
-  { href: '/move', label: '', isDisabled: false },
+  { href: '/auction', label: 'auction', isDisabled: false },
   { href: '/about', label: 'about', isDisabled: false },
 ]
 
@@ -21,10 +21,8 @@ const Header = ({ isDrawer = false }) => {
   useEffect(() => {
     if (!isCanMoveSuccess) return
     const newNav = [...navLinks]
-    if (!canMove) {
-      newNav[1] = { href: '/auction', label: 'auction', isDisabled: false }
-    } else {
-      newNav[1].label = 'move'
+    if (canMove) {
+      newNav[1] = { href: '/move', label: 'move', isDisabled: false }
     }
     setNav(newNav)
   }, [canMove, isCanMoveSuccess])
