@@ -34,7 +34,12 @@ export function LeftContent({ token, isDrawer = false }: LeftContentProps) {
   }, [selectedGridItem])
 
   return (
-    <Fade in={selectedGridItem && !!token} unmountOnExit>
+    // <Fade
+    //   in={selectedGridItem && !!token}
+    //   unmountOnExit
+    //   style={{ width: '100%', height: 'auto' }}
+    // >
+    <>
       <Flex as="header" alignItems={'center'} mb={4}>
         <SkeletonText
           noOfLines={1}
@@ -57,8 +62,9 @@ export function LeftContent({ token, isDrawer = false }: LeftContentProps) {
         h={isDrawer ? 'auto' : '100%'}
         itemId={posId}
         thumbnailsItems={highlightItems as GridItemProperties[]}
-        maxW={{ base: '100%', md: 'calc(100%)' }}
+        maxW={'100%'}
       />
-    </Fade>
+    </>
+    // </Fade>
   )
 }

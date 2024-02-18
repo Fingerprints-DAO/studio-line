@@ -63,7 +63,7 @@ export const TokenPreview = ({
                       },
                     }}
                   />
-                  <Text fontSize={'11px'} mt={1} mb={isFixed ? 2 : 0}>
+                  <Text fontSize={'11px'} mt={1} mb={2}>
                     ({coordinatesToText(item.index)})
                   </Text>
                 </Box>

@@ -101,7 +101,7 @@ export function SidebarDetailed({
   }, [isSuccess])
 
   return (
-    <Box w={'100%'} {...props}>
+    <Box w={'100%'} h={'100%'} {...props}>
       <Box as={'section'}>
         {!selectedGridItem && (
           <>
@@ -114,12 +114,27 @@ export function SidebarDetailed({
           </>
         )}
         {selectedGridItem && (
-          <Box as="section" mt={4}>
-            <Flex justifyContent={'flex-start'} flexShrink={2}>
-              <Box maxW={'60%'}>
+          <Box as="section" w={'100%'} h={'100%'} mt={4}>
+            <Flex
+              justifyContent={'flex-start'}
+              w={'100%'}
+              h={'calc(100vh - 150px)'}
+              maxH={'900px'}
+              display={'flex'}
+              flexDirection={'column'}
+              // bgColor={'red.100'}
+              pb={isDrawer ? 2 : 0}
+              flexDir={isDrawer ? 'column' : 'row'}
+              gap={isDrawer ? 4 : 0}
+            >
+              <Box
+                minW={'200px'}
+                h={isDrawer ? 'auto' : '100%'}
+                maxW={{ base: '100%', md: 'calc(100% - 200px)' }}
+              >
                 <LeftContent token={tokenJson} isDrawer={isDrawer} />
               </Box>
-              <Box ml={8} mt={2} flexShrink={1}>
+              <Box ml={isDrawer ? 0 : 8} minW={'170px'} mr={2} flexGrow={0}>
                 {!selectedGridItem.isLocked &&
                 myItems.includes(selectedGridItem.index) ? (
                   <>
