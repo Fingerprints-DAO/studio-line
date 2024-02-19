@@ -114,7 +114,7 @@ export function SidebarDetailed({
           </>
         )}
         {selectedGridItem && (
-          <Box as="section" w={'100%'} h={'100%'} mt={4}>
+          <Box w={'100%'} h={'100%'} mt={1}>
             <Flex
               justifyContent={'flex-start'}
               w={'100%'}
@@ -134,7 +134,13 @@ export function SidebarDetailed({
               >
                 <LeftContent token={tokenJson} isDrawer={isDrawer} />
               </Box>
-              <Box ml={isDrawer ? 0 : 8} minW={'170px'} mr={2} flexGrow={0}>
+              <Box
+                ml={isDrawer ? 0 : 8}
+                minW={'170px'}
+                mr={2}
+                mt={isDrawer ? 0 : 4}
+                flexGrow={0}
+              >
                 {!selectedGridItem.isLocked &&
                 myItems.includes(selectedGridItem.index) ? (
                   <>
@@ -223,7 +229,7 @@ export function SidebarDetailed({
                     )}
                   </>
                 ) : (
-                  <Box w={'full'} h={'45px'} />
+                  <Box w={'full'} h={'28px'} hidden={isDrawer} />
                 )}
 
                 {(isSuccess || hash || error) && (
@@ -237,7 +243,8 @@ export function SidebarDetailed({
                   noOfLines={9}
                   skeletonHeight="5"
                   isLoaded={!!tokenJson.attributes}
-                  mt={5}
+                  mt={isDrawer ? 2 : 5}
+                  mb={4}
                 >
                   {tokenJson.attributes.map(
                     ({

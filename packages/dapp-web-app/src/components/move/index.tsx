@@ -54,10 +54,15 @@ function MoveGridWithDrawer() {
           size={'lg'}
         >
           <DrawerOverlay />
-          <DrawerContent pt={14}>
+          <DrawerContent pt={0}>
             <DrawerCloseButton rounded={'0'} textColor={'black'} />
             <DrawerBody>
-              <SidebarDetailed handleFixMyToken={onFixMyTokenClick} isDrawer />
+              <TransactionProvider>
+                <SidebarDetailed
+                  handleFixMyToken={onFixMyTokenClick}
+                  isDrawer
+                />
+              </TransactionProvider>
             </DrawerBody>
           </DrawerContent>
         </Drawer>
