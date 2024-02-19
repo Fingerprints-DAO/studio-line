@@ -1,6 +1,6 @@
-import { Box } from '@chakra-ui/react'
-import ChakraNextImageLoader from 'components/chakraNextImageLoader'
+import { Box, Link as ChakraLink } from '@chakra-ui/react'
 import ChakraNextImageLoaderFull from 'components/chakraNextImageLoaderFull'
+import Link from 'next/link'
 
 export const questions = [
   {
@@ -112,7 +112,8 @@ export const auctionQuestions = [
         Fields of view are unique, but they may overlap with others. They are
         defined by the 625 photographs of the 25 x 25 grid. A specific
         coordinate can only be occupied by one token at a time. Images cycle
-        daily per token.
+        daily per token. A full image cycle takes 10 days for a normal token and
+        16 days for a &ldquo;star&rdquo; token.
         <Box
           as={'span'}
           display={'block'}
@@ -122,9 +123,9 @@ export const auctionQuestions = [
           mx="auto"
         >
           <ChakraNextImageLoaderFull
-            src={'/about/tokens-image.gif'}
-            imageWidth={1500}
-            imageHeight={1500}
+            src={'/about/tokens-image-2.gif'}
+            imageWidth={2000}
+            imageHeight={2000}
             alt="Gif illustrating directions of the tokens"
           />
         </Box>
@@ -133,8 +134,21 @@ export const auctionQuestions = [
   },
   {
     question: `What should I do during the Discovery phase before the auction?`,
-    answer:
-      "During the discovery phase, you can explore the grid by moving a token freely along different paths to reveal images in the landscape. It's important to take note of which coordinates you prefer to mint. You can restart the exploration as many times as you wish to discover new fields of view. Once the auction begins, you're encouraged to mint the tokens you like as quickly as possible before they are minted by someone else.",
+    answer: (
+      <>
+        During the discovery phase, you can explore the grid by moving a token
+        freely along different paths to reveal images in the landscape.
+        It&rsquo;s important to take note of which coordinates you prefer to
+        mint. You can restart the exploration as many times as you wish to
+        discover new fields of view. Once the auction begins, you&rsquo;re
+        encouraged to mint the tokens you like as quickly as possible before
+        they are minted by someone else. Visit the &ldquo;Playground&rdquo;{' '}
+        <ChakraLink as={Link} href="/">
+          here
+        </ChakraLink>
+        .
+      </>
+    ),
   },
   {
     question: 'Can I move a token to a new coordinate during the auction?',
@@ -181,8 +195,28 @@ export const auctionQuestions = [
   },
   {
     question: 'How can I move my token to a new coordinate?',
-    answer:
-      'Tokens can be moved on the grid, on this website, or by using simple smart-contract functions; their movements are limited, and they cannot move on a coordinate that is already used by another.',
+    answer: (
+      <>
+        Tokens can be moved on the grid, on this website, or by using simple
+        smart-contract functions; their movements are limited, and they cannot
+        move on a coordinate that is already used by another.
+        <Box
+          as={'span'}
+          display={'block'}
+          w={'100%'}
+          maxW={'xl'}
+          textAlign={'center'}
+          mx="auto"
+        >
+          <ChakraNextImageLoaderFull
+            src={'/about/grid-points.gif'}
+            imageWidth={2025}
+            imageHeight={2025}
+            alt="Points grid movementing"
+          />
+        </Box>
+      </>
+    ),
   },
   {
     question: 'Do I have to pay anything to move my token?',
