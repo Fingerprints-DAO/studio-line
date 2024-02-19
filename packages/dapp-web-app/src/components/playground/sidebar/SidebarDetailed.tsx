@@ -128,9 +128,7 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
                 <TextLine title={'Has Reached End'}>
                   {hasReachedEnd ? 'Yes' : 'No'}
                 </TextLine>
-                <TextLine title={'Is Locked'}>
-                  {isFixed ? 'Yes' : 'No'}
-                </TextLine>
+                <TextLine title={'Is Star'}>{isFixed ? 'Yes' : 'No'}</TextLine>
                 <TextLine title={'movements'}>{movements}</TextLine>
                 <Link
                   href={getArweaveImageURL(lastSelectedGridItem.id)}
