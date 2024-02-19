@@ -66,7 +66,7 @@ const Header = ({ isDrawer = false }) => {
                 href={item.href}
                 title={item.label}
                 mr={0}
-                ml={6}
+                ml={isDrawer ? 0 : 6}
                 _hover={{
                   color: item.isDisabled ? 'gray.300' : 'gray.900',
                   cursor: item.isDisabled ? 'not-allowed' : 'pointer',
