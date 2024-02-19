@@ -83,6 +83,9 @@ const MoveGrid: React.FC<MoveGridProps> = ({}) => {
       maxH={'1000px'}
       pos={'relative'}
     >
+      <Box mb={3} zIndex={5} pos={'absolute'} top={'-30px'} left={0}>
+        star tokens: 2/25
+      </Box>
       <Box
         hidden={showGrid}
         pos={'absolute'}
