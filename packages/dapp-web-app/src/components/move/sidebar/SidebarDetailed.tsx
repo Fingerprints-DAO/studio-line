@@ -147,11 +147,13 @@ export function SidebarDetailed({
                     {!fixTokenState && <MoveSection token={tokenJson} />}
                     {fixTokenState && (
                       <>
-                        <Text fontSize={'sm'}>
-                          {fixTokenSelected
-                            ? 'Once you confirm, it will have 360º view and cannot be moved.'
-                            : 'Please, select a point in the grid. Your token will be placed and cannot be moved.'}
-                        </Text>
+                        <Box maxW={isDrawer ? '' : '235px'}>
+                          <Text fontSize={'sm'}>
+                            {fixTokenSelected
+                              ? 'Once you confirm, it will have 360º view and cannot be moved.'
+                              : 'Please, select a point in the grid. Your token will be placed and cannot be moved.'}
+                          </Text>
+                        </Box>
                         {fixTokenSelected && (
                           <Flex alignItems={'flex-end'} mt={1}>
                             <Box>
@@ -213,7 +215,7 @@ export function SidebarDetailed({
                         </Button>
                         <Button
                           w={'full'}
-                          mt={4}
+                          mt={2}
                           mb={1}
                           onClick={toggleFixMyToken}
                           variant={'outline'}

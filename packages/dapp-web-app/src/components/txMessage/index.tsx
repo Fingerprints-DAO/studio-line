@@ -81,8 +81,16 @@ export const TxMessage = ({
         animateOpacity
         unmountOnExit
       >
-        <Link href={getExternalTxUrl(hash)} display={'block'} mt={2}>
-          view your tx on etherscan
+        <Link
+          href={getExternalTxUrl(hash)}
+          display={'block'}
+          mt={2}
+          textColor={'gray.500'}
+          textDecor={'underline'}
+          _hover={{ textColor: 'gray.900', cursor: 'pointer' }}
+          isExternal
+        >
+          View your tx on etherscan
         </Link>
       </Collapse>
     </>

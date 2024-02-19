@@ -23,8 +23,14 @@ const MoveGrid: React.FC<MoveGridProps> = ({}) => {
     fixTokenState,
     fixTokenSelected,
   } = useMoveContext()
-  const { data: starTokenSupply = 25n } = useLineMaxStarTokens()
-  const { data: starTokenMinted = 0n } = useLineNumStarTokens()
+  const { data: starTokenSupply = 25n } = useLineMaxStarTokens({
+    scopeKey: 'starTokenSupply',
+    watch: true,
+  })
+  const { data: starTokenMinted = 0n } = useLineNumStarTokens({
+    scopeKey: 'starTokenMinted',
+    watch: true,
+  })
 
   const gridItems = useMemo(() => {
     const items = []

@@ -5,18 +5,18 @@ import { Box, Button, Fade, Flex, Text } from '@chakra-ui/react'
 import Image from 'next/image'
 import { useMoveContext } from 'contexts/MoveContext'
 import { SidebarArrow } from 'components/arrow/SidebarArrow'
-import { TxMessage } from 'components/txMessage'
-import { TransactionError } from 'types/transaction'
 import {
   getNextPoint,
   getSpecificArrowMoveDirection,
 } from 'components/arrow/utils'
-import useMovePoint from 'hooks/useMovePoint'
 import { ArrowDirections } from 'types/movements'
 import { TRAITS } from 'types/nft'
-import { useWaitForTransaction } from 'wagmi'
 import { useHasReachedEnd } from 'hooks/use-has-reached-end'
 import { useTransactionContext } from 'contexts/TransactionContext'
+import {
+  useLineMaxStarTokens,
+  useLineNumStarTokens,
+} from 'services/web3/generated'
 
 export function MoveSection({ token }: { token: any }) {
   const { selectedGridItem, unavailableDirections, toggleFixMyToken } =
@@ -40,6 +40,14 @@ export function MoveSection({ token }: { token: any }) {
   const [arrowSelected, setArrowSelected] = useState<
     ArrowDirections | undefined
   >()
+  const { data: starTokenSupply = 25n } = useLineMaxStarTokens({
+    scopeKey: 'starTokenSupply',
+    watch: true,
+  })
+  const { data: starTokenMinted = 0n } = useLineNumStarTokens({
+    scopeKey: 'starTokenMinted',
+    watch: true,
+  })
 
   const tokenDirection = useMemo(() => {
     if (!token) return ''
@@ -156,7 +164,7 @@ export function MoveSection({ token }: { token: any }) {
             ? 'processing...'
             : 'move'}
       </Button>
-      {hasReachedEnd && (
+      {hasReachedEnd && starTokenSupply !== starTokenMinted && (
         <Button
           variant={'solid'}
           w={'full'}
