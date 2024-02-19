@@ -107,7 +107,12 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
                 // flex={2}
                 // overflow={'hidden'}
               />
-              <Box ml={isDrawer ? 0 : 8} minW={'170px'} mr={2}>
+              <Box
+                ml={isDrawer ? 0 : 8}
+                minW={'170px'}
+                mr={2}
+                pb={isDrawer ? 4 : 0}
+              >
                 <TextLine title={'Origin point'}>
                   {coordinatesToText(lastSelectedGridItem.index)}
                 </TextLine>
