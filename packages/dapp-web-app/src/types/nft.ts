@@ -4,6 +4,6 @@ export enum TRAITS {
   INITIAL_COORDINATE = 'Starting Point',
   DIRECTION = 'Type',
   HAS_REACHED_END = 'Has Reached End',
-  IS_LOCKED = 'Is Locked',
-  NUMBER_OF_MOVEMENTS = 'Number of Movements',
+  IS_LOCKED = 'Is Star',
+  NUMBER_OF_MOVEMENTS = 'Movements',
 }

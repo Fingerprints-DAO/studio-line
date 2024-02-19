@@ -246,7 +246,7 @@
             "internalType": "uint256"
           },
           { "name": "hasReachedEnd", "type": "bool", "internalType": "bool" },
-          { "name": "isLocked", "type": "bool", "internalType": "bool" },
+          { "name": "isStar", "type": "bool", "internalType": "bool" },
           {
             "name": "direction",
             "type": "uint8",
@@ -296,7 +296,7 @@
             "internalType": "uint256"
           },
           { "name": "hasReachedEnd", "type": "bool", "internalType": "bool" },
-          { "name": "isLocked", "type": "bool", "internalType": "bool" },
+          { "name": "isStar", "type": "bool", "internalType": "bool" },
           {
             "name": "direction",
             "type": "uint8",
@@ -331,7 +331,7 @@
   },
   {
     "type": "function",
-    "name": "lockOriginPoint",
+    "name": "lockAsStar",
     "inputs": [
       { "name": "tokenId", "type": "uint256", "internalType": "uint256" },
       { "name": "x", "type": "uint256", "internalType": "uint256" },
@@ -539,7 +539,7 @@
     "name": "setInitialAvailableCoordinates",
     "inputs": [
       {
-        "name": "positions",
+        "name": "coordinates",
         "type": "tuple[]",
         "internalType": "struct ITokenDescriptor.Coordinate[]",
         "components": [
@@ -592,7 +592,7 @@
       },
       { "name": "timestamp", "type": "uint256", "internalType": "uint256" },
       { "name": "hasReachedEnd", "type": "bool", "internalType": "bool" },
-      { "name": "isLocked", "type": "bool", "internalType": "bool" },
+      { "name": "isStar", "type": "bool", "internalType": "bool" },
       {
         "name": "direction",
         "type": "uint8",
@@ -810,6 +810,7 @@
     ],
     "anonymous": false
   },
+  { "type": "error", "name": "AlreadyStarToken", "inputs": [] },
   { "type": "error", "name": "ExceedsMaxMintPerTransaction", "inputs": [] },
   { "type": "error", "name": "HasNotReachedEnd", "inputs": [] },
   { "type": "error", "name": "IncorrectPrice", "inputs": [] },
@@ -819,7 +820,6 @@
   { "type": "error", "name": "MovementLocked", "inputs": [] },
   { "type": "error", "name": "NotMinted", "inputs": [] },
   { "type": "error", "name": "NotTokenOwner", "inputs": [] },
-  { "type": "error", "name": "OriginPointLocked", "inputs": [] },
   {
     "type": "error",
     "name": "OwnableInvalidOwner",

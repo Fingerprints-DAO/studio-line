@@ -14,7 +14,7 @@ import {
 import { useMoveContext } from 'contexts/MoveContext'
 import Image from 'next/image'
 import {
-  useLineLockOriginPoint,
+  useLineLockAsStar,
   useLineOwnerOf,
   useLineTokenUri,
 } from 'services/web3/generated'
@@ -57,7 +57,7 @@ export function SidebarDetailed({
     args: [BigInt(selectedGridItem?.id ?? 0)],
     enabled: !!selectedGridItem?.id,
   })
-  const moveToPosition = useLineLockOriginPoint()
+  const moveToPosition = useLineLockAsStar()
   const moveTx = useWaitForTransaction({
     hash: moveToPosition.data?.hash,
     enabled: moveToPosition.data?.hash !== undefined,

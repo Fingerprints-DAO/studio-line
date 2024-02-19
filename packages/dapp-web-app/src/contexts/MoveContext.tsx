@@ -246,7 +246,7 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
             direction: handleDirectionFromContract(
               tokensDirection[item.index]?.direction,
             ),
-            isLocked: tokensDirection[item.index]?.isLocked,
+            isLocked: tokensDirection[item.index]?.isStar,
             hasReachedEnd: tokensDirection[item.index]?.hasReachedEnd,
           },
         }

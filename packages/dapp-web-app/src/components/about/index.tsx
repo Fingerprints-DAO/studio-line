@@ -23,7 +23,6 @@ import SidebarIcons from 'components/sidebarIcons'
 import { useAccount } from 'wagmi'
 import { fetcher } from 'utils/fetcher'
 import { GetDiscountResponse } from 'app/getDiscount/api/route'
-import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 import Link from 'next/link'
 import ChakraNextImageLoaderFull from 'components/chakraNextImageLoaderFull'
 
