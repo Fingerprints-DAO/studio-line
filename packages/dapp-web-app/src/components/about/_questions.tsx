@@ -37,12 +37,7 @@ export const questions = [
   },
   {
     question: 'Can I mint multiple tokens?',
-    answer: (
-      <>
-        Yes, if you like various tokens/coordinates, they will appear on your
-        auction page, and you can mint up to 5 at a time.
-      </>
-    ),
+    answer: 'Yes, you can mint up to 5 at a time.',
   },
   {
     question: 'What is the collection size?',
@@ -139,33 +134,22 @@ export const auctionQuestions = [
   {
     question: `What should I do during the Discovery phase before the auction?`,
     answer:
-      'There will be a Discovery period where you can view the tokens on the grid and “like” specific tokens/coordinates. Once you like a token, it will appear on the auction page.',
-  },
-  {
-    question:
-      'If I liked a token/coordinate, does that guarantee I will mint it?',
-    answer:
-      'No, the Dutch auction is first come, first serve. Collectors are encouraged to choose and mint the tokens they want immediately.',
+      "During the discovery phase, you can explore the grid by moving a token freely along different paths to reveal images in the landscape. It's important to take note of which coordinates you prefer to mint. You can restart the exploration as many times as you wish to discover new fields of view. Once the auction begins, you're encouraged to mint the tokens you like as quickly as possible before they are minted by someone else.",
   },
   {
     question: 'Can I move a token to a new coordinate during the auction?',
     answer:
-      'You will not be able to move the token to a new coordinate until the end of the auction.',
-  },
-  {
-    question: 'Can I mint multiple tokens at a time?',
-    answer:
-      'Yes, if you like multiple tokens/coordinates they will appear on your auction page and you can mint all of them.',
+      'You will not be able to move the token to a new coordinate until the collection mints out, or at the end of the 48-hour minting period.',
   },
   {
     question: 'What happens at the end of the auction?',
     answer: (
       <>
-        Once all tokens are minted, collectors can move their tokens to new
-        coordinates on the grid. A token&apos;s origin point is the anchor of
-        its field of view. When a collector moves a token, they move the origin
-        point. Collectors can move around and discover the entire grid of
-        images/the synthetic landscape.
+        Collectors can move their tokens to new coordinates on the grid after
+        the collection mints out, or at the end of the 48-hour minting period. A
+        token&apos;s origin point is the anchor of its field of view. When a
+        collector moves a token, they move the origin point. Collectors can move
+        around and discover the entire grid of images/the synthetic landscape.
       </>
     ),
   },
@@ -210,12 +194,11 @@ export const auctionQuestions = [
       'How can I get a special “star” token with a 360-degree field of view?',
     answer: (
       <>
-        After the auction, collectors can move their tokens to new coordinates
-        on the grid. The first 25 tokens to reach the upper or lower borders of
-        the grid can use a special function that will allow them to choose to
-        relocate to any coordinate on the grid they want. Their token&apos;s
-        field of view will change to become a full 360-degree. If they decide to
-        do so, their position will be locked down, and they cannot move anymore.
+        The first 25 tokens to reach the upper or lower borders of the grid can
+        use a special function that will allow them to choose to relocate to any
+        coordinate on the grid they want. Their token&apos;s field of view will
+        change to become a full 360-degree. If they decide to do so, their
+        position will be locked down, and they cannot move anymore.
         <Box
           as={'span'}
           display={'block'}
