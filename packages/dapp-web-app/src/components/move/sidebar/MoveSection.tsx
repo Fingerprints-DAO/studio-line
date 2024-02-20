@@ -42,11 +42,11 @@ export function MoveSection({ token }: { token: any }) {
   >()
   const { data: starTokenSupply = 25n } = useLineMaxStarTokens({
     scopeKey: 'starTokenSupply',
-    watch: false,
+    watch: true,
   })
   const { data: starTokenMinted = 0n } = useLineNumStarTokens({
     scopeKey: 'starTokenMinted',
-    watch: false,
+    watch: true,
   })
 
   const tokenDirection = useMemo(() => {

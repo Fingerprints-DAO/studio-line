@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
+import useCurrentTokenId from 'hooks/use-current-token-id'
 import {
-  useLineCurrentTokenId,
   useLineGetAvailableCoordinates,
   useLineGetGrid,
   useLineMaxMintPerTx,
@@ -81,10 +81,7 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
   const [limitPerTx, setLimitPerTx] = useState(5)
   const [reachedLimit, setReachedLimit] = useState(false)
   const maxMintPerTx = useLineMaxMintPerTx()
-  const { data: currentTokenId = 1n } = useLineCurrentTokenId({
-    watch: false,
-    scopeKey: 'currentTokenId',
-  })
+  const { data: currentTokenId = 1n } = useCurrentTokenId()
   const { refetch: refetchAvailableTokens, ...getAvailableTokens } =
     useLineGetAvailableCoordinates()
   const { refetch: refetchGrid, ...getGrid } = useLineGetGrid({
