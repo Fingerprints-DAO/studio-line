@@ -6,14 +6,11 @@ import {
   Flex,
   Text,
   List,
-  ListItem,
   Input,
   Skeleton,
 } from '@chakra-ui/react'
-import { BsX } from 'react-icons/bs'
 
 import { useTokensContext } from 'contexts/TokensContext'
-import { Direction } from 'types/grid'
 import { useEffect, useMemo, useState } from 'react'
 import { AuctionState } from 'types/auction'
 import { formatToEtherStringBN } from 'utils/price'
@@ -25,8 +22,8 @@ import {
   useLineMintAtPosition,
   useLineMintRandom,
 } from 'services/web3/generated'
-import { Address, formatEther } from 'viem'
-import { useWaitForTransaction } from 'wagmi'
+import { formatEther } from 'viem'
+import { useQueryClient, useWaitForTransaction } from 'wagmi'
 import ForceConnectButton from 'components/forceConnectButton'
 import { TransactionError } from 'types/transaction'
 import { TxMessage } from 'components/txMessage'
@@ -34,8 +31,10 @@ import { useDiscount } from 'hooks/use-discount'
 import TotalPriceDisplay from './TotalPriceDisplay'
 import { TextLine } from './TextLine'
 import { coordinatesToText } from 'utils/handleCoordinates'
+import { getCurrentTokenId } from 'hooks/keys'
 
 export function SidebarDetailed({ ...props }: any) {
+  const [counter, setCounter] = useState(0)
   const {
     selectedItems,
     gridItemsState,
@@ -43,6 +42,8 @@ export function SidebarDetailed({ ...props }: any) {
     resetSelection,
     limitPerTx,
     reachedLimit,
+    handleIsMinting,
+    isMinting,
   } = useTokensContext()
   const {
     startPrice,
@@ -52,7 +53,7 @@ export function SidebarDetailed({ ...props }: any) {
     maxSupply,
     auctionState,
   } = useAuctionContext()
-  const [counter, setCounter] = useState(0)
+  const queryClient = useQueryClient()
   const { countdownInMili } = useCountdownTime()
   const { value: discountValue, hasDiscount, merkleProof } = useDiscount()
   const mintRandom = useLineMintRandom({
@@ -111,11 +112,31 @@ export function SidebarDetailed({ ...props }: any) {
     if (mintPositionsTx.isSuccess || mintRandomTx.isSuccess) {
       setCounter(0)
       resetSelection()
+      queryClient.invalidateQueries(getCurrentTokenId)
     }
 
     // DONT ADD resetSelection to dependency array
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mintPositionsTx.isSuccess, mintRandomTx.isSuccess])
+
+  useEffect(() => {
+    if (
+      mintPositionsTx.isLoading ||
+      mintRandomTx.isLoading ||
+      mintRandom.isLoading ||
+      mintPositions.isLoading
+    ) {
+      handleIsMinting(true)
+    } else {
+      handleIsMinting(false)
+    }
+  }, [
+    handleIsMinting,
+    mintPositions.isLoading,
+    mintPositionsTx.isLoading,
+    mintRandom.isLoading,
+    mintRandomTx.isLoading,
+  ])
 
   return (
     <Skeleton isLoaded={startPrice !== 0n} {...props}>
@@ -257,6 +278,7 @@ export function SidebarDetailed({ ...props }: any) {
                             title={`(${coordinatesToText(item.index)})`}
                             direction={item.direction}
                             onClick={() => toggleSelectedItem(item.index)}
+                            disableRemove={isMinting}
                           />
                         ))}
                   </List>

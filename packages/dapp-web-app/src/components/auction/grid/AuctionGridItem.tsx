@@ -15,6 +15,7 @@ interface GridItemProps extends GridItemProperties {
   isMinted: boolean
   isAvailable: boolean
   isSelected: boolean
+  disableSelection: boolean
   toggleGridItem: (index: string) => void
 }
 
@@ -62,6 +63,7 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
   isMinted,
   isAvailable,
   isSelected,
+  disableSelection,
 }) => {
   const [isFirstRow, isLastRow, isFirstCol, isLastCol] = [
     row === GridSize - 1,
@@ -72,7 +74,7 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
   const widthPx = `${width}px`
   const heightPx = `${height}px`
 
-  const disableClick = isMinted || !isAvailable
+  const disableClick = isMinted || !isAvailable || disableSelection
   const renderPoint = isMinted || isAvailable || isSelected
 
   const handleClick = () => {

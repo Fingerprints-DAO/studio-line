@@ -12,6 +12,8 @@ export const TextLine = ({
   children,
   title = '',
   direction,
+  disableRemove = false,
+  onClick = () => {},
   ...props
 }: ComponentDefaultProps & {
   title: string | number | null
@@ -40,8 +42,10 @@ export const TextLine = ({
         ({children})
       </Text> */}
     </Flex>
-    <Button variant={'link'} onClick={() => {}} minW={'none'} ml={2}>
-      <BsX size={16} color="gray.700" />
-    </Button>
+    {!disableRemove && (
+      <Button variant={'link'} onClick={onClick} minW={'none'} ml={2}>
+        <BsX size={16} color="gray.700" />
+      </Button>
+    )}
   </ListItem>
 )

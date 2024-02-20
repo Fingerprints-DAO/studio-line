@@ -58,7 +58,10 @@ export const TransactionProvider = ({
         isSuccess,
         isWaitingApproval: getCurrentMoveToCall().isLoading,
         hash: getCurrentMoveToCall().data?.hash,
-        error: (getCurrentMoveToCall().error as TransactionError) || undefined,
+        error:
+          (getCurrentMoveToCall().error as TransactionError) ||
+          moveTx.error ||
+          undefined,
         move: getMoveFunction as useMovePointReturnType['getMoveFunction'],
         setNextPoint: setNextPoint as typeof useState,
         nextPoint,

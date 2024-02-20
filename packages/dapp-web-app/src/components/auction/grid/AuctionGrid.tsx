@@ -13,6 +13,7 @@ const AuctionGrid: React.FC = () => {
     mintedItems,
     availableItems,
     selectedItems,
+    isMinting,
   } = useTokensContext()
   const [showGrid, setShowGrid] = useState(false)
 
@@ -42,20 +43,22 @@ const AuctionGrid: React.FC = () => {
           isMinted={mintedItems.includes(id)}
           isAvailable={availableItems.includes(id)}
           isSelected={selectedItems.includes(id)}
+          disableSelection={isMinting}
           {...gridItemsState[id]}
         />,
       )
     }
     return items
   }, [
-    itemWidth,
-    itemHeight,
-    toggleSelectedItem,
-    gridSpaceX,
-    mintedItems,
     availableItems,
-    selectedItems,
     gridItemsState,
+    gridSpaceX,
+    isMinting,
+    itemHeight,
+    itemWidth,
+    mintedItems,
+    selectedItems,
+    toggleSelectedItem,
   ])
 
   useEffect(() => {

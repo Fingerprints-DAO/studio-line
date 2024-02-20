@@ -60,6 +60,8 @@ const TokensContext = createContext<{
   reachedLimit: boolean
   toggleSelectedItem: (index: string) => void
   resetSelection: () => void
+  handleIsMinting: (value: boolean) => void
+  isMinting: boolean
 }>({
   gridItemsState: {},
   selectedItems: [],
@@ -69,6 +71,8 @@ const TokensContext = createContext<{
   reachedLimit: false,
   toggleSelectedItem: () => {},
   resetSelection: () => {},
+  handleIsMinting: () => {},
+  isMinting: false,
 })
 
 export const useTokensContext = () => useContext(TokensContext)
@@ -80,6 +84,7 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
   const [mintedItems, setMintedItems] = useState<(string | null)[]>([])
   const [limitPerTx, setLimitPerTx] = useState(5)
   const [reachedLimit, setReachedLimit] = useState(false)
+  const [isMinting, setIsMinting] = useState(false)
   const maxMintPerTx = useLineMaxMintPerTx()
   const { data: currentTokenId = 1n } = useCurrentTokenId()
   const { refetch: refetchAvailableTokens, ...getAvailableTokens } =
@@ -110,6 +115,10 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
   const resetSelection = () => {
     setReachedLimit(false)
     setSelectedItems([])
+  }
+
+  const handleIsMinting = (value: boolean) => {
+    setIsMinting(value)
   }
 
   useEffect(() => {
@@ -162,6 +171,8 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
         reachedLimit,
         toggleSelectedItem,
         resetSelection,
+        handleIsMinting,
+        isMinting,
       }}
     >
       {children}
