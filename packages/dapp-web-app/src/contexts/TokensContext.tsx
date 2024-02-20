@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import {
+  useLineCurrentTokenId,
   useLineGetAvailableCoordinates,
   useLineGetGrid,
   useLineMaxMintPerTx,
@@ -80,8 +81,15 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
   const [limitPerTx, setLimitPerTx] = useState(5)
   const [reachedLimit, setReachedLimit] = useState(false)
   const maxMintPerTx = useLineMaxMintPerTx()
-  const getAvailableTokens = useLineGetAvailableCoordinates({ watch: true })
-  const getGrid = useLineGetGrid({ watch: true, scopeKey: 'getGrid' })
+  const { data: currentTokenId = 1n } = useLineCurrentTokenId({
+    watch: true,
+    scopeKey: 'currentTokenId',
+  })
+  const { refetch: refetchAvailableTokens, ...getAvailableTokens } =
+    useLineGetAvailableCoordinates()
+  const { refetch: refetchGrid, ...getGrid } = useLineGetGrid({
+    scopeKey: 'getGrid',
+  })
 
   const toggleSelectedItem = (index: string) => {
     const willRemove = selectedItems.includes(index)
@@ -106,6 +114,13 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
     setReachedLimit(false)
     setSelectedItems([])
   }
+
+  useEffect(() => {
+    if (currentTokenId) {
+      refetchAvailableTokens()
+      refetchGrid()
+    }
+  }, [currentTokenId, refetchAvailableTokens, refetchGrid])
 
   useEffect(() => {
     setGridItemsState(generateFullGridDefaultState())

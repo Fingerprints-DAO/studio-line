@@ -69,7 +69,6 @@ export const AuctionProvider = ({
   const { data: config } = useLineConfig()
   const { data: canMove } = useLineCanMove({
     scopeKey: 'canMove',
-    cacheTime: Interval.CanMove,
   })
   const { data: price = 0n } = useLineGetCurrentPrice({
     watch: true,
