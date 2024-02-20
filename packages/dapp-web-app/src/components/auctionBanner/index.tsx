@@ -1,18 +1,14 @@
-import { Box, Text, Link as ChakraLink, Button, Flex } from '@chakra-ui/react'
+import { Box, Text, Link as ChakraLink, Button } from '@chakra-ui/react'
 import Countdown from 'components/countdown'
 import { useAuctionContext } from 'contexts/AuctionContext'
-import dayjs from 'dayjs'
 import useCanMove from 'hooks/use-can-move'
 import useCountdownTime from 'hooks/use-countdown-timer'
 import Link from 'next/link'
-import { useLineCanMove } from 'services/web3/generated'
 import { AuctionState } from 'types/auction'
-import { Interval } from 'types/interval'
 import { formatEther } from 'viem'
 
 export function AuctionBanner({ displayMintNow = false }) {
-  const { startTime, startPrice, endPrice, maxSupply, auctionState } =
-    useAuctionContext()
+  const { startPrice, endPrice, maxSupply, auctionState } = useAuctionContext()
   const { countdownInMili } = useCountdownTime()
   const { data: canMove, isSuccess: isCanMoveSuccess } = useCanMove()
 

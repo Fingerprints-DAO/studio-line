@@ -1,9 +1,11 @@
 'use client'
 
 import { Box, Flex, Link, Text, Fade } from '@chakra-ui/react'
+import { AuctionBanner } from 'components/auctionBanner'
 import { AuctionStaticBanner } from 'components/auctionStaticBanner'
 import { TextLine } from 'components/textLine'
 import { TokenPreview } from 'components/tokenPreview'
+import { AuctionProvider } from 'contexts/AuctionContext'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
 import { useCoordinates } from 'hooks/use-coordinates'
 import { useHasReachedEnd } from 'hooks/use-has-reached-end'
@@ -49,8 +51,10 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
     <Box w={'100%'} h={'100%'} {...props}>
       {!lastSelectedGridItem && (
         <>
-          {!hideBanner && <AuctionStaticBanner mb={4} />}
-          {/* <AuctionBanner displayMintNow /> */}
+          {/* {!hideBanner && <AuctionStaticBanner mb={4} />} */}
+          <AuctionProvider>
+            <AuctionBanner displayMintNow />
+          </AuctionProvider>
           <Text fontWeight={'bold'} fontSize={'2xl'} as={'h1'} mt={'-5px'}>
             Select a token to get started
           </Text>
