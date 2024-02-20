@@ -1,10 +1,9 @@
-import { Box, Button, Flex, Grid, GridItem, Text } from '@chakra-ui/react'
+import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react'
 import Wallet from 'components/wallet'
+import useCanMove from 'hooks/use-can-move'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { useLineCanMove } from 'services/web3/generated'
-import { Interval } from 'types/interval'
 
 const navLinks = [
   { href: '/', label: 'playground', isDisabled: false },
@@ -16,9 +15,7 @@ const navLinks = [
 const Header = ({ isDrawer = false }) => {
   const pathname = usePathname()
   const [nav, setNav] = useState(navLinks)
-  const { data: canMove, isSuccess: isCanMoveSuccess } = useLineCanMove({
-    watch: true,
-  })
+  const { data: canMove, isSuccess: isCanMoveSuccess } = useCanMove()
 
   useEffect(() => {
     if (!isCanMoveSuccess) return

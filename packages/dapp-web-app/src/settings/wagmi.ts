@@ -20,7 +20,7 @@ const { chains } = configureChains(
       },
     }),
   ],
-  { batch: { multicall: true }, pollingInterval: 20_000 },
+  { batch: { multicall: true } },
 )
 
 export const config: Config = createConfig(
