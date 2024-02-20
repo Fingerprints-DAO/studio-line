@@ -1,15 +1,9 @@
 import { AuctionData } from 'types/auction'
-import {
-  useLineCurrentTokenId,
-  useLineGetCurrentPrice,
-  useLineMaxSupply,
-} from '../generated'
+import { useLineCurrentTokenId, useLineMaxSupply } from '../generated'
+import usePrice from 'hooks/use-price'
 
 const useAuctionData = (): AuctionData => {
-  const { data: price } = useLineGetCurrentPrice({
-    watch: true,
-    scopeKey: 'price',
-  })
+  const { data: price = 0n } = usePrice()
   const { data: currentTokenId } = useLineCurrentTokenId({
     watch: true,
     cacheTime: 5_000,
