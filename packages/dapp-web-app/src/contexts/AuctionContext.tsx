@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import useCanMove from 'hooks/use-can-move'
 import React, {
   createContext,
   useState,
@@ -67,9 +68,7 @@ export const AuctionProvider = ({
   children: React.ReactNode
 }) => {
   const { data: config } = useLineConfig()
-  const { data: canMove } = useLineCanMove({
-    scopeKey: 'canMove',
-  })
+  const { data: canMove } = useCanMove()
   const { data: price = 0n } = useLineGetCurrentPrice({
     watch: true,
     scopeKey: 'price',
