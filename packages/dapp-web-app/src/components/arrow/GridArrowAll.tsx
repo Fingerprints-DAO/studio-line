@@ -16,10 +16,14 @@ export function ArrowAll({
   //   return theme.colors['purple'][500]
   // }
   const handleFillColor = () => {
-    if (isLocked && !isSelected) return theme.colors['purple'][200]
-    if (isOwner || isSelected) return theme.colors['purple'][600]
-    if (!isOwner && isSelected) return theme.colors['gray'][400]
-    if (!isOwner) return theme.colors['gray'][200]
+    if (!isOwner) {
+      if (isSelected) return theme.colors['gray'][400]
+      return theme.colors['gray'][200]
+    }
+
+    // Is owner from here
+    if (isSelected) return theme.colors['purple'][600]
+    if (isLocked) return theme.colors['purple'][200]
 
     return theme.colors['gray'][200]
   }

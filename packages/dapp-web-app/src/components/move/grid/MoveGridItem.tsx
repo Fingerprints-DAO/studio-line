@@ -209,7 +209,7 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
             transform={`translate(-50%, -50%)`}
             ml={isStar ? '0.5px' : '-0.5px'}
             mb={isStar ? '0' : '-0.5px'}
-            zIndex={1}
+            zIndex={isSelected || isAvailable ? 2 : 1}
           >
             {isStar && (
               <ArrowAll
