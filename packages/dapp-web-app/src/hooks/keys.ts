@@ -1,0 +1,6 @@
+export const getCanMoveKey = ['auction', 'canMove']
+export const getPriceKey = ['auction', 'currentPrice']
+export const getCurrentTokenId = ['auction', 'currentTokenId']
+export const numStarTokens = ['move', 'numStarTokens']
+export const getGrid = ['move', 'getGrid']
+export const getTokens = ['move', 'getTokens']

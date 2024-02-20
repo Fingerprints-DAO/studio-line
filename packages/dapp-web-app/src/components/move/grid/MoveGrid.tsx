@@ -4,10 +4,8 @@ import MoveGridItem from './MoveGridItem'
 import { useMoveContext } from 'contexts/MoveContext'
 import { GridItemsTotal, GridSize, GridSpace } from 'types/grid'
 import useGridSizes from 'hooks/useGridSizes'
-import {
-  useLineMaxStarTokens,
-  useLineNumStarTokens,
-} from 'services/web3/generated'
+import { useLineMaxStarTokens } from 'services/web3/generated'
+import useStarTokenMinted from 'hooks/use-star-token-minted'
 
 type MoveGridProps = {}
 
@@ -25,12 +23,8 @@ const MoveGrid: React.FC<MoveGridProps> = ({}) => {
   } = useMoveContext()
   const { data: starTokenSupply = 25n } = useLineMaxStarTokens({
     scopeKey: 'starTokenSupply',
-    watch: true,
   })
-  const { data: starTokenMinted = 0n } = useLineNumStarTokens({
-    scopeKey: 'starTokenMinted',
-    watch: true,
-  })
+  const { data: starTokenMinted = 0n } = useStarTokenMinted()
 
   const gridItems = useMemo(() => {
     const items = []

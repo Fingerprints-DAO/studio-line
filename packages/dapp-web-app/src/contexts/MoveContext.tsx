@@ -1,9 +1,7 @@
+import useGetGrid from 'hooks/use-get-grid'
 import React, { createContext, useState, useContext, useEffect } from 'react'
-import {
-  useLineGetGrid,
-  useLineGetTokens,
-  useLineTokensOfOwner,
-} from 'services/web3/generated'
+import useGetTokens from 'hooks/use-get-tokens'
+import { useLineTokensOfOwner } from 'services/web3/generated'
 import {
   Direction,
   GridItemBaseProperties,
@@ -114,12 +112,12 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
   )
   const [tokensDirectionHandled, setTokensDirectionHandled] = useState(false)
   const { address } = useAccount()
-  const getGrid = useLineGetGrid({ watch: true, scopeKey: 'getGrid' })
+  const getGrid = useGetGrid()
   const ownedTokens = useLineTokensOfOwner({
     args: [address!],
     enabled: !!address,
   })
-  const getTokens = useLineGetTokens({ watch: true })
+  const getTokens = useGetTokens()
 
   const toggleSelectedItem = (index: string) => {
     const selected = gridItemsState[index]

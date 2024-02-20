@@ -13,10 +13,8 @@ import { ArrowDirections } from 'types/movements'
 import { TRAITS } from 'types/nft'
 import { useHasReachedEnd } from 'hooks/use-has-reached-end'
 import { useTransactionContext } from 'contexts/TransactionContext'
-import {
-  useLineMaxStarTokens,
-  useLineNumStarTokens,
-} from 'services/web3/generated'
+import { useLineMaxStarTokens } from 'services/web3/generated'
+import useStarTokenMinted from 'hooks/use-star-token-minted'
 
 export function MoveSection({ token }: { token: any }) {
   const { selectedGridItem, unavailableDirections, toggleFixMyToken } =
@@ -42,12 +40,8 @@ export function MoveSection({ token }: { token: any }) {
   >()
   const { data: starTokenSupply = 25n } = useLineMaxStarTokens({
     scopeKey: 'starTokenSupply',
-    watch: true,
   })
-  const { data: starTokenMinted = 0n } = useLineNumStarTokens({
-    scopeKey: 'starTokenMinted',
-    watch: true,
-  })
+  const { data: starTokenMinted = 0n } = useStarTokenMinted()
 
   const tokenDirection = useMemo(() => {
     if (!token) return ''

@@ -1,4 +1,7 @@
 import dayjs from 'dayjs'
+import useCanMove from 'hooks/use-can-move'
+import useCurrentTokenId from 'hooks/use-current-token-id'
+import usePrice from 'hooks/use-price'
 import React, {
   createContext,
   useState,
@@ -6,15 +9,8 @@ import React, {
   useEffect,
   useRef,
 } from 'react'
-import {
-  useLineCanMove,
-  useLineConfig,
-  useLineCurrentTokenId,
-  useLineGetCurrentPrice,
-  useLineMaxSupply,
-} from 'services/web3/generated'
+import { useLineConfig, useLineMaxSupply } from 'services/web3/generated'
 import { AuctionConfig, AuctionData, AuctionState } from 'types/auction'
-import { Interval } from 'types/interval'
 
 export const AuctionContext = createContext<
   AuctionConfig &
@@ -67,19 +63,9 @@ export const AuctionProvider = ({
   children: React.ReactNode
 }) => {
   const { data: config } = useLineConfig()
-  const { data: canMove } = useLineCanMove({
-    scopeKey: 'canMove',
-    cacheTime: Interval.CanMove,
-  })
-  const { data: price = 0n } = useLineGetCurrentPrice({
-    watch: true,
-    scopeKey: 'price',
-  })
-  const { data: currentTokenId = 1n } = useLineCurrentTokenId({
-    watch: true,
-    cacheTime: Interval.TokenId,
-    scopeKey: 'currentTokenId',
-  })
+  const { data: canMove } = useCanMove()
+  const { data: price = 0n } = usePrice()
+  const { data: currentTokenId = 1n } = useCurrentTokenId()
   const { data: maxSupply = 0n } = useLineMaxSupply()
   const [startTime, endTime, startPrice, endPrice] = config || [0n, 0n, 0n, 0n]
 
