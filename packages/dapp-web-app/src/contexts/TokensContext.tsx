@@ -82,7 +82,7 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
   const [reachedLimit, setReachedLimit] = useState(false)
   const maxMintPerTx = useLineMaxMintPerTx()
   const { data: currentTokenId = 1n } = useLineCurrentTokenId({
-    watch: true,
+    watch: false,
     scopeKey: 'currentTokenId',
   })
   const { refetch: refetchAvailableTokens, ...getAvailableTokens } =

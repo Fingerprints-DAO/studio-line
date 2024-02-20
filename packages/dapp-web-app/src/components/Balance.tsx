@@ -22,7 +22,7 @@ export function AccountBalance() {
   const { address } = useAccount()
   const { data, refetch } = useBalance({
     address,
-    watch: true,
+    watch: false,
   })
 
   return (

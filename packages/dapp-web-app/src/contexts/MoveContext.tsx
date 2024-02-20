@@ -114,12 +114,12 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
   )
   const [tokensDirectionHandled, setTokensDirectionHandled] = useState(false)
   const { address } = useAccount()
-  const getGrid = useLineGetGrid({ watch: true, scopeKey: 'getGrid' })
+  const getGrid = useLineGetGrid({ watch: false, scopeKey: 'getGrid' })
   const ownedTokens = useLineTokensOfOwner({
     args: [address!],
     enabled: !!address,
   })
-  const getTokens = useLineGetTokens({ watch: true })
+  const getTokens = useLineGetTokens({ watch: false })
 
   const toggleSelectedItem = (index: string) => {
     const selected = gridItemsState[index]

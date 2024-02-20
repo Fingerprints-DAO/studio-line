@@ -72,7 +72,7 @@ export const AuctionProvider = ({
   const { data: canMove } = useCanMove()
   const { data: price = 0n } = usePrice()
   const { data: currentTokenId = 1n } = useLineCurrentTokenId({
-    watch: true,
+    watch: false,
     cacheTime: Interval.TokenId,
     scopeKey: 'currentTokenId',
   })

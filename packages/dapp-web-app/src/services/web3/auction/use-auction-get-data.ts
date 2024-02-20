@@ -5,7 +5,7 @@ import usePrice from 'hooks/use-price'
 const useAuctionData = (): AuctionData => {
   const { data: price = 0n } = usePrice()
   const { data: currentTokenId } = useLineCurrentTokenId({
-    watch: true,
+    watch: false,
     cacheTime: 5_000,
     scopeKey: 'currentTokenId',
   })
