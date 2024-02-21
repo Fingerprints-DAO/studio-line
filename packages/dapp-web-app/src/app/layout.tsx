@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Analytics } from '@vercel/analytics/react'
 import Providers from 'contexts/providers'
 import './../assets/styles/globals.css'
 import { getBaseURL } from 'utils/getLink'
@@ -46,6 +47,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     <html lang="en">
       <body style={{ backgroundColor: 'white' }}>
         <Providers>{children}</Providers>
+        <Analytics />
       </body>
     </html>
   )
