@@ -79,24 +79,22 @@ const Footer = ({ isDrawer = false }) => {
           </Box>
 
           <Flex flex={1} justifyContent={'flex-end'} alignItems={'center'}>
-            {contractAddress && (
-              <TextToltip label="Check out on Etherscan!" placement="top">
-                <Box
-                  as="a"
-                  href={getExternalEtherscanUrl(contractAddress)}
-                  title="OpenSea"
-                  target="_blank"
-                  p={2}
-                  color="gray.300"
-                  _hover={{ color: 'gray.200' }}
-                  transition="ease"
-                  transitionProperty="color"
-                  transitionDuration="0.2s"
-                >
-                  <Icon as={SiEthereum} w={6} h={6} display="block" />
-                </Box>
-              </TextToltip>
-            )}
+            <TextToltip label="Check out on Etherscan!" placement="top">
+              <Box
+                as="a"
+                href={getExternalEtherscanUrl(contractAddress)}
+                title="OpenSea"
+                target="_blank"
+                p={2}
+                color="gray.300"
+                _hover={{ color: 'gray.200' }}
+                transition="ease"
+                transitionProperty="color"
+                transitionDuration="0.2s"
+              >
+                <Icon as={SiEthereum} w={6} h={6} display="block" />
+              </Box>
+            </TextToltip>
             <TextToltip
               label="Check out the collection on Opensea!"
               placement="top"
