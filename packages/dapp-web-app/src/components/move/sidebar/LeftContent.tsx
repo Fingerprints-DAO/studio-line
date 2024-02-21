@@ -6,10 +6,12 @@ import { GridItemProperties, useMoveContext } from 'contexts/MoveContext'
 import { useMemo } from 'react'
 import { GridSize } from 'types/grid'
 import { TokenPreview } from 'components/tokenPreview'
+import { TRAITS } from 'types/nft'
 
 type LeftContentProps = {
   token: {
     name: string
+    attributes: { trait_type: string; value: string }[]
   }
   isDrawer?: boolean
 }
@@ -29,9 +31,14 @@ export function LeftContent({ token, isDrawer = false }: LeftContentProps) {
   )
 
   const posId = useMemo(() => {
-    if (!selectedGridItem) return 0
-    return selectedGridItem?.col + selectedGridItem?.row * GridSize
-  }, [selectedGridItem])
+    if (!token.attributes || token.attributes.length < 1) return 0
+    const [x = 0, y = 0] = token?.attributes
+      ?.find((attr) => attr?.trait_type === TRAITS.IMAGE_POINT)
+      ?.value?.split(',')
+      ?.map(Number) ?? [0, 0]
+
+    return x + y * GridSize
+  }, [token.attributes])
 
   return (
     // <Fade
