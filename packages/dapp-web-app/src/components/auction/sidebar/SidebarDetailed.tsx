@@ -55,7 +55,12 @@ export function SidebarDetailed({ ...props }: any) {
   } = useAuctionContext()
   const queryClient = useQueryClient()
   const { countdownInMili } = useCountdownTime()
-  const { value: discountValue, hasDiscount, merkleProof } = useDiscount()
+  const {
+    value: discountValue,
+    hasDiscount,
+    merkleProof,
+    isLoading: discountIsLoading,
+  } = useDiscount()
   const mintRandom = useLineMintRandom({
     args: [BigInt(counter), merkleProof],
   })
