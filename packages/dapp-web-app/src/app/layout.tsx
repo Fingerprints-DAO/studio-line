@@ -19,23 +19,23 @@ export const metadata: Metadata = {
   twitter: {
     ...defaultText,
     card: 'summary_large_image',
-    site: getBaseURL(),
+    site: 'https://line.fingerprintsdao.xyz/',
     creator: '@FingerprintsDAO',
   },
   openGraph: {
     ...defaultText,
     type: 'website',
-    url: getBaseURL(),
+    url: 'https://line.fingerprintsdao.xyz/',
   },
   other: {
     'fc:frame': 'vNext',
-    'fc:frame:image': getBaseURL() + '/opengraph-image.jpg',
+    'fc:frame:image': 'https://line.fingerprintsdao.xyz//opengraph-image.jpg',
     'fc:frame:button:1': 'Explore the collection',
     'fc:frame:button:1:action': 'link',
-    'fc:frame:button:1:target': getBaseURL() + '/',
+    'fc:frame:button:1:target': 'https://line.fingerprintsdao.xyz/',
     'fc:frame:button:2': 'Mint now',
     'fc:frame:button:2:action': 'link',
-    'fc:frame:button:2:target': getBaseURL() + '/auction',
+    'fc:frame:button:2:target': 'https://line.fingerprintsdao.xyz/auction',
     // 'fc:frame:post_url': getBaseURL() + '/frame/api',
     // 'fc:frame:button:1:target':
     //   'eip155:11155111:0x70b487b6e655307c56c231ac7b6a3d84dd4d7f26',
