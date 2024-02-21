@@ -64,9 +64,10 @@ export function AuctionBanner({ displayMintNow = false }) {
       <Text fontSize={'xs'} my={1}>
         Linear dutch auction over 1 hour. Starting price of{' '}
         {formatEther(startPrice).toString()} ETH, resting price of{' '}
-        {formatEther(endPrice).toString()} ETH, no rebate. Bidders can select
-        specific tokens before minting or mint randomly. As soon as you place
-        your bid your tokens will be minted. Supply of {maxSupply.toString()}.
+        {formatEther(endPrice).toString()} ETH, <b>no rebate</b>. Bidders can
+        select specific tokens before minting or mint randomly. As soon as you
+        place your bid your tokens will be minted. Supply of{' '}
+        {maxSupply.toString()}.
       </Text>
       <ChakraLink
         href={'https://www.addevent.com/event/VX20075579'}

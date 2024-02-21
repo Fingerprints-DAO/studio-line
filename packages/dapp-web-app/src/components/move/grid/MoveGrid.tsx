@@ -89,8 +89,16 @@ const MoveGrid: React.FC<MoveGridProps> = ({}) => {
       maxH={'1000px'}
       pos={'relative'}
     >
-      <Box mb={3} zIndex={5} pos={'absolute'} top={'-30px'} left={0}>
-        star tokens: {Number(starTokenMinted)}/{Number(starTokenSupply)}
+      <Box
+        mb={3}
+        zIndex={5}
+        pos={'absolute'}
+        top={'-52px'}
+        left={0}
+        fontSize={'md'}
+        fontWeight={'bold'}
+      >
+        STAR TOKENS: {Number(starTokenMinted)}/{Number(starTokenSupply)}
       </Box>
       <Box
         hidden={showGrid}
