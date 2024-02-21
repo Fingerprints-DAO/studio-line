@@ -5,7 +5,6 @@ import {
   Alert,
   AlertIcon,
   Box,
-  Button,
   Collapse,
   Container,
   Flex,
@@ -23,8 +22,8 @@ import SidebarIcons from 'components/sidebarIcons'
 import { useAccount } from 'wagmi'
 import { fetcher } from 'utils/fetcher'
 import { GetDiscountResponse } from 'app/getDiscount/api/route'
-import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 import Link from 'next/link'
+import ChakraNextImageLoaderFull from 'components/chakraNextImageLoaderFull'
 
 const textProps: TextProps = {
   my: 4,
@@ -70,7 +69,7 @@ export default function About() {
   }, [address])
 
   return (
-    <Container maxW={'6xl'}>
+    <Container maxW={'8xl'}>
       <Flex pos={'relative'} justifyContent={'center'}>
         <VStack
           bg="white"
@@ -84,16 +83,17 @@ export default function About() {
           {isMediumScreen && <SidebarIcons alignItems={'flex-end'} />}
           <Box
             as={'main'}
-            mt={isRegularScreen ? '62px' : '0'}
+            // mt={isRegularScreen ? '62px' : '0'}
             // mt={isRegularScreen ? '92px' : '0'}
             // mt={10}
             textColor={'gray.500'}
           >
-            <Box {...imagesProps}>
-              <ChakraNextImageLoader
+            <Box {...imagesProps} mt={0}>
+              <ChakraNextImageLoaderFull
                 src={'/about/header.jpg'}
-                width={3900}
-                height={1966}
+                imageWidth={5200}
+                imageHeight={1966}
+                w={'full'}
                 alt="Header image"
                 imageProps={{ priority: true }}
               />
@@ -103,17 +103,22 @@ export default function About() {
               animateOpacity
               unmountOnExit
             >
-              <Box pb={10}>
+              <Box>
                 <Alert status="success" bgColor={'gray.200'}>
                   <AlertIcon color={'gray.500'} />
                   {`You are eligible for a ${discountValue}% discount on Mint.`}
                 </Alert>
               </Box>
             </Collapse>
-            <Text {...titleProps}>LINE by Figure31</Text>
+            <Text {...titleProps} mt={4}>
+              LINE by Figure31
+            </Text>
             <Text {...textProps}>
-              <b>Date:</b> Dutch auction on Wednesday, February 21 at 10 AM PT /
-              1 PM ET / 7 PM CET{' - '}
+              <b>Discovery Phase:</b> Begins on Monday, February 19 (more info
+              below)
+              <br />
+              <b>Auction Date:</b> 60-minute Dutch auction on Wednesday,
+              February 21 at 10 AM PT / 1 PM ET / 7 PM CET{' - '}
               <ChakraLink
                 as={Link}
                 href={'https://www.addevent.com/event/VX20075579'}
@@ -123,10 +128,11 @@ export default function About() {
               </ChakraLink>
               <br />
               <b>Starting/Resting price:</b> 1.0 ETH → 0.15 ETH <br />
-              <b>Supply:</b> 200 tokens
+              <b>Supply:</b> 250 tokens; only available to mint through desktop,
+              not mobile.
             </Text>
             <Text {...textProps}>
-              LINE is a photographic series of 200 tokens placed within a
+              LINE is a photographic series of 250 tokens placed within a
               synthetic landscape. Using photographic and post-production
               techniques similar to Figure31&apos;s SALT, the images in LINE are
               captured using a digital camera combined with ultra-telephoto
@@ -149,7 +155,7 @@ export default function About() {
               image it perceives. The metadata of a token is dynamic; images and
               attributes travel back and forth between the different points
               within the reach of its field of view. Most tokens will have a
-              180-degree view, and only 20 “star” tokens will have a 360-degree
+              180-degree view, and only 25 “star” tokens will have a 360-degree
               view. Images cycle daily.
             </Text>
             <Text {...titleProps}>About Figure31</Text>
@@ -174,10 +180,10 @@ export default function About() {
             </Text>
           </Box>
           <Box {...imagesProps}>
-            <ChakraNextImageLoader
+            <ChakraNextImageLoaderFull
               src={'/about/faq.jpg'}
-              width={3900}
-              height={1966}
+              imageWidth={3900}
+              imageHeight={1966}
               alt="FAQ image"
             />
           </Box>
@@ -249,16 +255,16 @@ export default function About() {
             </Box>
           </Box>
 
-          <Box {...imagesProps}>
-            <ChakraNextImageLoader
+          <Box {...imagesProps} mb={0}>
+            <ChakraNextImageLoaderFull
               src={'/about/footer.jpg'}
-              width={3900}
-              height={1966}
+              imageWidth={3900}
+              imageHeight={1966}
               alt="FAQ image"
             />
           </Box>
           <Flex
-            height={'100%'}
+            h={'100%'}
             w={'100%'}
             overflow={'auto'}
             flexDir={'column'}

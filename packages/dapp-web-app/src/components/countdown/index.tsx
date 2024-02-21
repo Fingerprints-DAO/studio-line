@@ -29,11 +29,11 @@ const Countdown = ({ futureTimestamp }: CountdownProps) => {
         const seconds = duration.seconds().toString().padStart(2, '0')
 
         if (days > 0) {
-          setTimeLeft(`${days}d ${hours}h ${minutes}min`)
+          setTimeLeft(`${days}d ${hours}h ${minutes}m`)
         } else if (hours > 0) {
-          setTimeLeft(`${hours}:${minutes}:${seconds}`)
+          setTimeLeft(`${hours}h ${minutes}m ${seconds}s`)
         } else {
-          setTimeLeft(`${minutes}:${seconds}`)
+          setTimeLeft(`${minutes}m ${seconds}s`)
         }
       }
     }, 1000)

@@ -5,25 +5,31 @@ import { Box, Button, Fade, Flex, Text } from '@chakra-ui/react'
 import Image from 'next/image'
 import { useMoveContext } from 'contexts/MoveContext'
 import { SidebarArrow } from 'components/arrow/SidebarArrow'
-import { TxMessage } from 'components/txMessage'
-import { TransactionError } from 'types/transaction'
 import {
   getNextPoint,
   getSpecificArrowMoveDirection,
 } from 'components/arrow/utils'
-import useMovePoint from 'hooks/useMovePoint'
 import { ArrowDirections } from 'types/movements'
 import { TRAITS } from 'types/nft'
-import { useWaitForTransaction } from 'wagmi'
+import { useHasReachedEnd } from 'hooks/use-has-reached-end'
+import { useTransactionContext } from 'contexts/TransactionContext'
+import { useLineMaxStarTokens } from 'services/web3/generated'
+import useStarTokenMinted from 'hooks/use-star-token-minted'
 
 export function MoveSection({ token }: { token: any }) {
+  const { selectedGridItem, unavailableDirections, toggleFixMyToken } =
+    useMoveContext()
   const {
-    selectedGridItem,
-    unavailableDirections,
-    refreshAfterMove,
-    resetSelection,
-    toggleFixMyToken,
-  } = useMoveContext()
+    isLoading,
+    isSuccess,
+    isWaitingApproval,
+    move,
+    setNextPoint: setNextPointContext,
+  } = useTransactionContext()
+  const hasReachedEnd = useHasReachedEnd({
+    row: selectedGridItem?.row,
+    direction: selectedGridItem?.direction,
+  })
   const [arrowHover, setArrowHover] = useState<ArrowDirections | undefined>()
   const [nextPoint, setNextPoint] = useState<{
     col: number | null
@@ -32,12 +38,10 @@ export function MoveSection({ token }: { token: any }) {
   const [arrowSelected, setArrowSelected] = useState<
     ArrowDirections | undefined
   >()
-  const { getMoveFunction, getCurrentMoveToCall } = useMovePoint()
-  const moveTx = useWaitForTransaction({
-    hash: getCurrentMoveToCall().data?.hash,
-    enabled: getCurrentMoveToCall().data?.hash !== undefined,
-    staleTime: 1_000,
+  const { data: starTokenSupply = 25n } = useLineMaxStarTokens({
+    scopeKey: 'starTokenSupply',
   })
+  const { data: starTokenMinted = 0n } = useStarTokenMinted()
 
   const tokenDirection = useMemo(() => {
     if (!token) return ''
@@ -63,15 +67,17 @@ export function MoveSection({ token }: { token: any }) {
     )
     setNextPoint({ row, col })
   }
-  const handleMove = () => {
+  const handleMove = async () => {
     const pointDirection = getSpecificArrowMoveDirection(
       tokenDirection,
       arrowSelected!,
     )
     if (!pointDirection) return
 
-    const moveFunction = getMoveFunction(pointDirection!)
-    moveFunction.write({
+    const moveFunction = move(pointDirection!)
+    if (!moveFunction) return
+
+    await moveFunction.writeAsync!({
       args: [BigInt(selectedGridItem?.id || 0)],
     })
   }
@@ -82,15 +88,13 @@ export function MoveSection({ token }: { token: any }) {
     setNextPoint({ col: null, row: null })
     setArrowHover(undefined)
     setArrowSelected(undefined)
-  }, [selectedGridItem])
+  }, [selectedGridItem, setNextPoint])
 
   useEffect(() => {
-    if (moveTx.isSuccess && !!arrowSelected) {
-      setTimeout(() => {
-        window.location.reload()
-      }, 500)
+    if (isSuccess) {
+      setNextPointContext(`${nextPoint.row}-${nextPoint.col}`)
     }
-  }, [arrowSelected, moveTx.isSuccess, refreshAfterMove, resetSelection])
+  }, [isSuccess, nextPoint.col, nextPoint.row, setNextPointContext])
 
   return (
     <Fade in={!!selectedGridItem} unmountOnExit>
@@ -146,32 +150,33 @@ export function MoveSection({ token }: { token: any }) {
         mt={4}
         mb={1}
         onClick={handleMove}
-        isDisabled={
-          !arrowSelected || getCurrentMoveToCall().isLoading || moveTx.isLoading
-        }
+        isDisabled={!arrowSelected || isLoading}
       >
-        {getCurrentMoveToCall().isLoading
-          ? 'Waiting for approval...'
-          : moveTx.isLoading
-            ? 'Processing...'
-            : 'Move'}
+        {isWaitingApproval
+          ? 'waiting for approval...'
+          : isLoading
+            ? 'processing...'
+            : 'move'}
       </Button>
-      <TxMessage
-        hash={getCurrentMoveToCall().data?.hash}
-        error={getCurrentMoveToCall().error as TransactionError}
-        successMessage="Token moved successfully! Reloading the page..."
-      />
-
-      <Button
-        variant={'solid'}
-        w={'full'}
-        mt={4}
-        mb={1}
-        onClick={toggleFixMyToken}
-        colorScheme="purple"
-      >
-        Fix my token on grid
-      </Button>
+      {hasReachedEnd && starTokenSupply !== starTokenMinted && (
+        <Button
+          variant={'solid'}
+          w={'full'}
+          mt={1}
+          mb={1}
+          onClick={toggleFixMyToken}
+          colorScheme="purple"
+          bgColor={'purple.600'}
+          borderColor={'purple.600'}
+          _hover={{
+            color: 'purple.600',
+            borderColor: 'purple.600',
+            backgroundColor: 'white',
+          }}
+        >
+          fix my token on grid
+        </Button>
+      )}
     </Fade>
   )
 }

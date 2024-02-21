@@ -1,7 +1,7 @@
 import React, { memo, useMemo, useState } from 'react'
 import { Box, Flex, Tooltip, Image as ChackraImage } from '@chakra-ui/react'
 import { GridItemProperties } from 'contexts/MoveContext'
-import { Direction, GridSize } from 'types/grid'
+import { Direction, GridSize, ImageSizes, generateImage } from 'types/grid'
 import { Arrow } from 'components/arrow/GridArrow'
 import { useHexColor } from 'components/arrow/utils'
 import { ArrowDirections } from 'types/movements'
@@ -80,6 +80,7 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
   ]
   const widthPx = `${width}px`
   const heightPx = `${height}px`
+  const posId = useMemo(() => col + row * GridSize, [col, row])
 
   const disableClick = isSelectable ? isMinted : !isMinted
   const renderArrows = isMinted || isAvailable || isSelectable
@@ -156,13 +157,17 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
               <Flex
                 flexDir={'column'}
                 alignItems={'center'}
-                minW={'100px'}
-                minH={'150px'}
+                w={'100px'}
+                h={'150px'}
               >
                 <ChakraNextImageLoader
-                  src={image}
-                  width={100}
-                  height={150}
+                  src={
+                    posId !== null
+                      ? generateImage(posId, ImageSizes.MEDIUM)
+                      : image
+                  }
+                  imageWidth={286}
+                  imageHeight={433}
                   alt="Token image"
                 />
               </Flex>
@@ -189,7 +194,7 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
                 bgColor={renderPoint && !isFixedSelected ? 'white' : ''}
                 borderWidth={renderPoint && !isFixedSelected ? '2px' : ''}
                 borderColor={
-                  renderPoint && !isFixedSelected ? 'purple.500' : ''
+                  renderPoint && !isFixedSelected ? 'purple.200' : ''
                 }
                 zIndex={4}
               />
@@ -202,16 +207,18 @@ const MoveGridItemComponent: React.FC<GridItemProps> = ({
             left={'50%'}
             top={'50%'}
             transform={`translate(-50%, -50%)`}
-            ml={isStar ? '' : '-0.5px'}
-            mb={isStar ? '' : '-0.5px'}
-            zIndex={1}
+            ml={isStar ? '0.5px' : '-0.5px'}
+            mb={isStar ? '0' : '-0.5px'}
+            zIndex={isSelected || isAvailable ? 2 : 1}
           >
             {isStar && (
               <ArrowAll
                 {...arrowsProps}
-                opacity={isLocked && !isSelected ? 0.5 : 1}
+                isLocked={isLocked}
                 isOwner={isAvailable}
-                isSelected={isFixedSelected}
+                isSelected={isSelected || isFixedSelected}
+                w={`${lineWidth * 2 - 10}px`}
+                h={`${lineHeight * 2 - 8}px`}
               />
             )}
             {!isStar && (

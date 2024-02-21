@@ -23,8 +23,15 @@ export interface GridItemBaseProperties {
   index: string
   row: number
   col: number
+  isLocked: boolean
   direction: Direction | null
 }
 
-export const generateImage = (index: number) =>
-  `https://picsum.photos/id/${index}/200/300`
+export enum ImageSizes {
+  SMALL = 'small',
+  MEDIUM = 'medium',
+  LARGE = 'large',
+}
+
+export const generateImage = (index: number, size = ImageSizes.SMALL) =>
+  `/tokens/${size}/PAN_${index}.jpg`

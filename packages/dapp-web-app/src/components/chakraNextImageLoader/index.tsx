@@ -1,41 +1,46 @@
-import { FC, useState } from 'react'
+import {
+  FC,
+  PropsWithRef,
+  RefObject,
+  forwardRef,
+  useEffect,
+  useState,
+} from 'react'
 import Image, { ImageProps } from 'next/image'
 import { Box, BoxProps, Skeleton } from '@chakra-ui/react'
 
 // Define props type
-export interface ChakraNextImageLoaderProps extends BoxProps {
+export interface ChakraNextImageLoaderProps extends PropsWithRef<BoxProps> {
   src: string
   alt: string
-  width: number
-  height?: number
+  imageWidth: number
+  imageHeight?: number
   imageProps?: Partial<ImageProps>
 }
 
-export const ChakraNextImageLoader: FC<ChakraNextImageLoaderProps> = ({
-  src,
-  alt,
-  width,
-  height,
-  imageProps,
-  ...rest
-}) => {
+export const ChakraNextImageLoader = (
+  {
+    src,
+    alt,
+    imageWidth,
+    imageHeight,
+    imageProps,
+    ...rest
+  }: ChakraNextImageLoaderProps,
+  ref?: any,
+) => {
   const [isLoading, setLoading] = useState(true)
 
+  useEffect(() => {
+    setLoading(true)
+  }, [src])
+
   return (
-    <Box
-      as={'span'}
-      display={'block'}
-      position="relative"
-      width={width}
-      height={'auto'}
-      maxW={'100%'}
-      maxH={'100%'}
-      {...rest}
-    >
+    <Box as={'span'} display={'inline-block'} position="relative" {...rest}>
       {isLoading && (
         <Skeleton
           as={'span'}
-          display={'block'}
+          display={'inline-block'}
           left={0}
           top={0}
           bottom={0}
@@ -47,11 +52,16 @@ export const ChakraNextImageLoader: FC<ChakraNextImageLoaderProps> = ({
       <Image
         src={src}
         alt={alt}
-        width={width}
-        height={height}
+        width={imageWidth}
+        height={imageHeight}
         onLoadingComplete={() => setLoading(false)}
+        ref={ref}
         style={{
-          width: '100%',
+          width: 'auto',
+          maxHeight: '60vh',
+          opacity: isLoading ? 0 : 1,
+          transition: 'opacity 0.2s',
+          objectFit: 'contain',
         }}
         {...imageProps}
       />
@@ -59,4 +69,4 @@ export const ChakraNextImageLoader: FC<ChakraNextImageLoaderProps> = ({
   )
 }
 
-export default ChakraNextImageLoader
+export default forwardRef(ChakraNextImageLoader)

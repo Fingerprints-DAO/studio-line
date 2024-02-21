@@ -65,9 +65,9 @@ export const useArrowColors = ({
   const theme = useTheme()
 
   if (direction === Direction.UP)
-    return [theme.colors['red'][300], theme.colors['red'][600]]
+    return [theme.colors['red'][500], theme.colors['red'][600]]
   if (direction === Direction.DOWN)
-    return [theme.colors['cyan'][300], theme.colors['cyan'][600]]
+    return [theme.colors['cyan'][500], theme.colors['cyan'][600]]
 
   return theme.colors['gray'][200]
 }
@@ -85,6 +85,24 @@ export const useHexColor = ({
     if (direction === Direction.DOWN) return theme.colors['cyan'][600]
   }
   if (!isAvailable) return theme.colors['gray'][200]
+  if (direction === Direction.UP) return theme.colors['red'][100]
+  if (direction === Direction.DOWN) return theme.colors['cyan'][100]
+  return theme.colors['gray'][200]
+}
+
+export const useHexColorDot = ({
+  isAvailable,
+  isSelected,
+  direction,
+}: ArrowProps) => {
+  const theme = useTheme()
+
+  if (isSelected) {
+    if (!isAvailable) return theme.colors['gray'][400]
+    if (direction === Direction.UP) return theme.colors['red'][600]
+    if (direction === Direction.DOWN) return theme.colors['cyan'][600]
+  }
+  if (!isAvailable) return theme.colors['gray'][300]
   if (direction === Direction.UP) return theme.colors['red'][100]
   if (direction === Direction.DOWN) return theme.colors['cyan'][100]
   return theme.colors['gray'][200]

@@ -6,9 +6,7 @@ import {
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
-  DrawerFooter,
   DrawerOverlay,
-  Flex,
   IconButton,
   Tooltip,
   useDisclosure,
@@ -80,7 +78,7 @@ export function SidebarNav() {
         isOpen={sidebarIsOpen}
         placement="right"
         onClose={sidebarOnClose}
-        size={'md'}
+        size={'lg'}
       >
         <DrawerOverlay />
         <DrawerContent>

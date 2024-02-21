@@ -1,15 +1,16 @@
+import { useHasReachedEnd } from 'hooks/use-has-reached-end'
 import React, { createContext, useState, useContext } from 'react'
 import {
   Direction,
   GridItemBaseProperties,
   GridSize,
+  ImageSizes,
   generateImage,
   getDirection,
 } from 'types/grid'
 
 export interface GridItemProperties extends GridItemBaseProperties {
   isOpened: boolean
-  isBlocked: boolean
   id: number
 }
 
@@ -19,11 +20,11 @@ export type GridItemState = {
 
 export const gridItemDefaultState = {
   isOpened: false,
-  isBlocked: false,
   image: '',
   index: '',
   row: 0,
   col: 0,
+  isLocked: false,
   direction: Direction.UP,
 }
 
@@ -39,8 +40,9 @@ const generateFullGridDefaultState = () => {
         index,
         row,
         col,
+        isLocked: false,
         direction: getDirection(row),
-        image: generateImage(row + 1 + col + 1),
+        image: generateImage(col + row * GridSize, ImageSizes.SMALL),
       }
     }
   }
@@ -53,7 +55,8 @@ const PlaygroundContext = createContext<{
   toggleGridItem: (index: string) => void
   resetGrid: () => void
   movements: number
-  originPoint: string
+  startingPoint: string
+  isFixed: boolean
   lastSelectedGridItem?: {
     direction: Direction | null
   } & GridItemProperties
@@ -63,7 +66,8 @@ const PlaygroundContext = createContext<{
   toggleGridItem: () => {},
   resetGrid: () => {},
   movements: 0,
-  originPoint: '',
+  startingPoint: '',
+  isFixed: false,
   lastSelectedGridItem: undefined,
 })
 
@@ -81,24 +85,35 @@ export const PlaygroundProvider = ({
   const [lastSelectedGridItem, setLastSelectedGridItem] =
     useState<GridItemProperties>()
   const [movements, setMovements] = useState(0)
-  const [originPoint, setOriginPoint] = useState('')
+  const [startingPoint, setStartingPoint] = useState('')
+  const hasReachedEnd = useHasReachedEnd({
+    row: lastSelectedGridItem?.row,
+    direction: lastSelectedGridItem?.direction,
+  })
+  const [isFixed, setIsFixed] = useState(false)
 
   const toggleGridItem = (index: string) => {
     if (!lastSelectedGridItem) {
-      setOriginPoint(index)
+      setStartingPoint(index)
     } else {
       setMovements(movements + 1)
     }
     setGridItemsState((prevState) => {
+      const isMovementToFix =
+        hasReachedEnd &&
+        (prevState[index].row !== lastSelectedGridItem?.row ||
+          prevState[index].col - lastSelectedGridItem?.col > 1)
       const direction =
         lastSelectedGridItem?.direction ?? prevState[index].direction
+
       setLastSelectedGridItem({
         ...prevState[index],
         direction,
       })
       const [row, col] = index.split('-').map((n) => Number(n))
-      const nextRow = direction !== Direction.UP ? row - 1 : row + 1
-      // TODO: if all, order should be different
+      const nextRow =
+        isMovementToFix || direction !== Direction.UP ? row - 1 : row + 1
+
       const newHighlightGridItem = [
         `${row}-${col - 1}`,
         `${nextRow}-${col - 1}`,
@@ -107,13 +122,16 @@ export const PlaygroundProvider = ({
         `${row}-${col + 1}`,
       ]
 
-      // if (direction === Direction.ALL) {
-      //   newHighlightGridItem.push(
-      //     `${row + 1}-${col}`,
-      //     `${row + 1}-${col - 1}`,
-      //     `${row + 1}-${col + 1}`
-      //   )
-      // }
+      if (isMovementToFix) {
+        newHighlightGridItem.push(
+          `${row + 1}-${col}`,
+          `${row + 1}-${col - 1}`,
+          `${row + 1}-${col + 1}`,
+        )
+      }
+      if (isMovementToFix) {
+        setIsFixed(true)
+      }
 
       setHighlightGridItem(newHighlightGridItem)
       return {
@@ -131,7 +149,8 @@ export const PlaygroundProvider = ({
     setHighlightGridItem([])
     setLastSelectedGridItem(undefined)
     setMovements(0)
-    setOriginPoint('')
+    setStartingPoint('')
+    setIsFixed(false)
   }
 
   return (
@@ -143,7 +162,8 @@ export const PlaygroundProvider = ({
         lastSelectedGridItem,
         resetGrid,
         movements,
-        originPoint,
+        startingPoint: startingPoint,
+        isFixed,
       }}
     >
       {children}

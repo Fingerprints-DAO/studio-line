@@ -1,7 +1,7 @@
 'use client'
 
-import React from 'react'
-import { Container, Flex, VStack } from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react'
+import { Box, Container, Flex, VStack } from '@chakra-ui/react'
 import Header from 'components/header'
 import Footer from 'components/footer'
 import { AuctionProvider } from 'contexts/AuctionContext'
@@ -20,34 +20,46 @@ export default function Layout({
   sidebarProvider?: typeof AuctionProvider
 }) {
   const { isRegularScreen, isMediumScreen } = useDisplayConfig()
+  const [showSidebar, setShowSidebar] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => setShowSidebar(true), 500)
+  }, [])
 
   const renderSidebars = () => (
     <>
       {isRegularScreen && (
-        <VStack
-          bg="white"
-          px={4}
+        <Box
           alignItems="stretch"
-          maxH={'100vh'}
-          minW={'30vw'}
+          flex={'1'}
+          h={'100%'}
+          // maxH={'100vh'}
+          // maxW={'calc(100% - 400px)'}
+          overflow={'hidden'}
           pos={'relative'}
-          flex={4}
+          bg="white"
+          minW={'30%'}
+          pl={4}
+          pt={4}
+          opacity={showSidebar ? 1 : 0}
+          transition={'opacity 0.5s ease'}
         >
-          <Header />
           <Flex
-            height={'100%'}
+            w={'100%'}
+            h={'90vh'}
+            maxH={'1000px'}
+            // maxW={{ base: '40vw', md: '' }}
             overflow={'auto'}
             flexDir={'column'}
             justifyContent={'space-between'}
-            mt={'92px'}
-            mr={'-20px'}
-            pr={'20px'}
-            w={'100%'}
+            // mt={'62px'}
+            // mr={'-20px'}
+            // pr={'20px'}
           >
             {sidebar}
-            <Footer />
+            {/* <Footer /> */}
           </Flex>
-        </VStack>
+        </Box>
       )}
       {isMediumScreen && <SidebarIcons additionalNav={sidebarIcons} />}
     </>
@@ -61,23 +73,23 @@ export default function Layout({
   }
 
   return (
-    <Container maxW={'8xl'}>
-      <Flex
-        pos={'relative'}
-        justifyContent={{ base: 'space-between', md: 'center' }}
-      >
+    <Container maxW={'8xl'} maxH={'100vh'}>
+      {isRegularScreen && <Header />}
+      <Flex pos={'relative'} justifyContent={'center'} w={'100%'}>
         <Flex
           p={2}
           mt={'1vh'}
+          ml={'1vw'}
           bgColor={'white'}
-          h={'95vh'}
-          maxW={
-            isRegularScreen
-              ? 'none'
-              : { base: 'calc(100vw - 80px)', md: 'calc(100vw - 100px)' }
-          }
+          h={'90vh'}
+          // maxW={
+          //   isRegularScreen
+          //     ? 'none'
+          //     : { base: 'calc(100vw - 80px)', md: 'calc(100vw - 100px)' }
+          // }
           justifyContent={'center'}
-          flex={isRegularScreen ? 6 : 9}
+          flex={'0 0 auto'}
+          maxW={isMediumScreen ? '90%' : ''}
         >
           {children}
         </Flex>

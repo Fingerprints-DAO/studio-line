@@ -13,6 +13,7 @@ const AuctionGrid: React.FC = () => {
     mintedItems,
     availableItems,
     selectedItems,
+    isMinting,
   } = useTokensContext()
   const [showGrid, setShowGrid] = useState(false)
 
@@ -33,6 +34,7 @@ const AuctionGrid: React.FC = () => {
       items.push(
         <AuctionGridItem
           key={index}
+          gridId={gridItemsState[id]?.id}
           width={itemWidth}
           height={itemHeight}
           toggleGridItem={toggleSelectedItem}
@@ -41,33 +43,35 @@ const AuctionGrid: React.FC = () => {
           isMinted={mintedItems.includes(id)}
           isAvailable={availableItems.includes(id)}
           isSelected={selectedItems.includes(id)}
+          disableSelection={isMinting}
           {...gridItemsState[id]}
         />,
       )
     }
     return items
   }, [
-    itemWidth,
-    itemHeight,
-    toggleSelectedItem,
-    gridSpaceX,
-    mintedItems,
     availableItems,
-    selectedItems,
     gridItemsState,
+    gridSpaceX,
+    isMinting,
+    itemHeight,
+    itemWidth,
+    mintedItems,
+    selectedItems,
+    toggleSelectedItem,
   ])
 
   useEffect(() => {
     setTimeout(() => {
       setShowGrid(true)
-    }, 1000)
+    }, 500)
   }, [])
 
   return (
     <Box
       ref={ref}
       height={'100%'}
-      w={height > 0 ? height : 'auto'}
+      w={!showGrid ? '45vw' : height > 0 ? height - 20 : 'auto'}
       minW={ref.current ? 'none' : '50vw'}
       pos={'relative'}
     >

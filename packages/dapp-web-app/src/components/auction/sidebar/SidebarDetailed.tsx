@@ -6,18 +6,12 @@ import {
   Flex,
   Text,
   List,
-  ListItem,
-  Checkbox,
   Input,
-  FormControl,
-  FormLabel,
   Skeleton,
 } from '@chakra-ui/react'
-import { BsX } from 'react-icons/bs'
 
 import { useTokensContext } from 'contexts/TokensContext'
-import { Direction } from 'types/grid'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { AuctionState } from 'types/auction'
 import { formatToEtherStringBN } from 'utils/price'
 import useCountdownTime from 'hooks/use-countdown-timer'
@@ -28,45 +22,29 @@ import {
   useLineMintAtPosition,
   useLineMintRandom,
 } from 'services/web3/generated'
-import { Address, formatEther } from 'viem'
-import { useWaitForTransaction } from 'wagmi'
+import { formatEther } from 'viem'
+import { useQueryClient, useWaitForTransaction } from 'wagmi'
 import ForceConnectButton from 'components/forceConnectButton'
 import { TransactionError } from 'types/transaction'
 import { TxMessage } from 'components/txMessage'
+import { useDiscount } from 'hooks/use-discount'
+import TotalPriceDisplay from './TotalPriceDisplay'
+import { TextLine } from './TextLine'
+import { coordinatesToText } from 'utils/handleCoordinates'
+import { getCurrentTokenId } from 'hooks/keys'
 
-const TextLine = ({ children, title = '', direction, ...props }: any) => (
-  <ListItem
-    mb={1}
-    bgColor={'gray.100'}
-    px={1}
-    display={'flex'}
-    justifyContent={'space-between'}
-    w={'100%'}
-    {...props}
-  >
-    <Flex alignItems={'center'} gap={1}>
-      <Text
-        as={'span'}
-        fontWeight={'bold'}
-        textColor={direction === Direction.DOWN ? 'cyan.500' : 'red.500'}
-        textTransform={'uppercase'}
-        fontSize={'md'}
-      >
-        LINE #{title}
-      </Text>{' '}
-      <Text as={'span'} fontSize={'xs'} color={'gray.500'}>
-        ({children})
-      </Text>
-    </Flex>
-    <Button variant={'link'} onClick={() => {}} minW={'none'} ml={2}>
-      <BsX size={16} color="gray.700" />
-    </Button>
-  </ListItem>
-)
-const merkleProof: Address[] = []
 export function SidebarDetailed({ ...props }: any) {
-  const { selectedItems, gridItemsState, toggleSelectedItem, resetSelection } =
-    useTokensContext()
+  const [counter, setCounter] = useState(0)
+  const {
+    selectedItems,
+    gridItemsState,
+    toggleSelectedItem,
+    resetSelection,
+    limitPerTx,
+    reachedLimit,
+    handleIsMinting,
+    isMinting,
+  } = useTokensContext()
   const {
     startPrice,
     endPrice,
@@ -75,8 +53,9 @@ export function SidebarDetailed({ ...props }: any) {
     maxSupply,
     auctionState,
   } = useAuctionContext()
-  const [counter, setCounter] = useState(0)
+  const queryClient = useQueryClient()
   const { countdownInMili } = useCountdownTime()
+  const { value: discountValue, hasDiscount, merkleProof } = useDiscount()
   const mintRandom = useLineMintRandom({
     args: [BigInt(counter), merkleProof],
   })
@@ -91,19 +70,21 @@ export function SidebarDetailed({ ...props }: any) {
     enabled: mintPositions.data?.hash !== undefined,
     staleTime: 1_000,
   })
-  useEffect(() => {
-    if (mintPositionsTx.isSuccess || mintRandomTx.isSuccess) {
-      setCounter(0)
-      resetSelection()
-    }
+  const price = useMemo(() => {
+    if (!hasDiscount || discountValue === 0 || discountValue === null)
+      return currentPrice
 
-    // DONT ADD resetSelection to dependency array
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mintPositionsTx.isSuccess, mintRandomTx.isSuccess])
+    return currentPrice - (currentPrice * BigInt(discountValue)) / 100n
+  }, [currentPrice, discountValue, hasDiscount])
+
+  const availableToMint = useMemo(() => {
+    const available = Number(maxSupply - minted)
+    return available > limitPerTx ? limitPerTx : available
+  }, [limitPerTx, maxSupply, minted])
 
   const handleRandomMint = () => {
     mintRandom.write({
-      value: BigInt(counter) * currentPrice,
+      value: BigInt(counter) * price,
     })
   }
 
@@ -112,16 +93,55 @@ export function SidebarDetailed({ ...props }: any) {
       const [y, x] = coordinate.split('-')
       return { x: BigInt(x), y: BigInt(y) }
     })
+
     mintPositions.write({
       args: [coordinates, merkleProof],
-      value: BigInt(coordinates.length) * currentPrice,
+      value: BigInt(coordinates.length) * price,
     })
   }
+  const handlerCounter = (value: number) => {
+    if (value < 0) return
+    if (value > availableToMint) {
+      setCounter(availableToMint)
+      return
+    }
+    setCounter(value)
+  }
+
+  useEffect(() => {
+    if (mintPositionsTx.isSuccess || mintRandomTx.isSuccess) {
+      setCounter(0)
+      resetSelection()
+      queryClient.invalidateQueries(getCurrentTokenId)
+    }
+
+    // DONT ADD resetSelection to dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mintPositionsTx.isSuccess, mintRandomTx.isSuccess])
+
+  useEffect(() => {
+    if (
+      mintPositionsTx.isLoading ||
+      mintRandomTx.isLoading ||
+      mintRandom.isLoading ||
+      mintPositions.isLoading
+    ) {
+      handleIsMinting(true)
+    } else {
+      handleIsMinting(false)
+    }
+  }, [
+    handleIsMinting,
+    mintPositions.isLoading,
+    mintPositionsTx.isLoading,
+    mintRandom.isLoading,
+    mintRandomTx.isLoading,
+  ])
 
   return (
     <Skeleton isLoaded={startPrice !== 0n} {...props}>
       <Box {...props}>
-        <Box as={'section'}>
+        <Box>
           <AuctionBanner />
           {(auctionState === AuctionState.STARTED ||
             auctionState === AuctionState.RESTING) && (
@@ -144,17 +164,39 @@ export function SidebarDetailed({ ...props }: any) {
                       : 'Current price'}
                   </Text>
                   <Text
+                    as={'div'}
                     fontSize={'lg'}
                     fontWeight={'bold'}
                     textColor={'gray.900'}
                   >
-                    {formatToEtherStringBN(currentPrice)} ETH
+                    {hasDiscount && (
+                      <Flex alignItems={'center'}>
+                        <Text
+                          textColor={'gray.400'}
+                          textDecor={'line-through'}
+                          fontSize={'xs'}
+                        >
+                          {formatToEtherStringBN(currentPrice)} ETH
+                        </Text>
+                        <Text
+                          ml={2}
+                          bgColor={'gray.500'}
+                          textColor={'gray.50'}
+                          px={1}
+                          fontSize={'x-small'}
+                        >
+                          -{discountValue}%
+                        </Text>
+                      </Flex>
+                    )}
+                    {formatToEtherStringBN(price)} ETH
                   </Text>
                 </Flex>
                 {auctionState !== AuctionState.RESTING && (
                   <Flex
-                    bgColor={'gray.100'}
                     flexDirection={'column'}
+                    justifyContent={'center'}
+                    bgColor={'gray.100'}
                     py={1}
                     px={3}
                     ml={2}
@@ -178,8 +220,9 @@ export function SidebarDetailed({ ...props }: any) {
                 )}
 
                 <Flex
-                  bgColor={'gray.100'}
                   flexDirection={'column'}
+                  justifyContent={'center'}
+                  bgColor={'gray.100'}
                   py={1}
                   px={3}
                   ml={2}
@@ -204,10 +247,11 @@ export function SidebarDetailed({ ...props }: any) {
               <Text fontSize={'xs'} color={'gray.500'} mt={2} mb={6}>
                 Linear dutch auction over 1 hour. Starting price of{' '}
                 {formatEther(startPrice).toString()}ETH, resting price of{' '}
-                {formatEther(endPrice).toString()} ETH, no rebate. Bidders can
-                select specific tokens before minting or mint randomly. As soon
-                as you place your bid your tokens will be minted. Supply of{' '}
-                {maxSupply.toString()}.
+                {formatEther(endPrice).toString()} ETH, <b>no rebate</b>.
+                Bidders can select specific tokens before minting or mint
+                randomly. As soon as you place your bid your tokens will be
+                minted. Supply of {maxSupply.toString()}. Limit per transaction:{' '}
+                {limitPerTx} tokens.
               </Text>
             </>
           )}
@@ -231,23 +275,21 @@ export function SidebarDetailed({ ...props }: any) {
                         .map((item) => (
                           <TextLine
                             key={item.id}
-                            title={item.id}
+                            title={`(${coordinatesToText(item.index)})`}
                             direction={item.direction}
                             onClick={() => toggleSelectedItem(item.index)}
-                          >
-                            {item.index.replace('-', ',')}
-                          </TextLine>
+                            disableRemove={isMinting}
+                          />
                         ))}
                   </List>
                 </Box>
                 <Box ml={4} flex={2}>
-                  <Text fontSize={'xs'} fontWeight={'bold'}>
-                    Total:{' '}
-                    {formatToEtherStringBN(
-                      BigInt(selectedItems.length) * currentPrice,
-                    )}{' '}
-                    ETH
-                  </Text>
+                  <TotalPriceDisplay
+                    selectedItemsCount={selectedItems.length}
+                    currentPrice={currentPrice}
+                    hasDiscount={hasDiscount}
+                    price={price}
+                  />
                   <Text fontSize={'xs'} fontWeight={'normal'} my={2}>
                     Unavailable tokens for minting will be refunded in the same
                     transaction.
@@ -266,15 +308,21 @@ export function SidebarDetailed({ ...props }: any) {
                         }
                       >
                         {mintPositions.isLoading
-                          ? 'Waiting for approval...'
+                          ? 'waiting for approval...'
                           : mintPositionsTx.isLoading
-                            ? 'Processing...'
-                            : ' Mint selected tokens'}
+                            ? 'processing...'
+                            : ' mint selected tokens'}
                       </Button>
                       <TxMessage
                         hash={mintPositions.data?.hash}
                         error={mintPositions.error as TransactionError}
                       />
+                      {reachedLimit && (
+                        <Text fontSize={'xs'} color={'red.500'} mt={2}>
+                          You have reached the limit per transaction:{' '}
+                          {limitPerTx} tokens.
+                        </Text>
+                      )}
                     </>
                   </ForceConnectButton>
                 </Box>
@@ -296,13 +344,14 @@ export function SidebarDetailed({ ...props }: any) {
                     <Button
                       variant={'outline'}
                       mr={2}
-                      onClick={() => setCounter(counter - 1)}
+                      onClick={() => handlerCounter(counter - 1)}
                     >
                       -
                     </Button>
                     <Input
                       htmlSize={4}
                       w={'40px'}
+                      height={8}
                       p={1}
                       textAlign={'center'}
                       mr={2}
@@ -316,22 +365,26 @@ export function SidebarDetailed({ ...props }: any) {
                       borderRadius={'none'}
                       borderWidth={'2px'}
                       value={counter}
-                      onChange={(e) => setCounter(Number(e.target.value))}
+                      onChange={(e) => handlerCounter(Number(e.target.value))}
                     />
                     <Button
                       variant={'outline'}
                       mr={2}
-                      onClick={() => setCounter(counter + 1)}
+                      onClick={() => handlerCounter(counter + 1)}
                     >
                       +
                     </Button>
                   </Flex>
                 </Box>
                 <Box ml={4} flex={2}>
-                  <Text fontSize={'xs'} fontWeight={'bold'} mb={2}>
-                    Total:{' '}
-                    {formatToEtherStringBN(BigInt(counter) * currentPrice)} ETH
-                  </Text>
+                  <Box mb={2}>
+                    <TotalPriceDisplay
+                      selectedItemsCount={counter}
+                      currentPrice={currentPrice}
+                      hasDiscount={hasDiscount}
+                      price={price}
+                    />
+                  </Box>
                   <ForceConnectButton buttonText="Connect to mint">
                     <>
                       <Button
@@ -345,10 +398,10 @@ export function SidebarDetailed({ ...props }: any) {
                         onClick={handleRandomMint}
                       >
                         {mintRandom.isLoading
-                          ? 'Waiting for approval...'
+                          ? 'waiting for approval...'
                           : mintRandomTx.isLoading
-                            ? 'Processing...'
-                            : 'Random Mint'}
+                            ? 'processing...'
+                            : 'random Mint'}
                       </Button>
                       <TxMessage
                         hash={mintRandom.data?.hash}

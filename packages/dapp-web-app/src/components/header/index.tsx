@@ -1,57 +1,47 @@
 import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react'
 import Wallet from 'components/wallet'
+import useCanMove from 'hooks/use-can-move'
 import Link from 'next/link'
-// import useMediaQuery from 'hooks/use-media-query'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { useLineCanMove } from 'services/web3/generated'
-// import Grid from 'components/grid'
-// import Wallet from 'components/wallet'
-// import { isAfterStage, PageState } from 'utils/currentStage'
 
-// let nav = isAfterStage(PageState.Released) ? [{ href: '/auction', label: 'auction' }] : []
-// const navLinks = [
-//   { href: '/', label: 'playground', isDisabled: true },
-//   { href: '/move', label: '', isDisabled: true },
-//   { href: '/about', label: 'about', isDisabled: false },
-// ]
 const navLinks = [
-  // { href: '/about', label: 'playground', isDisabled: true },
+  { href: '/', label: 'playground', isDisabled: false },
+  { href: '/', label: 'auction', isDisabled: true },
+  // { href: '/move', label: '', isDisabled: false },
   { href: '/about', label: 'about', isDisabled: false },
-  { href: '/about', label: 'auction', isDisabled: true },
 ]
 
 const Header = ({ isDrawer = false }) => {
   const pathname = usePathname()
   const [nav, setNav] = useState(navLinks)
-  // const { data: canMove, isSuccess: isCanMoveSuccess } = useLineCanMove({
-  //   watch: true,
-  // })
+  const { data: canMove, isSuccess: isCanMoveSuccess } = useCanMove()
 
-  // useEffect(() => {
-  //   if (!isCanMoveSuccess) return
-  //   const newNav = [...navLinks]
-  //   if (!canMove) {
-  //     newNav[1] = { href: '/auction', label: 'auction', isDisabled: true }
-  //   } else {
-  //     newNav[1].label = 'tokens'
-  //   }
-  //   setNav(newNav)
-  // }, [canMove, isCanMoveSuccess])
+  useEffect(() => {
+    if (!isCanMoveSuccess) return
+    const newNav = [...navLinks]
+    if (!canMove) {
+      newNav[1] = { href: '/auction', label: 'auction', isDisabled: false }
+    } else {
+      newNav[1] = { href: '/move', label: 'move', isDisabled: false }
+    }
+    setNav(newNav)
+  }, [canMove, isCanMoveSuccess])
 
   return (
     <Grid
       as="header"
-      pt={6}
-      pb={4}
+      pt={3}
+      pb={2}
       position="relative"
       zIndex={1}
       justifyContent={isDrawer ? 'center' : 'right'}
       my={isDrawer ? 8 : 0}
-      pos={isDrawer ? 'static' : 'absolute'}
+      // pos={isDrawer ? 'static' : 'absolute'}
       bgColor={'white'}
-      right={4}
-      left={0}
+      w={'full'}
+      // right={4}
+      // left={0}
     >
       <GridItem colSpan={isDrawer ? 1 : 10}>
         <Flex
@@ -74,29 +64,34 @@ const Header = ({ isDrawer = false }) => {
                 href={item.href}
                 title={item.label}
                 mr={0}
-                ml={6}
+                ml={isDrawer ? 0 : 6}
                 _hover={{
-                  color: item.isDisabled ? 'gray.400' : 'cyan.500',
+                  color: item.isDisabled ? 'gray.300' : 'gray.900',
                   cursor: item.isDisabled ? 'not-allowed' : 'pointer',
                 }}
                 color={
                   item.isDisabled
-                    ? 'gray.400'
+                    ? 'gray.300'
                     : isActive
-                      ? 'cyan.500'
-                      : 'gray.900'
+                      ? 'gray.900'
+                      : 'gray.500'
                 }
                 transition="ease"
                 transitionProperty="color"
                 transitionDuration="0.2s"
               >
-                <Text as="strong" fontSize="16px" lineHeight={'16px'}>
+                <Text
+                  as="strong"
+                  fontSize="14px"
+                  lineHeight={'14px'}
+                  textTransform={'uppercase'}
+                >
                   {item.label}
                 </Text>
               </Box>
             )
           })}
-          {/* <Wallet ml={6} isDrawer={isDrawer} /> */}
+          <Wallet ml={6} isDrawer={isDrawer} />
         </Flex>
       </GridItem>
     </Grid>

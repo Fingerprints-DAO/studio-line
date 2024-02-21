@@ -4,9 +4,9 @@ import './../assets/styles/globals.css'
 import { getBaseURL } from 'utils/getLink'
 
 const defaultText = {
-  title: 'Explore LINE by Figure31',
+  title: 'LINE by Figure31',
   description:
-    'LINE is a photographic series of 200 tokens placed within a synthetic landscape, made up of a grid with distinct coordinates. Every token has an origin point which defines a unique “field of view.”',
+    'LINE is a photographic series of 250 tokens placed within a synthetic landscape, made up of a grid with distinct coordinates. Every token has an origin point which defines a unique “field of view.”',
 }
 
 export const metadata: Metadata = {
@@ -26,15 +26,19 @@ export const metadata: Metadata = {
     type: 'website',
     url: getBaseURL(),
   },
-  // other: {
-  //   'fc:frame': 'vNext',
-  //   'fc:frame:image': getBaseURL() + '/opengraph-image.jpg',
-  //   'fc:frame:button:1': 'Mint',
-  //   'fc:frame:button:1:action': 'mint',
-  //   // 'fc:frame:post_url': getBaseURL() + '/frame/api',
-  //   'fc:frame:button:1:target':
-  //     'eip155:11155111:0x70b487b6e655307c56c231ac7b6a3d84dd4d7f26',
-  // },
+  other: {
+    'fc:frame': 'vNext',
+    'fc:frame:image': getBaseURL() + '/opengraph-image.jpg',
+    'fc:frame:button:1': 'Explore the collection',
+    'fc:frame:button:1:action': 'link',
+    'fc:frame:button:1:target': getBaseURL() + '/',
+    'fc:frame:button:2': 'Mint now',
+    'fc:frame:button:2:action': 'link',
+    'fc:frame:button:2:target': getBaseURL() + '/auction',
+    // 'fc:frame:post_url': getBaseURL() + '/frame/api',
+    // 'fc:frame:button:1:target':
+    //   'eip155:11155111:0x70b487b6e655307c56c231ac7b6a3d84dd4d7f26',
+  },
 }
 
 function RootLayout({ children }: { children: React.ReactNode }) {

@@ -1,7 +1,9 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
+import useCurrentTokenId from 'hooks/use-current-token-id'
 import {
   useLineGetAvailableCoordinates,
   useLineGetGrid,
+  useLineMaxMintPerTx,
 } from 'services/web3/generated'
 import {
   Direction,
@@ -25,6 +27,7 @@ export const gridItemDefaultState = {
   index: '',
   row: 0,
   col: 0,
+  isLocked: false,
   direction: Direction.UP,
 }
 
@@ -40,6 +43,7 @@ const generateFullGridDefaultState = () => {
         row,
         col,
         direction: getDirection(row),
+        isLocked: false,
         image: generateImage(row + 1 + col + 1),
       }
     }
@@ -52,15 +56,23 @@ const TokensContext = createContext<{
   selectedItems: string[]
   availableItems: string[]
   mintedItems: (string | null)[]
+  limitPerTx: number
+  reachedLimit: boolean
   toggleSelectedItem: (index: string) => void
   resetSelection: () => void
+  handleIsMinting: (value: boolean) => void
+  isMinting: boolean
 }>({
   gridItemsState: {},
   selectedItems: [],
   availableItems: [],
   mintedItems: [],
+  limitPerTx: 0,
+  reachedLimit: false,
   toggleSelectedItem: () => {},
   resetSelection: () => {},
+  handleIsMinting: () => {},
+  isMinting: false,
 })
 
 export const useTokensContext = () => useContext(TokensContext)
@@ -70,20 +82,51 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedItems, setSelectedItems] = useState<string[]>([])
   const [availableItems, setAvailableItems] = useState<string[]>([])
   const [mintedItems, setMintedItems] = useState<(string | null)[]>([])
-  const getAvailableTokens = useLineGetAvailableCoordinates({ watch: true })
-  const getGrid = useLineGetGrid({ watch: true })
+  const [limitPerTx, setLimitPerTx] = useState(5)
+  const [reachedLimit, setReachedLimit] = useState(false)
+  const [isMinting, setIsMinting] = useState(false)
+  const maxMintPerTx = useLineMaxMintPerTx()
+  const { data: currentTokenId = 1n } = useCurrentTokenId()
+  const { refetch: refetchAvailableTokens, ...getAvailableTokens } =
+    useLineGetAvailableCoordinates()
+  const { refetch: refetchGrid, ...getGrid } = useLineGetGrid({
+    scopeKey: 'getGrid',
+  })
 
   const toggleSelectedItem = (index: string) => {
+    const willRemove = selectedItems.includes(index)
+
+    if (!willRemove && selectedItems.length + 1 > limitPerTx) {
+      setReachedLimit(true)
+      return
+    }
+
+    if (reachedLimit && willRemove) {
+      setReachedLimit(false)
+    }
+
     setSelectedItems(
-      selectedItems.includes(index)
+      willRemove
         ? selectedItems.filter((i) => i !== index)
         : [...selectedItems, index],
     )
   }
 
   const resetSelection = () => {
+    setReachedLimit(false)
     setSelectedItems([])
   }
+
+  const handleIsMinting = (value: boolean) => {
+    setIsMinting(value)
+  }
+
+  useEffect(() => {
+    if (currentTokenId) {
+      refetchAvailableTokens()
+      refetchGrid()
+    }
+  }, [currentTokenId, refetchAvailableTokens, refetchGrid])
 
   useEffect(() => {
     setGridItemsState(generateFullGridDefaultState())
@@ -96,6 +139,10 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
       )
     }
   }, [getAvailableTokens.data, gridItemsState])
+
+  useEffect(() => {
+    setLimitPerTx(Number(maxMintPerTx?.data) ?? 5)
+  }, [maxMintPerTx?.data])
 
   useEffect(() => {
     if (getGrid.data && getGrid.data.length > 0) {
@@ -120,8 +167,12 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
         selectedItems,
         availableItems,
         mintedItems,
+        limitPerTx,
+        reachedLimit,
         toggleSelectedItem,
         resetSelection,
+        handleIsMinting,
+        isMinting,
       }}
     >
       {children}

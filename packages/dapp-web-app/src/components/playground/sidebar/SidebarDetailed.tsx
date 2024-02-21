@@ -1,55 +1,61 @@
 'use client'
 
-import {
-  Box,
-  Button,
-  Flex,
-  Link,
-  Text,
-  Image as ChackraImage,
-  Fade,
-} from '@chakra-ui/react'
+import { Box, Flex, Link, Text, Fade } from '@chakra-ui/react'
 import { AuctionBanner } from 'components/auctionBanner'
+import { AuctionStaticBanner } from 'components/auctionStaticBanner'
+import { TextLine } from 'components/textLine'
+import { TokenPreview } from 'components/tokenPreview'
+import { AuctionProvider } from 'contexts/AuctionContext'
 import { usePlaygroundContext } from 'contexts/PlaygroundContext'
-import Image from 'next/image'
+import { useCoordinates } from 'hooks/use-coordinates'
+import { useHasReachedEnd } from 'hooks/use-has-reached-end'
+import { useEffect, useMemo, useState } from 'react'
 import { Direction, GridSize } from 'types/grid'
+import { getArweaveImageURL } from 'utils/getLink'
+import { coordinatesToText } from 'utils/handleCoordinates'
 
-const TextLine = ({ children, title = '', ...props }: any) => (
-  <Text fontSize={'md'} color={'gray.500'} mb={1} {...props}>
-    <Text as={'span'} fontWeight={'bold'} textColor={'gray.700'}>
-      {title}:
-    </Text>{' '}
-    <Text as={'span'} textTransform={'capitalize'}>
-      {children}
-    </Text>
-  </Text>
-)
+const getRandomNumber = (): number => {
+  return Math.floor(Math.random() * 250)
+}
 
 export function SidebarDetailed({ isDrawer = false, ...props }: any) {
+  const [hideBanner, setHideBanner] = useState(false)
   const {
     lastSelectedGridItem,
-    resetGrid,
     highlightGridItem,
     gridItemsState,
     movements,
-    originPoint,
+    startingPoint,
+    isFixed,
   } = usePlaygroundContext()
+  const hasReachedEnd = useHasReachedEnd({
+    row: lastSelectedGridItem?.row,
+    direction: lastSelectedGridItem?.direction,
+  })
+  const randomTokenId = useMemo(getRandomNumber, [])
+  const { x, y } = useCoordinates(lastSelectedGridItem?.index)
   const itemId = lastSelectedGridItem
     ? lastSelectedGridItem.row * GridSize + lastSelectedGridItem.col
     : 0
-  const isFirstOrLastLine =
-    lastSelectedGridItem?.row === 24 || lastSelectedGridItem?.row === 0
 
   const highlightItems = highlightGridItem
     .map((item) => gridItemsState[item])
     .filter((item) => item)
 
+  useEffect(() => {
+    if (lastSelectedGridItem) {
+      setHideBanner(true)
+    }
+  }, [lastSelectedGridItem])
   return (
-    <Box {...props}>
+    <Box w={'100%'} h={'100%'} {...props}>
       {!lastSelectedGridItem && (
         <>
-          <AuctionBanner displayMintNow />
-          <Text fontWeight={'bold'} mt={4} fontSize={'2xl'} as={'h1'}>
+          {/* {!hideBanner && <AuctionStaticBanner mb={4} />} */}
+          <AuctionProvider>
+            <AuctionBanner displayMintNow />
+          </AuctionProvider>
+          <Text fontWeight={'bold'} fontSize={'2xl'} as={'h1'} mt={'-5px'}>
             Select a token to get started
           </Text>
           <Text mb={4} fontSize={'md'}>
@@ -58,92 +64,86 @@ export function SidebarDetailed({ isDrawer = false, ...props }: any) {
           </Text>
         </>
       )}
-      <Fade in={!!lastSelectedGridItem}>
-        {lastSelectedGridItem && !isDrawer && (
-          <Button variant={'outline'} my={4} onClick={resetGrid}>
-            Reset playground
-          </Button>
-        )}
+      <Fade
+        in={!!lastSelectedGridItem}
+        style={{ width: '100%', height: 'auto' }}
+      >
         {lastSelectedGridItem && (
-          <Box as="section">
-            <Flex as="header" alignItems={'center'}>
+          <Box as="section" w={'100%'} h={'100%'} mt={'-8px'}>
+            <Flex as="header" alignItems={'center'} mb={4}>
               <Text
                 fontWeight={'bold'}
-                my={4}
+                // mb={4}
                 textColor={'gray.900'}
                 fontSize={'2xl'}
                 textTransform={'uppercase'}
               >
-                LINE #{itemId}
+                LINE {randomTokenId}
               </Text>
               <Text fontSize={'md'} textColor={'gray.500'} ml={2}>
-                ({lastSelectedGridItem.index.replace('-', ',')})
+                ({x}, {y})
               </Text>
             </Flex>
-            <Flex justifyContent={'flex-start'}>
-              <Box maxW={'55%'}>
-                <Image
-                  src={lastSelectedGridItem.image}
-                  alt={`Token ${lastSelectedGridItem.index}`}
-                  width={400}
-                  height={200}
-                  style={{ maxWidth: '100%' }}
-                />
-                {highlightItems.length > 0 && (
-                  <Box
-                    display={'flex'}
-                    justifyContent={'space-between'}
-                    mt={2}
-                    flexWrap={highlightItems.length > 5 ? 'wrap' : 'nowrap'}
-                  >
-                    {highlightItems.map((item) => {
-                      return (
-                        <Box
-                          key={item.index}
-                          textAlign={'center'}
-                          w={
-                            highlightItems.length > 5
-                              ? '23%'
-                              : `${
-                                  Math.floor(100 / highlightItems.length) - 1
-                                }%`
-                          }
-                        >
-                          <Image
-                            src={item.image}
-                            alt={`Token ${item.index}`}
-                            width={78}
-                            height={20}
-                            style={{ width: '100%' }}
-                          />
-                          <Text fontSize={'xs'} mt={1}>
-                            ({item.index.replace('-', ',')})
-                          </Text>
-                        </Box>
-                      )
-                    })}
-                  </Box>
-                )}
-              </Box>
-              <Box ml={8} flexShrink={0}>
+            <Flex
+              justifyContent={'flex-start'}
+              w={'100%'}
+              h={'calc(100vh - 150px)'}
+              maxH={'900px'}
+              display={'flex'}
+              flexDirection={'column'}
+              // bgColor={'red.100'}
+              pb={isDrawer ? 2 : 0}
+              flexDir={isDrawer ? 'column' : 'row'}
+              gap={isDrawer ? 4 : 0}
+            >
+              <TokenPreview
+                // maxW={'300px'}
+                // maxHeight={'80vh'}
+                // maxW={'330px'}
+                // w={isDrawer ? '65%' : { base: '50%', xl: '45%' }}
+                // minW={'250px'}
+                minW={'200px'}
+                h={isDrawer ? 'auto' : '100%'}
+                itemId={itemId}
+                thumbnailsItems={highlightItems}
+                isFixed={isFixed}
+                maxW={{ base: '100%', md: 'calc(100% - 200px)' }}
+                // flex={2}
+                // overflow={'hidden'}
+              />
+              <Box
+                ml={isDrawer ? 0 : 8}
+                minW={'170px'}
+                mr={2}
+                pb={isDrawer ? 4 : 0}
+              >
                 <TextLine title={'Origin point'}>
-                  {originPoint.replace('-', ',')}
+                  {coordinatesToText(lastSelectedGridItem.index)}
                 </TextLine>
-                <TextLine title={'Image point'}>
-                  {lastSelectedGridItem.index.replace('-', ',')}
-                </TextLine>
-                <TextLine title={'Type'}>
+                <TextLine
+                  title={'Type'}
+                  valueProps={{
+                    textColor:
+                      lastSelectedGridItem.direction === Direction.UP
+                        ? 'red.600'
+                        : 'cyan.600',
+                  }}
+                >
                   {lastSelectedGridItem.direction}
                 </TextLine>
-                <TextLine title={'Limit'}>
-                  {isFirstOrLastLine ? 'Yes' : 'No'}
-                </TextLine>
                 <TextLine title={'Starting point'}>
-                  {lastSelectedGridItem.index.replace('-', ',')}
+                  {coordinatesToText(startingPoint)}
                 </TextLine>
-                <TextLine title={'Movements'}>{movements}</TextLine>
-                <Link href={lastSelectedGridItem.image} isExternal>
-                  Preview in new tab
+                <TextLine title={'Has Reached End'}>
+                  {hasReachedEnd ? 'Yes' : 'No'}
+                </TextLine>
+                <TextLine title={'Is Star'}>{isFixed ? 'Yes' : 'No'}</TextLine>
+                <TextLine title={'movements'}>{movements}</TextLine>
+                <Link
+                  href={getArweaveImageURL(lastSelectedGridItem.id)}
+                  isExternal
+                >
+                  view image in new tab
                 </Link>
               </Box>
             </Flex>

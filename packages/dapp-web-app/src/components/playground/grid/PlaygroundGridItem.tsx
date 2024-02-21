@@ -2,11 +2,12 @@ import React, { memo, useMemo, useState } from 'react'
 import { Box, Flex, Tooltip, Image as ChackraImage } from '@chakra-ui/react'
 import { GridItemProperties } from 'contexts/PlaygroundContext'
 import Image from 'next/image'
-import { Direction, GridSize } from 'types/grid'
+import { Direction, GridSize, ImageSizes, generateImage } from 'types/grid'
 import GridNumber from 'components/gridNumber'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 
 interface GridItemProps extends GridItemProperties {
+  gridId: number
   width: number
   height: number
   moveDirection?: Direction | null
@@ -15,6 +16,8 @@ interface GridItemProps extends GridItemProperties {
   isHighlighted: boolean
   onlyHighlightedClick: boolean
   toggleGridItem: (index: string) => void
+  hasReachedEnd: boolean
+  isFixed: boolean
   // id: number
 }
 
@@ -47,13 +50,13 @@ const lineStyle = ({
 })
 
 const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
+  gridId,
   width,
   height,
   moveDirection,
   lineWidth,
   lineHeight,
   isOpened,
-  isBlocked,
   image,
   index,
   row,
@@ -61,6 +64,8 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   isHighlighted,
   toggleGridItem,
   onlyHighlightedClick,
+  hasReachedEnd,
+  isFixed,
 }) => {
   const [isFirstRow, isLastRow, isFirstCol, isLastCol] = [
     row === GridSize - 1,
@@ -71,14 +76,35 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   const widthPx = `${width}px`
   const heightPx = `${height}px`
 
-  const disableClick =
-    isFirstCol ||
-    isLastCol ||
-    isBlocked ||
-    (onlyHighlightedClick && !isHighlighted) ||
-    (isHighlighted && (isLastRow || isFirstRow))
-  const isBorder = isFirstRow || isFirstCol || isLastRow || isLastCol
-  const isOdd = col % 2 === 0
+  const disableClick = useMemo(() => {
+    if (isFixed) {
+      return true
+    }
+    if (hasReachedEnd) {
+      return isLastRow || isFirstRow || isLastCol || isFirstCol
+    }
+
+    return (
+      isFirstCol ||
+      isLastCol ||
+      (onlyHighlightedClick && !isHighlighted) ||
+      (isHighlighted &&
+        (moveDirection === Direction.UP ? isFirstRow : isLastRow))
+    )
+  }, [
+    hasReachedEnd,
+    isFirstCol,
+    isFirstRow,
+    isFixed,
+    isHighlighted,
+    isLastCol,
+    isLastRow,
+    moveDirection,
+    onlyHighlightedClick,
+  ])
+
+  // const isBorder = isFirstRow || isFirstCol || isLastRow || isLastCol
+  // const isOdd = col % 2 === 0
 
   const handleClick = () => {
     toggleGridItem(index)
@@ -86,18 +112,13 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
 
   const bgColor = useMemo(() => {
     if (isHighlighted) {
-      return moveDirection === Direction.UP || moveDirection === Direction.ALL
-        ? 'red.100'
-        : 'cyan.200'
+      if (isFixed) return 'purple.600'
+
+      return moveDirection === Direction.UP ? 'red.600' : 'cyan.600'
     }
-    if (isBorder) {
-      return 'gray.300'
-    }
-    if (isOdd) {
-      return 'gray.400'
-    }
-    return 'gray.500'
-  }, [isBorder, isHighlighted, isOdd, moveDirection])
+    return 'gray.300'
+  }, [isFixed, isHighlighted, moveDirection])
+  // }, [isFixed, isHighlighted, isOdd, moveDirection])
 
   return (
     <Box
@@ -105,7 +126,7 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
       w={widthPx}
       h={heightPx}
       onClick={disableClick ? undefined : handleClick}
-      cursor={disableClick ? 'not-allowed' : isOpened ? 'grabbing' : 'pointer'}
+      cursor={disableClick ? 'default' : isOpened ? 'grabbing' : 'pointer'}
       _after={
         !isLastRow
           ? lineStyle({
@@ -155,20 +176,23 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
           left={0}
           right={0}
           bottom={0}
-          zIndex={isOpened || isBlocked ? 1 : 0}
+          zIndex={isOpened ? 1 : 0}
           _hover={{
             transition: 'filter 2s',
           }}
-          filter={isBlocked ? 'grayscale(100%)' : 'none'}
           border={isHighlighted ? '2px solid red' : `none`}
           borderColor={isHighlighted ? bgColor : `none`}
         >
-          <Image
-            src={image}
-            alt="placeholder"
-            width={width * 2}
-            height={height * 2}
-          />
+          {isOpened && (
+            <Image
+              src={image}
+              alt="placeholder"
+              width={104}
+              height={157}
+              // width={width * 2}
+              // height={height * 2}
+            />
+          )}
         </Box>
 
         <Tooltip
@@ -179,19 +203,18 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
           p={'8px'}
           bgColor={'rgba(45, 55, 72, 1)'}
           backdropFilter={'blur(4px)'}
-          isDisabled={disableClick}
           openDelay={500}
           label={
             <Flex
               flexDir={'column'}
               alignItems={'center'}
-              minW={'100px'}
-              minH={'150px'}
+              w={'100px'}
+              h={'150px'}
             >
               <ChakraNextImageLoader
-                src={image}
-                width={100}
-                height={150}
+                src={generateImage(gridId, ImageSizes.MEDIUM)}
+                imageWidth={286}
+                imageHeight={433}
                 alt="Token image"
               />
             </Flex>
@@ -203,7 +226,7 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
             pos={'absolute'}
             w={'100%'}
             h={'100%'}
-            zIndex={isBlocked || isOpened ? 0 : 1}
+            zIndex={isOpened ? 0 : 1}
             fontSize={'xx-small'}
           />
         </Tooltip>

@@ -1,5 +1,6 @@
-import { Box } from '@chakra-ui/react'
-import ChakraNextImageLoader from 'components/chakraNextImageLoader'
+import { Box, Link as ChakraLink } from '@chakra-ui/react'
+import ChakraNextImageLoaderFull from 'components/chakraNextImageLoaderFull'
+import Link from 'next/link'
 
 export const questions = [
   {
@@ -29,16 +30,20 @@ export const questions = [
       <>
         The Dutch auction is first come, first served. Collectors can choose to
         mint specific tokens or mint random ones. Tokens will be minted as soon
-        as a bid is placed. However, allowlisted wallets will be eligible for a
-        discount at the time of mint.
+        as a bid is placed. Note that there will not be rebates. However,
+        allowlisted wallets will be eligible for a discount at the time of mint.
       </>
     ),
+  },
+  {
+    question: 'Can I mint multiple tokens?',
+    answer: 'Yes, you can mint up to 5 at a time.',
   },
   {
     question: 'What is the collection size?',
     answer: (
       <>
-        A total of <b>200 tokens</b> will be available for mint. If the
+        A total of <b>250 tokens</b> will be available for mint. If the
         collection does not mint out after the auction or 48-hour minting
         period, the remaining tokens will not get minted.
       </>
@@ -64,10 +69,10 @@ export const auctionQuestions = [
           textAlign={'center'}
           mx="auto"
         >
-          <ChakraNextImageLoader
-            src={'/about/grid-tokens.jpg'}
-            width={3000}
-            height={3000}
+          <ChakraNextImageLoaderFull
+            src={'/about/layout-animation.gif'}
+            imageWidth={1200}
+            imageHeight={1999}
             alt="Grid with tokens"
           />
         </Box>
@@ -90,56 +95,25 @@ export const auctionQuestions = [
           textAlign={'center'}
           mx="auto"
         >
-          <ChakraNextImageLoader
-            src={'/about/tokens-image.gif'}
-            width={1500}
-            height={1500}
-            alt="Images illustrating day by day token view"
+          <ChakraNextImageLoaderFull
+            src={'/about/tokens-arrows.gif'}
+            imageWidth={1510}
+            imageHeight={1510}
+            alt="Gif illustrating directions of the tokens"
           />
         </Box>
       </>
     ),
   },
   {
-    question: `What should I do during the Discovery phase before the auction?`,
-    answer:
-      'There will be a Discovery period where you can view the tokens on the grid and “like” specific tokens/coordinates. Once you like a token, it will appear on the auction page.',
-  },
-  {
-    question:
-      'If I liked a token/coordinate, does that guarantee I will mint it?',
-    answer:
-      'No, the Dutch auction is first come, first serve. Collectors are encouraged to choose and mint the tokens they want immediately.',
-  },
-  {
-    question: 'Can I move a token to a new coordinate during the auction?',
-    answer:
-      'You will not be able to move the token to a new coordinate until the end of the auction.',
-  },
-  {
-    question: 'Can I mint multiple tokens at a time?',
-    answer:
-      'Yes, if you like multiple tokens/coordinates they will appear on your auction page and you can mint all of them.',
-  },
-  {
-    question: 'What happens at the end of the auction?',
+    question: 'What will my field of view look like?',
     answer: (
       <>
-        Once all tokens are minted, collectors can move their tokens to new
-        coordinates on the grid. A token&apos;s origin point is the anchor of
-        its field of view. When a collector moves a token, they move the origin
-        point. Collectors can move around and discover the entire grid of
-        images/the synthetic landscape.
-      </>
-    ),
-  },
-  {
-    question: 'What determines the movements a token can make on the grid?',
-    answer: (
-      <>
-        Tokens are pieces; they can go up or down, diagonally or laterally; they
-        simulate a 180-degree field of view. Depending on their initial
-        placement at the time of mint, some tokens face up, others down.
+        Fields of view are unique, but they may overlap with others. They are
+        defined by the 625 photographs of the 25 x 25 grid. A specific
+        coordinate can only be occupied by one token at a time. Images cycle
+        daily per token. A full image cycle takes 10 days for a normal token and
+        16 days for a &ldquo;star&rdquo; token.
         <Box
           as={'span'}
           display={'block'}
@@ -148,10 +122,71 @@ export const auctionQuestions = [
           textAlign={'center'}
           mx="auto"
         >
-          <ChakraNextImageLoader
+          <ChakraNextImageLoaderFull
+            src={'/about/tokens-image-2.gif'}
+            imageWidth={2000}
+            imageHeight={2000}
+            alt="Gif illustrating directions of the tokens"
+          />
+        </Box>
+      </>
+    ),
+  },
+  {
+    question: `What should I do during the Discovery phase before the auction?`,
+    answer: (
+      <>
+        During the discovery phase, you can explore the grid by moving a token
+        freely along different paths to reveal images in the landscape.
+        It&rsquo;s important to take note of which coordinates you prefer to
+        mint. You can restart the exploration as many times as you wish to
+        discover new fields of view. Once the auction begins, you&rsquo;re
+        encouraged to mint the tokens you like as quickly as possible before
+        they are minted by someone else. Visit the &ldquo;Playground&rdquo;{' '}
+        <ChakraLink as={Link} href="/">
+          here
+        </ChakraLink>
+        .
+      </>
+    ),
+  },
+  {
+    question: 'Can I move a token to a new coordinate during the auction?',
+    answer:
+      'You will not be able to move the token to a new coordinate until the collection mints out, or at the end of the 48-hour minting period.',
+  },
+  {
+    question: 'What happens at the end of the auction?',
+    answer: (
+      <>
+        Collectors can move their tokens to new coordinates on the grid after
+        the collection mints out, or at the end of the 48-hour minting period. A
+        token&apos;s origin point is the anchor of its field of view. When a
+        collector moves a token, they move the origin point. Collectors can move
+        around and discover the entire grid of images/the synthetic landscape.
+      </>
+    ),
+  },
+  {
+    question: 'What determines the movements a token can make on the grid?',
+    answer: (
+      <>
+        Tokens are pieces; they can go up or down, diagonally or laterally; they
+        simulate a 180-degree field of view. Tokens minted below the middle line
+        face up (red) while tokens minted above face down (blue), some tokens
+        face up, others down.
+        <Box
+          as={'span'}
+          display={'block'}
+          w={'100%'}
+          maxW={'xl'}
+          textAlign={'center'}
+          mx="auto"
+        >
+          <ChakraNextImageLoaderFull
             src={'/about/movement.gif'}
-            width={1510}
-            height={1510}
+            imageWidth={1510}
+            imageHeight={1510}
             alt="Images illustrating token movements"
           />
         </Box>
@@ -160,22 +195,41 @@ export const auctionQuestions = [
   },
   {
     question: 'How can I move my token to a new coordinate?',
-    answer:
-      'Tokens can be moved on the grid, on this website, or by using simple smart-contract functions; their movements are limited, and they cannot move on a coordinate that is already used by another.',
+    answer: (
+      <>
+        Tokens can be moved on the grid, on this website, or by using simple
+        smart-contract functions; their movements are limited, and they cannot
+        move on a coordinate that is already used by another.
+        <Box
+          as={'span'}
+          display={'block'}
+          w={'100%'}
+          maxW={'xl'}
+          textAlign={'center'}
+          mx="auto"
+        >
+          <ChakraNextImageLoaderFull
+            src={'/about/grid-points.gif'}
+            imageWidth={2025}
+            imageHeight={2025}
+            alt="Points grid movementing"
+          />
+        </Box>
+      </>
+    ),
   },
   {
     question: 'Do I have to pay anything to move my token?',
     answer:
-      'Movements are free. You only have to pay the transaction costs associated with the move function.',
+      'Movements are free. Yet, the only cost is the gas fees associated with the move function.',
   },
   {
     question:
       'How can I get a special “star” token with a 360-degree field of view?',
     answer: (
       <>
-        After mint, collectors can move their tokens to new coordinates on the
-        grid. The first 20 tokens to reach the borders of the grid can use a
-        special function that will allow them to choose to relocate to any
+        The first 25 tokens to reach the upper or lower borders of the grid can
+        use a special function that will allow them to choose to relocate to any
         coordinate on the grid they want. Their token&apos;s field of view will
         change to become a full 360-degree. If they decide to do so, their
         position will be locked down, and they cannot move anymore.
@@ -187,10 +241,10 @@ export const auctionQuestions = [
           textAlign={'center'}
           mx="auto"
         >
-          <ChakraNextImageLoader
+          <ChakraNextImageLoaderFull
             src={'/about/token-types.jpg'}
-            width={3349}
-            height={1874}
+            imageWidth={3349}
+            imageHeight={1874}
             alt="All token types"
           />
         </Box>

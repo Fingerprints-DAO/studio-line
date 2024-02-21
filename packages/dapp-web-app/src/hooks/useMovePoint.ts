@@ -9,12 +9,22 @@ import {
   useLineMoveNorthwest,
   useLineMoveSouthwest,
 } from 'services/web3/generated'
-import { ArrowMoveDirections, movementContractMap } from 'types/movements'
-// import { WriteContractReturnType } from 'viem'
+import { ArrowMoveDirections } from 'types/movements'
 
-// type useMovePointType = {
-//   moveTo: ArrowMoveDirections
-// }
+export type LineMoveReturnType =
+  | ReturnType<typeof useLineMoveNorth>
+  | ReturnType<typeof useLineMoveSouth>
+  | ReturnType<typeof useLineMoveEast>
+  | ReturnType<typeof useLineMoveWest>
+  | ReturnType<typeof useLineMoveNorthwest>
+  | ReturnType<typeof useLineMoveNortheast>
+  | ReturnType<typeof useLineMoveSouthwest>
+  | ReturnType<typeof useLineMoveSoutheast>
+
+export type useMovePointReturnType = {
+  getCurrentMoveToCall: () => LineMoveReturnType
+  getMoveFunction: (moveTo: ArrowMoveDirections) => LineMoveReturnType
+}
 
 function useMovePoint() {
   const [currentMoveTo, setCurrentMoveTo] = useState<ArrowMoveDirections>()

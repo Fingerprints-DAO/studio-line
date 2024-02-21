@@ -22,7 +22,7 @@ const Wallet = ({
   const name = shortenAddress(
     ensName || address,
     isDrawer ? 8 : 5,
-    isDrawer ? 8 : 5,
+    isDrawer ? 8 : 3,
   )
 
   const handleConnectWallet =
@@ -39,7 +39,7 @@ const Wallet = ({
             variant={isConnected ? 'outline' : 'solid'}
             {...props}
           >
-            {isConnected ? name : 'Connect'}
+            {isConnected ? name : 'connect'}
           </Button>
         )
       }}

@@ -1,11 +1,13 @@
 import React, { memo, useMemo, useState } from 'react'
 import { Box, Flex, Tooltip, Image as ChackraImage } from '@chakra-ui/react'
 import { GridItemProperties } from 'contexts/TokensContext'
-import { Direction, GridSize } from 'types/grid'
+import { Direction, GridSize, ImageSizes, generateImage } from 'types/grid'
 import GridNumber from 'components/gridNumber'
 import ChakraNextImageLoader from 'components/chakraNextImageLoader'
 
 interface GridItemProps extends GridItemProperties {
+  gridId: number | null
+  image: string
   width: number
   height: number
   lineWidth: number
@@ -13,6 +15,7 @@ interface GridItemProps extends GridItemProperties {
   isMinted: boolean
   isAvailable: boolean
   isSelected: boolean
+  disableSelection: boolean
   toggleGridItem: (index: string) => void
 }
 
@@ -46,6 +49,7 @@ const lineStyle = ({
 })
 
 const AuctionGridItemComponent: React.FC<GridItemProps> = ({
+  gridId,
   width,
   height,
   image,
@@ -59,6 +63,7 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
   isMinted,
   isAvailable,
   isSelected,
+  disableSelection,
 }) => {
   const [isFirstRow, isLastRow, isFirstCol, isLastCol] = [
     row === GridSize - 1,
@@ -69,7 +74,7 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
   const widthPx = `${width}px`
   const heightPx = `${height}px`
 
-  const disableClick = isMinted || !isAvailable
+  const disableClick = isMinted || !isAvailable || disableSelection
   const renderPoint = isMinted || isAvailable || isSelected
 
   const handleClick = () => {
@@ -77,9 +82,12 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
   }
 
   const bgColor = useMemo(() => {
-    if (isMinted) return 'gray.200'
-    if (direction === Direction.UP) return 'red.500'
-    if (direction === Direction.DOWN) return 'cyan.500'
+    if (isMinted) {
+      if (direction === Direction.UP) return 'red.100'
+      if (direction === Direction.DOWN) return 'cyan.100'
+    }
+    if (direction === Direction.UP) return 'red.600'
+    if (direction === Direction.DOWN) return 'cyan.600'
 
     return 'gray.500'
   }, [direction, isMinted])
@@ -131,13 +139,17 @@ const AuctionGridItemComponent: React.FC<GridItemProps> = ({
             <Flex
               flexDir={'column'}
               alignItems={'center'}
-              minW={'100px'}
-              minH={'150px'}
+              w={'100px'}
+              h={'150px'}
             >
               <ChakraNextImageLoader
-                src={image}
-                width={100}
-                height={150}
+                src={
+                  gridId !== null
+                    ? generateImage(gridId, ImageSizes.MEDIUM)
+                    : image
+                }
+                imageWidth={286}
+                imageHeight={433}
                 alt="Token image"
               />
             </Flex>

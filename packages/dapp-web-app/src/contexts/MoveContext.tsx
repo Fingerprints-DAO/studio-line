@@ -1,13 +1,12 @@
+import useGetGrid from 'hooks/use-get-grid'
 import React, { createContext, useState, useContext, useEffect } from 'react'
-import {
-  useLineGetGrid,
-  useLineGetTokens,
-  useLineTokensOfOwner,
-} from 'services/web3/generated'
+import useGetTokens from 'hooks/use-get-tokens'
+import { useLineTokensOfOwner } from 'services/web3/generated'
 import {
   Direction,
   GridItemBaseProperties,
   GridSize,
+  ImageSizes,
   generateImage,
   handleDirectionFromContract,
 } from 'types/grid'
@@ -58,7 +57,7 @@ const generateFullGridDefaultState = () => {
         direction: null,
         isLocked: false,
         hasReachedEnd: false,
-        image: generateImage(row + 1 + col + 1),
+        image: generateImage(col + row * GridSize, ImageSizes.SMALL),
       }
     }
   }
@@ -111,15 +110,14 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
   const [tokensDirection, setTokensDirection] = useState<Record<string, any>>(
     [],
   )
-  const [tokensDiretionHandled, setTokensDirectionHandled] = useState(false)
+  const [tokensDirectionHandled, setTokensDirectionHandled] = useState(false)
   const { address } = useAccount()
-  const getGrid = useLineGetGrid({ watch: true })
+  const getGrid = useGetGrid()
   const ownedTokens = useLineTokensOfOwner({
     args: [address!],
     enabled: !!address,
-    watch: true,
   })
-  const getTokens = useLineGetTokens({ watch: true })
+  const getTokens = useGetTokens()
 
   const toggleSelectedItem = (index: string) => {
     const selected = gridItemsState[index]
@@ -134,21 +132,28 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
     const {
       leftPos,
       diagonalLeftPos,
+      diagonalLeftPosReversed,
       centerPos,
+      centerPosReversed,
       diagonalRightPos,
+      diagonalRightPosReversed,
       rightPos,
       disableArrows,
     } = getArrowsAvailability({
       index: selected.index,
       direction: selected.direction,
       mintedPositions: mintedItems?.map((item) => item?.index ?? '') ?? [],
+      isStar: selected.isLocked,
     })
 
     setHighlightGridItem([
       leftPos,
       diagonalLeftPos,
+      diagonalLeftPosReversed,
       centerPos,
+      centerPosReversed,
       diagonalRightPos,
+      diagonalRightPosReversed,
       rightPos,
     ])
 
@@ -226,7 +231,7 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const gridItemStateValues = Object.values(gridItemsState)
     if (
-      !tokensDiretionHandled &&
+      !tokensDirectionHandled &&
       tokensDirection &&
       gridItemStateValues.length > 0
     ) {
@@ -239,7 +244,7 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
             direction: handleDirectionFromContract(
               tokensDirection[item.index]?.direction,
             ),
-            isLocked: tokensDirection[item.index]?.isLocked,
+            isLocked: tokensDirection[item.index]?.isStar,
             hasReachedEnd: tokensDirection[item.index]?.hasReachedEnd,
           },
         }
@@ -247,7 +252,7 @@ export const MoveProvider = ({ children }: { children: React.ReactNode }) => {
       setGridItemsState(newGrid)
       setTokensDirectionHandled(true)
     }
-  }, [gridItemsState, tokensDirection, tokensDiretionHandled])
+  }, [gridItemsState, tokensDirection, tokensDirectionHandled])
 
   // console.log(myItems, mintedItems)
   return (

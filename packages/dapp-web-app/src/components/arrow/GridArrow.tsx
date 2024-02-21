@@ -1,5 +1,5 @@
 import { Box, useTheme } from '@chakra-ui/react'
-import { ArrowProps, useHexColor } from './utils'
+import { ArrowProps, useHexColor, useHexColorDot } from './utils'
 import { Direction } from 'types/grid'
 import { ArrowDirections } from 'types/movements'
 
@@ -14,6 +14,11 @@ export function Arrow({
 }: ArrowProps) {
   const theme = useTheme()
   const hexColor = useHexColor({
+    isAvailable,
+    isSelected,
+    direction,
+  })
+  const hexColorDot = useHexColorDot({
     isAvailable,
     isSelected,
     direction,
@@ -92,7 +97,12 @@ export function Arrow({
 
           {/* CIRCLE */}
           {displayCircle && (
-            <circle cx="24.5677" cy="24.3971" r="2.9796" fill={hexColor} />
+            <circle
+              cx="24.5677"
+              cy="24.3971"
+              r="2.9796"
+              fill={hexColorDot || hexColor}
+            />
           )}
         </g>
       </Box>

@@ -8,14 +8,14 @@
   },
   {
     "type": "function",
-    "name": "MAX_LOCKED_TOKENS",
+    "name": "MAX_MINT_PER_TX",
     "inputs": [],
     "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
     "stateMutability": "view"
   },
   {
     "type": "function",
-    "name": "MAX_MINT_PER_TX",
+    "name": "MAX_STAR_TOKENS",
     "inputs": [],
     "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
     "stateMutability": "view"
@@ -60,13 +60,21 @@
   },
   {
     "type": "function",
-    "name": "availableCoordinates",
-    "inputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
-    "outputs": [
-      { "name": "x", "type": "uint256", "internalType": "uint256" },
-      { "name": "y", "type": "uint256", "internalType": "uint256" }
+    "name": "artistMint",
+    "inputs": [
+      { "name": "receiver", "type": "address", "internalType": "address" },
+      {
+        "name": "coordinates",
+        "type": "tuple[]",
+        "internalType": "struct ITokenDescriptor.Coordinate[]",
+        "components": [
+          { "name": "x", "type": "uint256", "internalType": "uint256" },
+          { "name": "y", "type": "uint256", "internalType": "uint256" }
+        ]
+      }
     ],
-    "stateMutability": "view"
+    "outputs": [],
+    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
@@ -122,15 +130,13 @@
         "name": "endPriceInWei",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "fundsRecipient",
+        "type": "address",
+        "internalType": "address payable"
       }
     ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "coordinateHashToIndex",
-    "inputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
-    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
     "stateMutability": "view"
   },
   {
@@ -151,6 +157,13 @@
         "internalType": "contract ITokenDescriptor"
       }
     ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "fpMembersMerkleRoot",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
     "stateMutability": "view"
   },
   {
@@ -233,7 +246,7 @@
             "internalType": "uint256"
           },
           { "name": "hasReachedEnd", "type": "bool", "internalType": "bool" },
-          { "name": "isLocked", "type": "bool", "internalType": "bool" },
+          { "name": "isStar", "type": "bool", "internalType": "bool" },
           {
             "name": "direction",
             "type": "uint8",
@@ -283,7 +296,7 @@
             "internalType": "uint256"
           },
           { "name": "hasReachedEnd", "type": "bool", "internalType": "bool" },
-          { "name": "isLocked", "type": "bool", "internalType": "bool" },
+          { "name": "isStar", "type": "bool", "internalType": "bool" },
           {
             "name": "direction",
             "type": "uint8",
@@ -301,12 +314,9 @@
   },
   {
     "type": "function",
-    "name": "grid",
-    "inputs": [
-      { "name": "", "type": "uint256", "internalType": "uint256" },
-      { "name": "", "type": "uint256", "internalType": "uint256" }
-    ],
-    "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
+    "name": "holdersMerkleRoot",
+    "inputs": [],
+    "outputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
     "stateMutability": "view"
   },
   {
@@ -321,7 +331,7 @@
   },
   {
     "type": "function",
-    "name": "lockOriginPoint",
+    "name": "lockAsStar",
     "inputs": [
       { "name": "tokenId", "type": "uint256", "internalType": "uint256" },
       { "name": "x", "type": "uint256", "internalType": "uint256" },
@@ -329,13 +339,6 @@
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "merkleRoot",
-    "inputs": [],
-    "outputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
-    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -372,13 +375,6 @@
     ],
     "outputs": [],
     "stateMutability": "payable"
-  },
-  {
-    "type": "function",
-    "name": "mintableCoordinates",
-    "inputs": [{ "name": "", "type": "bytes32", "internalType": "bytes32" }],
-    "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
-    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -461,7 +457,7 @@
   },
   {
     "type": "function",
-    "name": "numLockedOriginPoints",
+    "name": "numStarTokens",
     "inputs": [],
     "outputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
     "stateMutability": "view"
@@ -543,9 +539,13 @@
     "name": "setInitialAvailableCoordinates",
     "inputs": [
       {
-        "name": "positions",
-        "type": "uint256[]",
-        "internalType": "uint256[]"
+        "name": "coordinates",
+        "type": "tuple[]",
+        "internalType": "struct ITokenDescriptor.Coordinate[]",
+        "components": [
+          { "name": "x", "type": "uint256", "internalType": "uint256" },
+          { "name": "y", "type": "uint256", "internalType": "uint256" }
+        ]
       }
     ],
     "outputs": [],
@@ -592,7 +592,7 @@
       },
       { "name": "timestamp", "type": "uint256", "internalType": "uint256" },
       { "name": "hasReachedEnd", "type": "bool", "internalType": "bool" },
-      { "name": "isLocked", "type": "bool", "internalType": "bool" },
+      { "name": "isStar", "type": "bool", "internalType": "bool" },
       {
         "name": "direction",
         "type": "uint8",
@@ -662,6 +662,11 @@
         "name": "endPriceInWei",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "fundsRecipient",
+        "type": "address",
+        "internalType": "address payable"
       }
     ],
     "outputs": [],
@@ -669,9 +674,18 @@
   },
   {
     "type": "function",
-    "name": "updateMerkleRoot",
+    "name": "updateMerkleRoots",
     "inputs": [
-      { "name": "_root", "type": "bytes32", "internalType": "bytes32" }
+      {
+        "name": "_holdersRoot",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "_fpMembersRoot",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
@@ -796,20 +810,16 @@
     ],
     "anonymous": false
   },
+  { "type": "error", "name": "AlreadyStarToken", "inputs": [] },
   { "type": "error", "name": "ExceedsMaxMintPerTransaction", "inputs": [] },
   { "type": "error", "name": "HasNotReachedEnd", "inputs": [] },
   { "type": "error", "name": "IncorrectPrice", "inputs": [] },
   { "type": "error", "name": "InvalidDirection", "inputs": [] },
-  {
-    "type": "error",
-    "name": "MaxLockedOriginPointsAlreadyReached",
-    "inputs": []
-  },
+  { "type": "error", "name": "MaxStarTokensReached", "inputs": [] },
   { "type": "error", "name": "MintingClosed", "inputs": [] },
   { "type": "error", "name": "MovementLocked", "inputs": [] },
   { "type": "error", "name": "NotMinted", "inputs": [] },
   { "type": "error", "name": "NotTokenOwner", "inputs": [] },
-  { "type": "error", "name": "OriginPointLocked", "inputs": [] },
   {
     "type": "error",
     "name": "OwnableInvalidOwner",

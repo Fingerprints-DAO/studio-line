@@ -32,14 +32,15 @@ const components = {
     },
   }),
   Button: defineStyleConfig({
-    // sizes: {
-    //   lg: {
-    //     fontWeight: 'bold',
-    //     height: 12,
-    //     fontSize: 16,
-    //     px: 4,
-    //   },
-    // },
+    sizes: {
+      md: {
+        // fontWeight: 'bold',
+        height: 8,
+        fontSize: 11,
+        px: 4,
+        py: 0,
+      },
+    },
     variants: {
       solid: defineStyle(({ colorScheme }) => ({
         bgColor: `${colorScheme}.900`,
@@ -68,6 +69,8 @@ const components = {
         borderWidth: 2,
         borderColor: `${colorScheme}.900`,
         rounded: 'none',
+        // pt: 1,
+        // pb: 0,
       })),
     },
     baseStyle: {
@@ -75,11 +78,12 @@ const components = {
       _disabled: {
         transition: 'none',
       },
+      textTransform: 'uppercase',
     },
   }),
   Link: defineStyleConfig({
     baseStyle: {
-      color: 'cyan.500',
+      color: 'links.500',
       _hover: {
         color: 'cyan.400',
         textDecoration: 'underline',

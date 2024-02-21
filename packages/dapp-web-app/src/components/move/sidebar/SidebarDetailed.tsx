@@ -1,16 +1,24 @@
 'use client'
 
 import { useEffect, useMemo } from 'react'
-import { Box, Button, Flex, Link, SkeletonText, Text } from '@chakra-ui/react'
+import {
+  Box,
+  BoxProps,
+  Button,
+  Flex,
+  Link,
+  SkeletonText,
+  Text,
+} from '@chakra-ui/react'
 
 import { useMoveContext } from 'contexts/MoveContext'
 import Image from 'next/image'
 import {
-  useLineLockOriginPoint,
+  useLineLockAsStar,
   useLineOwnerOf,
   useLineTokenUri,
 } from 'services/web3/generated'
-import { getExternalOpenseaUrl } from 'utils/getLink'
+import { getExternalOpenseaUrl, handleArweaveUrl } from 'utils/getLink'
 import { shortenAddress } from 'utils/string'
 import { contractAddresses } from '@dapp/contracts'
 import { getChainId } from 'utils/chain'
@@ -19,19 +27,20 @@ import { MoveSection } from './MoveSection'
 import { useWaitForTransaction } from 'wagmi'
 import { TxMessage } from 'components/txMessage'
 import { TransactionError } from 'types/transaction'
+import { TextLine } from 'components/textLine'
+import { Direction } from 'types/grid'
+import { useTransactionContext } from 'contexts/TransactionContext'
 
-const TextLine = ({ children, title = '', ...props }: any) => (
-  <Text fontSize={'md'} color={'gray.500'} mb={1} {...props}>
-    <Text as={'span'} fontWeight={'bold'} textColor={'gray.700'}>
-      {title}:
-    </Text>{' '}
-    <Text as={'span'} textTransform={'capitalize'}>
-      {children}
-    </Text>
-  </Text>
-)
+type SidebarDetailedProps = BoxProps & {
+  handleFixMyToken?: () => void
+  isDrawer?: boolean
+}
 
-export function SidebarDetailed({ ...props }: any) {
+export function SidebarDetailed({
+  handleFixMyToken,
+  isDrawer = false,
+  ...props
+}: SidebarDetailedProps) {
   const {
     selectedGridItem,
     myItems,
@@ -39,21 +48,19 @@ export function SidebarDetailed({ ...props }: any) {
     fixTokenState,
     fixTokenSelected,
   } = useMoveContext()
+  const { isSuccess, hash, error } = useTransactionContext()
   const tokenData = useLineTokenUri({
     args: [BigInt(selectedGridItem?.id ?? 0)],
-    watch: true,
     enabled: !!selectedGridItem?.id,
   })
   const tokenOwner = useLineOwnerOf({
     args: [BigInt(selectedGridItem?.id ?? 0)],
-    watch: true,
     enabled: !!selectedGridItem?.id,
   })
-  const moveToPosition = useLineLockOriginPoint()
+  const moveToPosition = useLineLockAsStar()
   const moveTx = useWaitForTransaction({
     hash: moveToPosition.data?.hash,
     enabled: moveToPosition.data?.hash !== undefined,
-    staleTime: 1_000,
   })
 
   const tokenJson = useMemo(() => {
@@ -85,12 +92,20 @@ export function SidebarDetailed({ ...props }: any) {
     }
   }, [moveTx.isSuccess])
 
+  useEffect(() => {
+    if (isSuccess) {
+      setTimeout(() => {
+        window.location.reload()
+      }, 2_000)
+    }
+  }, [isSuccess])
+
   return (
-    <Box w={'100%'} {...props}>
+    <Box w={'100%'} h={'100%'} {...props}>
       <Box as={'section'}>
         {!selectedGridItem && (
           <>
-            <Text fontWeight={'bold'} mt={4} fontSize={'2xl'} as={'h1'}>
+            <Text fontWeight={'bold'} mt={1} fontSize={'2xl'} as={'h1'}>
               Select a token to move
             </Text>
             <Text fontSize={'xs'}>
@@ -99,23 +114,47 @@ export function SidebarDetailed({ ...props }: any) {
           </>
         )}
         {selectedGridItem && (
-          <Box as="section" mt={4}>
-            <Flex justifyContent={'flex-start'} flexShrink={2}>
-              <Box maxW={'60%'}>
-                <LeftContent token={tokenJson} />
+          <Box w={'100%'} h={'100%'} mt={1}>
+            <Flex
+              justifyContent={'flex-start'}
+              w={'100%'}
+              h={'calc(100vh - 150px)'}
+              maxH={'900px'}
+              display={'flex'}
+              flexDirection={'column'}
+              // bgColor={'red.100'}
+              pb={isDrawer ? 2 : 0}
+              flexDir={isDrawer ? 'column' : 'row'}
+              gap={isDrawer ? 4 : 0}
+            >
+              <Box
+                minW={'200px'}
+                h={isDrawer ? 'auto' : '100%'}
+                maxW={{ base: '100%', md: 'calc(100% - 200px)' }}
+              >
+                <LeftContent token={tokenJson} isDrawer={isDrawer} />
               </Box>
-              <Box ml={8} mt={2} flexShrink={1}>
+              <Box
+                ml={isDrawer ? 0 : 8}
+                minW={'170px'}
+                maxW={'200px'}
+                mr={2}
+                mt={isDrawer ? 0 : 4}
+                flexGrow={0}
+              >
                 {!selectedGridItem.isLocked &&
                 myItems.includes(selectedGridItem.index) ? (
                   <>
                     {!fixTokenState && <MoveSection token={tokenJson} />}
                     {fixTokenState && (
                       <>
-                        <Text fontSize={'sm'}>
-                          {fixTokenSelected
-                            ? 'Once you confirm, it will have 360º view and cannot be moved.'
-                            : 'Please, select a point in the grid. Your token will be placed and cannot be moved.'}
-                        </Text>
+                        <Box maxW={isDrawer ? '' : '235px'}>
+                          <Text fontSize={'sm'}>
+                            {fixTokenSelected
+                              ? 'Once you confirm, it will have 360º view and cannot be moved.'
+                              : 'Please, select a point in the grid. Your token will be placed and cannot be moved.'}
+                          </Text>
+                        </Box>
                         {fixTokenSelected && (
                           <Flex alignItems={'flex-end'} mt={1}>
                             <Box>
@@ -160,39 +199,55 @@ export function SidebarDetailed({ ...props }: any) {
                             moveTx.isLoading ||
                             moveToPosition.isLoading
                           }
+                          colorScheme="purple"
+                          bgColor={'purple.600'}
+                          borderColor={'purple.600'}
+                          _hover={{
+                            color: 'purple.600',
+                            borderColor: 'purple.600',
+                            backgroundColor: 'white',
+                          }}
                         >
                           {moveToPosition.isLoading
-                            ? 'Waiting for approval...'
+                            ? 'waiting for approval...'
                             : moveTx.isLoading
-                              ? 'Processing...'
-                              : 'Confirm'}
+                              ? 'processing...'
+                              : 'confirm'}
                         </Button>
                         <Button
                           w={'full'}
-                          mt={4}
+                          mt={2}
                           mb={1}
                           onClick={toggleFixMyToken}
                           variant={'outline'}
                         >
-                          Go Back
+                          go back
                         </Button>
                         <TxMessage
                           hash={moveToPosition.data?.hash}
                           error={moveTx.error as TransactionError}
-                          successMessage="Token moved successfully! Reloading the page..."
+                          successMessage="Moved! Reloading..."
                         />
                       </>
                     )}
                   </>
                 ) : (
-                  <Box w={'full'} h={'45px'} />
+                  <Box w={'full'} h={'28px'} hidden={isDrawer} />
                 )}
 
+                {(isSuccess || hash || error) && (
+                  <TxMessage
+                    hash={hash}
+                    error={error}
+                    successMessage="Moved! Reloading..."
+                  />
+                )}
                 <SkeletonText
                   noOfLines={9}
                   skeletonHeight="5"
                   isLoaded={!!tokenJson.attributes}
-                  mt={5}
+                  mt={isDrawer ? 2 : 5}
+                  mb={4}
                 >
                   {tokenJson.attributes.map(
                     ({
@@ -202,7 +257,18 @@ export function SidebarDetailed({ ...props }: any) {
                       trait_type: string
                       value: string
                     }) => (
-                      <TextLine key={trait_type} title={trait_type}>
+                      <TextLine
+                        key={trait_type}
+                        title={trait_type}
+                        valueProps={{
+                          textColor:
+                            trait_type === 'Type'
+                              ? value.toLowerCase() === Direction.UP
+                                ? 'red.600'
+                                : 'cyan.600'
+                              : '',
+                        }}
+                      >
                         {value}
                       </TextLine>
                     ),
@@ -218,10 +284,14 @@ export function SidebarDetailed({ ...props }: any) {
                     isExternal
                     display={'block'}
                   >
-                    View on Opensea
+                    view on opensea
                   </Link>
-                  <Link href={tokenJson.image} isExternal display={'block'}>
-                    Preview in new tab
+                  <Link
+                    href={handleArweaveUrl(tokenJson.image)}
+                    isExternal
+                    display={'block'}
+                  >
+                    view image in new tab
                   </Link>
                 </SkeletonText>
               </Box>

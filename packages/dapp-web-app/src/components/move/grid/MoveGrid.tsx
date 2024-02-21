@@ -4,6 +4,8 @@ import MoveGridItem from './MoveGridItem'
 import { useMoveContext } from 'contexts/MoveContext'
 import { GridItemsTotal, GridSize, GridSpace } from 'types/grid'
 import useGridSizes from 'hooks/useGridSizes'
+import { useLineMaxStarTokens } from 'services/web3/generated'
+import useStarTokenMinted from 'hooks/use-star-token-minted'
 
 type MoveGridProps = {}
 
@@ -19,6 +21,10 @@ const MoveGrid: React.FC<MoveGridProps> = ({}) => {
     fixTokenState,
     fixTokenSelected,
   } = useMoveContext()
+  const { data: starTokenSupply = 25n } = useLineMaxStarTokens({
+    scopeKey: 'starTokenSupply',
+  })
+  const { data: starTokenMinted = 0n } = useStarTokenMinted()
 
   const gridItems = useMemo(() => {
     const items = []
@@ -38,6 +44,7 @@ const MoveGrid: React.FC<MoveGridProps> = ({}) => {
       items.push(
         <MoveGridItem
           key={index}
+          // gridId={gridItemsState[id]?.id}
           width={itemWidth}
           height={itemHeight}
           toggleGridItem={toggleSelectedItem}
@@ -77,10 +84,22 @@ const MoveGrid: React.FC<MoveGridProps> = ({}) => {
     <Box
       ref={ref}
       height={'100%'}
-      w={!showGrid ? '100%' : height > 0 ? height : 'auto'}
+      w={!showGrid ? '45vw' : height > 0 ? height - 20 : 'auto'}
       minW={ref.current ? 'none' : '50vw'}
+      maxH={'1000px'}
       pos={'relative'}
     >
+      <Box
+        mb={3}
+        zIndex={5}
+        pos={'absolute'}
+        top={'-52px'}
+        left={0}
+        fontSize={'md'}
+        fontWeight={'bold'}
+      >
+        STAR TOKENS: {Number(starTokenMinted)}/{Number(starTokenSupply)}
+      </Box>
       <Box
         hidden={showGrid}
         pos={'absolute'}

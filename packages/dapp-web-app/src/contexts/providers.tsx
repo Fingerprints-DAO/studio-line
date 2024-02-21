@@ -24,8 +24,7 @@ dayjs.extend(duration)
 
 function Providers({ children }: { children: React.ReactNode }) {
   const { isMediumScreen } = useDisplayConfig()
-  // TODO: make it true to version 2
-  const { isOpen: isVisible, onClose } = useDisclosure({ defaultIsOpen: false })
+  const { isOpen: isVisible, onClose } = useDisclosure({ defaultIsOpen: true })
 
   return (
     <CacheProvider>
@@ -38,8 +37,12 @@ function Providers({ children }: { children: React.ReactNode }) {
           </ConnectKitProvider>
         </WagmiConfig>
         {isVisible && isMediumScreen && (
-          <Box position={'fixed'} bottom={0} left={0} right={0}>
-            <Alert status="warning" bgColor={'gray.300'}>
+          <Box position={'fixed'} bottom={0} left={0} right={0} zIndex={2}>
+            <Alert
+              status="warning"
+              bgColor={'gray.300'}
+              justifyContent={'center'}
+            >
               <TbScreenShareOff size={40} color="gray.700" />
               <AlertDescription fontSize={'md'} ml={4} textColor={'gray.700'}>
                 For the best experience, please use this website on a desktop or
@@ -49,9 +52,11 @@ function Providers({ children }: { children: React.ReactNode }) {
                 alignSelf="flex-start"
                 position="relative"
                 right={-1}
-                top={-1}
+                top={-2}
                 onClick={onClose}
                 textColor={'gray.700'}
+                fontSize={'10px'}
+                _hover={{ borderRadius: 0 }}
               />
             </Alert>
           </Box>
