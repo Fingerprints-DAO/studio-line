@@ -17,7 +17,7 @@ import {
 import { GiHamburgerMenu } from 'react-icons/gi'
 import Header from 'components/header'
 import Footer from 'components/footer'
-import { AuctionStaticBanner } from 'components/auctionStaticBanner'
+import { AuctionBanner } from 'components/auctionBanner'
 
 export default function SidebarIcons({
   additionalNav,
@@ -74,8 +74,8 @@ export default function SidebarIcons({
           <DrawerCloseButton rounded={'0'} textColor={'black'} />
           <DrawerBody>
             <Header isDrawer />
-            <AuctionStaticBanner />
-            {/* <AuctionBanner displayMintNow /> */}
+            {/* <AuctionStaticBanner /> */}
+            <AuctionBanner displayMintNow />
           </DrawerBody>
 
           <DrawerFooter as={'div'}>
