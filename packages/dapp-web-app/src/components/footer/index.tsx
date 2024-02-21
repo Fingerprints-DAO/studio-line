@@ -6,7 +6,7 @@ import { BsDiscord, BsTwitterX } from 'react-icons/bs'
 import { BsTwitter } from 'react-icons/bs'
 import { SiOpensea } from 'react-icons/si'
 import { SiEthereum } from 'react-icons/si'
-import { getExternalEtherscanUrl } from 'utils/getLink'
+import { getExternalEtherscanUrl, getExternalOpenseaUrl } from 'utils/getLink'
 import { Address, useNetwork } from 'wagmi'
 
 const Footer = ({ isDrawer = false }) => {
@@ -79,7 +79,7 @@ const Footer = ({ isDrawer = false }) => {
           </Box>
 
           <Flex flex={1} justifyContent={'flex-end'} alignItems={'center'}>
-            {/* {contractAddress && (
+            {contractAddress && (
               <TextToltip label="Check out on Etherscan!" placement="top">
                 <Box
                   as="a"
@@ -103,7 +103,7 @@ const Footer = ({ isDrawer = false }) => {
             >
               <Box
                 as="a"
-                href="https://opensea.io/collection/line"
+                href={getExternalOpenseaUrl(contractAddress!)}
                 title="OpenSea"
                 target="_blank"
                 p={2}
@@ -115,7 +115,7 @@ const Footer = ({ isDrawer = false }) => {
               >
                 <Icon as={SiOpensea} w={6} h={6} display="block" />
               </Box>
-            </TextToltip> */}
+            </TextToltip>
             <TextToltip label="Join us on Discord!" placement="top">
               <Box
                 as="a"
