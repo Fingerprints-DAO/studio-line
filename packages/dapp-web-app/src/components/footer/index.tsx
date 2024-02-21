@@ -6,28 +6,11 @@ import { BsDiscord, BsTwitterX } from 'react-icons/bs'
 import { BsTwitter } from 'react-icons/bs'
 import { SiOpensea } from 'react-icons/si'
 import { SiEthereum } from 'react-icons/si'
+import { lineAddress } from 'services/web3/generated'
 import { getExternalEtherscanUrl, getExternalOpenseaUrl } from 'utils/getLink'
 import { Address, useNetwork } from 'wagmi'
 
 const Footer = ({ isDrawer = false }) => {
-  const { chain } = useNetwork()
-  const [contractAddress, setContractAddress] = useState<Address | undefined>()
-
-  useEffect(() => {
-    const fetchContractsData = async () => {
-      if (chain?.id) {
-        try {
-          const data = await getContractsDataForChainOrThrow(chain.id)
-          setContractAddress(data.LineABI.address as Address)
-        } catch (error) {
-          console.error('Failed to fetch contracts data:', error)
-        }
-      }
-    }
-
-    fetchContractsData()
-  }, [chain?.id])
-
   return (
     <Box
       as="footer"
@@ -82,7 +65,7 @@ const Footer = ({ isDrawer = false }) => {
             <TextToltip label="Check out on Etherscan!" placement="top">
               <Box
                 as="a"
-                href={getExternalEtherscanUrl(contractAddress)}
+                href={getExternalEtherscanUrl(lineAddress)}
                 title="OpenSea"
                 target="_blank"
                 p={2}
@@ -101,7 +84,7 @@ const Footer = ({ isDrawer = false }) => {
             >
               <Box
                 as="a"
-                href={getExternalOpenseaUrl(contractAddress!)}
+                href={getExternalOpenseaUrl(lineAddress)}
                 title="OpenSea"
                 target="_blank"
                 p={2}
