@@ -1,9 +1,16 @@
-import React, { createContext, useState, useContext, useEffect } from 'react'
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useMemo,
+} from 'react'
 import useCurrentTokenId from 'hooks/use-current-token-id'
 import {
   useLineGetAvailableCoordinates,
   useLineGetGrid,
   useLineMaxMintPerTx,
+  useLineMaxSupply,
 } from 'services/web3/generated'
 import {
   Direction,
@@ -87,16 +94,22 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
   const [isMinting, setIsMinting] = useState(false)
   const maxMintPerTx = useLineMaxMintPerTx()
   const { data: currentTokenId = 1n } = useCurrentTokenId()
+  const { data: maxSupply = 0n } = useLineMaxSupply()
   const { refetch: refetchAvailableTokens, ...getAvailableTokens } =
     useLineGetAvailableCoordinates()
   const { refetch: refetchGrid, ...getGrid } = useLineGetGrid({
     scopeKey: 'getGrid',
   })
 
+  const availableToMint = useMemo(() => {
+    const available = Number(maxSupply - (currentTokenId - 1n))
+    return available > limitPerTx ? limitPerTx : available
+  }, [currentTokenId, limitPerTx, maxSupply])
+
   const toggleSelectedItem = (index: string) => {
     const willRemove = selectedItems.includes(index)
 
-    if (!willRemove && selectedItems.length + 1 > limitPerTx) {
+    if (!willRemove && selectedItems.length + 1 > availableToMint) {
       setReachedLimit(true)
       return
     }
@@ -167,7 +180,7 @@ export const TokensProvider = ({ children }: { children: React.ReactNode }) => {
         selectedItems,
         availableItems,
         mintedItems,
-        limitPerTx,
+        limitPerTx: availableToMint,
         reachedLimit,
         toggleSelectedItem,
         resetSelection,
