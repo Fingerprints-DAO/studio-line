@@ -137,6 +137,7 @@ export function SidebarDetailed({
               <Box
                 ml={isDrawer ? 0 : 8}
                 minW={'170px'}
+                maxW={'200px'}
                 mr={2}
                 mt={isDrawer ? 0 : 4}
                 flexGrow={0}

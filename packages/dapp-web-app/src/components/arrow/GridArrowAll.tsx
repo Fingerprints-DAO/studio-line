@@ -17,12 +17,15 @@ export function ArrowAll({
   // }
   const handleFillColor = () => {
     if (!isOwner) {
-      if (isSelected) return theme.colors['gray'][400]
+      if (isSelected) {
+        if (!isLocked) return theme.colors['purple'][200]
+        return theme.colors['gray'][400]
+      }
       return theme.colors['gray'][200]
     }
 
+    if (isSelected) return theme.colors['purple'][500]
     // Is owner from here
-    if (isSelected) return theme.colors['purple'][600]
     if (isLocked) return theme.colors['purple'][200]
 
     return theme.colors['gray'][200]
