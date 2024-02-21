@@ -14,6 +14,7 @@ import {
 import { useMoveContext } from 'contexts/MoveContext'
 import Image from 'next/image'
 import {
+  lineAddress,
   useLineLockAsStar,
   useLineOwnerOf,
   useLineTokenUri,
@@ -278,7 +279,7 @@ export function SidebarDetailed({
                   </TextLine>
                   <Link
                     href={getExternalOpenseaUrl(
-                      contractAddresses[getChainId()].Line,
+                      lineAddress,
                       selectedGridItem.id?.toString(),
                     )}
                     isExternal
