@@ -7,7 +7,6 @@ import { AuctionState } from 'types/auction'
 export function AuctionBanner({ displayMintNow = false }) {
   const { data: canMove, isSuccess: isCanMoveSuccess } = useCanMove()
 
-  console.log(canMove, isCanMoveSuccess)
   if (!isCanMoveSuccess) return null
 
   if (!canMove) {
