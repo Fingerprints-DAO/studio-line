@@ -18,6 +18,7 @@ interface GridItemProps extends GridItemProperties {
   toggleGridItem: (index: string) => void
   hasReachedEnd: boolean
   isFixed: boolean
+  forceIsOpened: boolean
   // id: number
 }
 
@@ -66,6 +67,7 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   onlyHighlightedClick,
   hasReachedEnd,
   isFixed,
+  forceIsOpened,
 }) => {
   const [isFirstRow, isLastRow, isFirstCol, isLastCol] = [
     row === GridSize - 1,
@@ -77,7 +79,7 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
   const heightPx = `${height}px`
 
   const disableClick = useMemo(() => {
-    if (isFixed) {
+    if (isFixed || forceIsOpened) {
       return true
     }
     if (hasReachedEnd) {
@@ -92,6 +94,7 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
         (moveDirection === Direction.UP ? isFirstRow : isLastRow))
     )
   }, [
+    forceIsOpened,
     hasReachedEnd,
     isFirstCol,
     isFirstRow,
@@ -170,31 +173,6 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
               }
         }
       >
-        <Box
-          pos={'absolute'}
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          zIndex={isOpened ? 1 : 0}
-          _hover={{
-            transition: 'filter 2s',
-          }}
-          border={isHighlighted ? '2px solid red' : `none`}
-          borderColor={isHighlighted ? bgColor : `none`}
-        >
-          {isOpened && (
-            <Image
-              src={image}
-              alt="placeholder"
-              width={104}
-              height={157}
-              // width={width * 2}
-              // height={height * 2}
-            />
-          )}
-        </Box>
-
         <Tooltip
           hasArrow
           arrowSize={6}
@@ -204,6 +182,7 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
           bgColor={'rgba(45, 55, 72, 1)'}
           backdropFilter={'blur(4px)'}
           openDelay={500}
+          placement="auto"
           label={
             <Flex
               flexDir={'column'}
@@ -219,16 +198,41 @@ const PlaygroundGridItemComponent: React.FC<GridItemProps> = ({
               />
             </Flex>
           }
-          placement="auto"
         >
-          <Box
-            bgColor={bgColor}
-            pos={'absolute'}
-            w={'100%'}
-            h={'100%'}
-            zIndex={isOpened ? 0 : 1}
-            fontSize={'xx-small'}
-          />
+          <Box w={'100%'} h={'100%'}>
+            <Box
+              pos={'absolute'}
+              top={0}
+              left={0}
+              right={0}
+              bottom={0}
+              zIndex={isOpened || forceIsOpened ? 1 : 0}
+              _hover={{
+                transition: 'filter 2s',
+              }}
+              border={isHighlighted ? '2px solid red' : `none`}
+              borderColor={isHighlighted ? bgColor : `none`}
+            >
+              {(isOpened || forceIsOpened) && (
+                <Image
+                  src={image}
+                  alt="placeholder"
+                  width={104}
+                  height={157}
+                  // width={width * 2}
+                  // height={height * 2}
+                />
+              )}
+            </Box>
+            <Box
+              bgColor={bgColor}
+              pos={'absolute'}
+              w={'100%'}
+              h={'100%'}
+              zIndex={isOpened || forceIsOpened ? 0 : 1}
+              fontSize={'xx-small'}
+            />
+          </Box>
         </Tooltip>
       </Box>
     </Box>
