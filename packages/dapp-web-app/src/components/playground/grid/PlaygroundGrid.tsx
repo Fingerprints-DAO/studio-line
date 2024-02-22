@@ -22,6 +22,7 @@ import { useHasReachedEnd } from 'hooks/use-has-reached-end'
 const PlaygroundGrid: React.FC = () => {
   const { ref, height, itemHeight, itemWidth, gridSpaceX } = useGridSizes()
   const [showGrid, setShowGrid] = useState(false)
+  const [displayArts, setDisplayArts] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = useRef<HTMLButtonElement>(null)
   const {
@@ -65,6 +66,7 @@ const PlaygroundGrid: React.FC = () => {
           lineHeight={Math.round(itemHeight + GridSpace)}
           hasReachedEnd={hasReachedEnd}
           isFixed={isFixed}
+          forceIsOpened={displayArts}
           {...gridItemsState[id]}
         />,
       )
@@ -80,6 +82,7 @@ const PlaygroundGrid: React.FC = () => {
     gridSpaceX,
     hasReachedEnd,
     isFixed,
+    displayArts,
   ])
 
   useEffect(() => {
@@ -111,6 +114,13 @@ const PlaygroundGrid: React.FC = () => {
             isDisabled={!lastSelectedGridItem}
           >
             RESTART
+          </Button>
+          <Button
+            variant={'outline'}
+            onClick={() => setDisplayArts(!displayArts)}
+            ml={2}
+          >
+            {displayArts ? 'Back to playground' : 'Show the arts'}
           </Button>
         </Box>
         <AlertDialog
