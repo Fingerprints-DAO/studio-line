@@ -120,7 +120,7 @@ const PlaygroundGrid: React.FC = () => {
             onClick={() => setDisplayArts(!displayArts)}
             ml={2}
           >
-            {displayArts ? 'Back to playground' : 'Show the arts'}
+            {displayArts ? 'Back to playground' : 'Reveal image grid'}
           </Button>
         </Box>
         <AlertDialog
