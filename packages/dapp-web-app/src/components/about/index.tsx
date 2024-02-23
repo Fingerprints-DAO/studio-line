@@ -44,29 +44,6 @@ const imagesProps: BoxProps = {
 
 export default function About() {
   const { isRegularScreen, isMediumScreen } = useDisplayConfig()
-  const [discountValue, setDiscountValue] = useState<number | null>(null)
-  const { address } = useAccount()
-
-  useEffect(() => {
-    const checkDiscount = async (address: string) => {
-      try {
-        const response = await fetcher<GetDiscountResponse>(
-          '/getDiscount/api',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ address }),
-          },
-        )
-        setDiscountValue(response.discountPercentage)
-      } catch (error) {
-        console.error('Error checking discounts:', error)
-        setDiscountValue(null)
-      }
-    }
-
-    if (address) checkDiscount(address)
-  }, [address])
 
   return (
     <Container maxW={'8xl'}>
@@ -98,18 +75,6 @@ export default function About() {
                 imageProps={{ priority: true }}
               />
             </Box>
-            <Collapse
-              in={discountValue !== null && discountValue > 0}
-              animateOpacity
-              unmountOnExit
-            >
-              <Box>
-                <Alert status="success" bgColor={'gray.200'}>
-                  <AlertIcon color={'gray.500'} />
-                  {`You are eligible for a ${discountValue}% discount on Mint.`}
-                </Alert>
-              </Box>
-            </Collapse>
             <Text {...titleProps} mt={4}>
               LINE by Figure31
             </Text>

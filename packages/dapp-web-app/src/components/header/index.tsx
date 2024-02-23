@@ -1,32 +1,16 @@
 import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react'
 import Wallet from 'components/wallet'
-import useCanMove from 'hooks/use-can-move'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
 
-const navLinks = [
+const nav = [
   { href: '/', label: 'playground', isDisabled: false },
-  { href: '/', label: 'auction', isDisabled: true },
-  // { href: '/move', label: '', isDisabled: false },
+  { href: '/move', label: 'move', isDisabled: false },
   { href: '/about', label: 'about', isDisabled: false },
 ]
 
 const Header = ({ isDrawer = false }) => {
   const pathname = usePathname()
-  const [nav, setNav] = useState(navLinks)
-  const { data: canMove, isSuccess: isCanMoveSuccess } = useCanMove()
-
-  useEffect(() => {
-    if (!isCanMoveSuccess) return
-    const newNav = [...navLinks]
-    if (!canMove) {
-      newNav[1] = { href: '/auction', label: 'auction', isDisabled: false }
-    } else {
-      newNav[1] = { href: '/move', label: 'move', isDisabled: false }
-    }
-    setNav(newNav)
-  }, [canMove, isCanMoveSuccess])
 
   return (
     <Grid

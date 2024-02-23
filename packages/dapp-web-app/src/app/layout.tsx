@@ -33,12 +33,9 @@ export const metadata: Metadata = {
     'fc:frame:button:1': 'Explore the collection',
     'fc:frame:button:1:action': 'link',
     'fc:frame:button:1:target': 'https://line.fingerprintsdao.xyz/',
-    'fc:frame:button:2': 'Mint now',
+    'fc:frame:button:2': 'Buy on Opensea',
     'fc:frame:button:2:action': 'link',
-    'fc:frame:button:2:target': 'https://line.fingerprintsdao.xyz/auction',
-    // 'fc:frame:post_url': getBaseURL() + '/frame/api',
-    // 'fc:frame:button:1:target':
-    //   'eip155:11155111:0x70b487b6e655307c56c231ac7b6a3d84dd4d7f26',
+    'fc:frame:button:2:target': 'https://opensea.io/collection/linebyfigure31',
   },
 }
 
